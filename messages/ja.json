@@ -1,0 +1,9 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "home_page": "ホーム",
+  "about_page": "概要",
+  "example_message": "ポートフォリオへようこそ。",
+  "language_label": "言語",
+  "current_locale": "現在の言語: {locale}",
+  "learn_router": "Paraglide JS を学ぶ"
+}
