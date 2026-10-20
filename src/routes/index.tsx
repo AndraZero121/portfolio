@@ -436,37 +436,37 @@ interface RoadmapItem {
 const ROADMAP_ITEMS: RoadmapItem[] = [
   {
     year: '2022 — 2023',
-    title: 'First Code & Web Foundations',
+    title: 'First Code & Web',
     description:
-      'Memulai eksplorasi koding perdana semasa bersekolah di SMPN 35 Semarang dengan merancang landing page berbasis HTML, CSS, dan JavaScript murni.',
+      'Mulai koding pertama membuat landing page HTML, CSS, dan JS saat masih bersekolah di SMP 35 Semarang.',
     position: 'top',
   },
   {
     year: '2024',
     title: 'SMK Palapa & Juara 3 LKS',
     description:
-      'Menempuh studi RPL di SMK Palapa Semarang, mendalami backend PHP & framework Laravel, serta berhasil meraih Juara 3 LKS di SMKN 8 Semarang.',
+      'Masuk RPL SMK Palapa Semarang, pelajari dasar pemrograman, PHP, Laravel, serta juara 3 LKS di SMK 8 Semarang.',
     position: 'bottom',
   },
   {
     year: '2025',
-    title: 'Crocodic, BJS & Novarsity',
+    title: 'Crocodic & Novarsity',
     description:
-      'Terpilih di Kelas Industri & magang di Crocodic Tembalang, menyabet piagam Bank Jateng Syariah, merintis tim Untrustnova, hingga mendirikan startup Novarsity Digital Indonesia.',
+      'Kelas Industri & magang di Crocodic Tembalang, raih piagam Bank Jateng Syariah, inisiasi Untrustnova, dan rintis Novarsity.',
     position: 'top',
   },
   {
     year: '2026',
-    title: 'Lulusan Terbaik & Refleksi Diri',
+    title: 'Lulusan Terbaik & Evaluasi',
     description:
-      'Lulus sebagai Lulusan Terbaik SMK Palapa Semarang & Kelas Industri Crocodic. Menyelesaikan LKS terakhir di SMKN 8 Semarang dengan kedewasaan dan evaluasi diri yang berharga.',
+      'Lulus Terbaik SMK Palapa & Crocodic. Mengikuti LKS terakhir di SMK 8 Semarang dengan pembelajaran & evaluasi diri.',
     position: 'bottom',
   },
   {
     year: 'KEDEPANNYA',
-    title: 'Continuous Growth & Impact',
+    title: 'Continuous Growth',
     description:
-      '"I hope that I will become a better person next time :3" — bertekad terus bertumbuh menjadi backend & DevOps engineer yang tangguh, adaptif, dan berintegritas tinggi.',
+      '"I hope that I will become a better person next time :3" — bertekad terus berkembang menjadi engineer yang lebih baik.',
     position: 'top',
     isCurrentOrFuture: true,
   },
@@ -583,41 +583,23 @@ function AboutMeSection() {
           </div>
         </div>
 
-        {/* ROADMAP / MILESTONES (Format Horizontal Bersegi Panjang: ------------o----------o------------) */}
-        <div className="mt-14 sm:mt-16 pt-10 sm:pt-12 border-t border-zinc-200/80 dark:border-zinc-800/80">
-          {/* Header Roadmap */}
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 sm:mb-8">
-            <div>
-              <div className="flex items-center gap-2 text-xs font-jetbrains font-semibold tracking-wider text-blue-600 dark:text-blue-400 uppercase mb-1.5">
-                <span>// 02.1 . JOURNEY ROADMAP / 歩み</span>
-              </div>
-              <h3 className="text-xl sm:text-2xl font-black tracking-tight text-zinc-950 dark:text-white">
-                Milestones & Development Path
-              </h3>
-            </div>
-            <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400 font-jetbrains select-none">
-              <span className="hidden sm:inline">Format:</span>
-              <span className="px-2.5 py-1 rounded bg-zinc-200/70 dark:bg-zinc-800/80 font-bold tracking-wider text-[11px] text-zinc-700 dark:text-zinc-300">
-                ------------o----------o------------
-              </span>
-            </div>
-          </div>
-
+        {/* ROADMAP / MILESTONES (Format Horizontal Kompak & Persegi: ------------o----------o------------) */}
+        <div className="mt-10 sm:mt-12 pt-8 sm:pt-10 border-t border-zinc-200/80 dark:border-zinc-800/80">
           {/* Kontainer Horizontal Roadmap Persegi Panjang ke Kanan */}
           <div
             data-lenis-prevent
             data-lenis-prevent-horizontal
-            className="w-full overflow-x-auto overscroll-x-contain pb-6 pt-2 select-none [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-zinc-300 dark:[&::-webkit-scrollbar-thumb]:bg-zinc-700"
+            className="w-full overflow-x-auto overscroll-x-contain pb-3 pt-1 select-none [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-zinc-300 dark:[&::-webkit-scrollbar-thumb]:bg-zinc-700"
           >
-            <div className="min-w-[1000px] sm:min-w-[1100px] relative px-6 py-4">
+            <div className="min-w-[960px] sm:min-w-[1020px] relative px-4 sm:px-6 py-2">
               {/* Garis Poros Horizontal Pusat: ------------o----------o------------ */}
               <div
                 aria-hidden="true"
-                className="absolute top-1/2 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-500/30 via-zinc-300 dark:via-zinc-700 to-blue-500/30 -translate-y-1/2 pointer-events-none z-0"
+                className="absolute top-[calc(185px+20px)] sm:top-[calc(195px+20px)] left-0 right-0 h-[2px] bg-gradient-to-r from-blue-500/20 via-zinc-300 dark:via-zinc-700 to-blue-500/20 pointer-events-none z-0"
               />
 
-              {/* 5 Kolom Milestone Bergantian Atas & Bawah yang Menyatu dengan Poros Garis */}
-              <div className="grid grid-cols-5 gap-5 sm:gap-6 relative z-10">
+              {/* 5 Kolom Milestone Bergantian Atas & Bawah */}
+              <div className="grid grid-cols-5 gap-4 sm:gap-6 relative z-10">
                 {ROADMAP_ITEMS.map((item, idx) => {
                   const isTop = item.position === 'top'
                   const isFuture = item.isCurrentOrFuture
@@ -625,22 +607,21 @@ function AboutMeSection() {
                   return (
                     <div
                       key={idx}
-                      className="flex flex-col items-center justify-between min-h-[380px] sm:min-h-[420px] relative group"
+                      className="flex flex-col items-center w-full relative group"
                     >
-                      {/* Sisi Atas: Kotak Konten jika isTop, atau Spacer Penyeimbang jika isBottom */}
-                      {isTop ? (
-                        <div className="w-full flex flex-col items-center mb-auto">
-                          {/* Kotak Konten Utama & Tanggal */}
+                      {/* BARIS 1: TOP CARDS (h-[185px] sm:h-[195px]) */}
+                      <div className="h-[185px] sm:h-[195px] w-full flex items-end">
+                        {isTop ? (
                           <div
-                            className={`w-full p-4 rounded-2xl transition-all duration-300 border bg-white dark:bg-zinc-900 shadow-sm group-hover:shadow-md ${
+                            className={`w-full h-full p-3 sm:p-3.5 rounded-2xl transition-all duration-300 border bg-white dark:bg-zinc-900 shadow-sm flex flex-col justify-between group-hover:shadow-md ${
                               isFuture
                                 ? 'border-blue-500/60 dark:border-blue-400/60 ring-1 ring-blue-500/30 bg-blue-50/20 dark:bg-blue-950/20'
                                 : 'border-zinc-200/90 dark:border-zinc-800 group-hover:border-blue-500/50 dark:group-hover:border-blue-400/50'
                             }`}
                           >
-                            <div className="flex items-center justify-between gap-2 mb-2">
+                            <div>
                               <span
-                                className={`font-jetbrains text-xs font-bold tracking-wider uppercase px-2 py-0.5 rounded ${
+                                className={`font-jetbrains text-[10px] sm:text-[11px] font-bold tracking-wider uppercase px-2 py-0.5 rounded ${
                                   isFuture
                                     ? 'bg-blue-600 text-white dark:bg-blue-500'
                                     : 'bg-zinc-100 dark:bg-zinc-800 text-blue-600 dark:text-blue-400'
@@ -648,71 +629,75 @@ function AboutMeSection() {
                               >
                                 {item.year}
                               </span>
+                              <h4 className="text-xs sm:text-[13px] font-bold tracking-tight text-zinc-950 dark:text-white mt-1.5 leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                {item.title}
+                              </h4>
                             </div>
-                            <h4 className="text-sm font-bold tracking-tight text-zinc-950 dark:text-white leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                              {item.title}
-                            </h4>
-                            <p className="mt-2 text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal">
+                            <p className="text-[11px] sm:text-xs text-zinc-600 dark:text-zinc-400 leading-snug font-normal line-clamp-4">
                               {item.description}
                             </p>
                           </div>
+                        ) : (
+                          <div className="w-full h-full pointer-events-none" />
+                        )}
+                      </div>
 
-                          {/* Garis Vertikal Penghubung yang Menyatu dari Dasar Kotak ke Node 'o' */}
+                      {/* BARIS 2: STEM PENGHUBUNG & TITIK NODE PUSAT 'o' (h-10 = 40px) */}
+                      <div className="h-10 w-full relative flex items-center justify-center z-10">
+                        {/* Batang vertikal jika isTop (dari dasar card Row 1 ke dot) */}
+                        {isTop && (
                           <div
-                            className={`w-[2px] h-8 sm:h-10 transition-colors duration-300 ${
+                            className={`w-[2px] h-1/2 absolute top-0 left-1/2 -translate-x-1/2 transition-colors duration-300 ${
                               isFuture
                                 ? 'bg-blue-500 dark:bg-blue-400'
                                 : 'bg-zinc-300 dark:bg-zinc-700 group-hover:bg-blue-500 dark:group-hover:bg-blue-400'
                             }`}
                           />
-                        </div>
-                      ) : (
-                        <div className="w-full flex-1 mb-auto pointer-events-none" />
-                      )}
+                        )}
 
-                      {/* Titik Node Pusat 'o' Tepat di Atas Garis Poros Horizontal */}
-                      <div className="relative my-auto flex items-center justify-center z-20">
+                        {/* Titik Node 'o' di Sumbu Poros */}
                         <div
-                          className={`w-5 h-5 rounded-full border-[3px] bg-white dark:bg-zinc-950 flex items-center justify-center transition-all duration-300 ${
+                          className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full border-[3px] bg-white dark:bg-zinc-950 flex items-center justify-center transition-all duration-300 z-20 ${
                             isFuture
                               ? 'border-blue-600 dark:border-blue-400 scale-110 shadow-[0_0_12px_rgba(37,99,235,0.45)]'
                               : 'border-zinc-400 dark:border-zinc-600 group-hover:border-blue-600 dark:group-hover:border-blue-400 group-hover:scale-125'
                           }`}
                         >
                           <div
-                            className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
+                            className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full transition-colors duration-300 ${
                               isFuture
                                 ? 'bg-blue-600 dark:bg-blue-400'
                                 : 'bg-transparent group-hover:bg-blue-600 dark:group-hover:bg-blue-400'
                             }`}
                           />
                         </div>
+
+                        {/* Batang vertikal jika !isTop (dari dot ke atap card Row 3) */}
+                        {!isTop && (
+                          <div className="w-[2px] h-1/2 absolute bottom-0 left-1/2 -translate-x-1/2 bg-zinc-300 dark:bg-zinc-700 group-hover:bg-blue-500 dark:group-hover:bg-blue-400 transition-colors duration-300" />
+                        )}
                       </div>
 
-                      {/* Sisi Bawah: Spacer Penyeimbang jika isTop, atau Kotak Konten jika isBottom */}
-                      {!isTop ? (
-                        <div className="w-full flex flex-col items-center mt-auto">
-                          {/* Garis Vertikal Penghubung yang Menyatu dari Node 'o' ke Atap Kotak */}
-                          <div className="w-[2px] h-8 sm:h-10 bg-zinc-300 dark:bg-zinc-700 group-hover:bg-blue-500 dark:group-hover:bg-blue-400 transition-colors duration-300" />
-
-                          {/* Kotak Konten Utama & Tanggal */}
-                          <div className="w-full p-4 rounded-2xl transition-all duration-300 border border-zinc-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm group-hover:shadow-md group-hover:border-blue-500/50 dark:group-hover:border-blue-400/50">
-                            <div className="flex items-center justify-between gap-2 mb-2">
-                              <span className="font-jetbrains text-xs font-bold tracking-wider uppercase px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-blue-600 dark:text-blue-400">
+                      {/* BARIS 3: BOTTOM CARDS (h-[185px] sm:h-[195px]) */}
+                      <div className="h-[185px] sm:h-[195px] w-full flex items-start">
+                        {!isTop ? (
+                          <div className="w-full h-full p-3 sm:p-3.5 rounded-2xl transition-all duration-300 border border-zinc-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm flex flex-col justify-between group-hover:shadow-md group-hover:border-blue-500/50 dark:group-hover:border-blue-400/50">
+                            <div>
+                              <span className="font-jetbrains text-[10px] sm:text-[11px] font-bold tracking-wider uppercase px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-blue-600 dark:text-blue-400 inline-block">
                                 {item.year}
                               </span>
+                              <h4 className="text-xs sm:text-[13px] font-bold tracking-tight text-zinc-950 dark:text-white mt-1.5 leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                {item.title}
+                              </h4>
                             </div>
-                            <h4 className="text-sm font-bold tracking-tight text-zinc-950 dark:text-white leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                              {item.title}
-                            </h4>
-                            <p className="mt-2 text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal">
+                            <p className="text-[11px] sm:text-xs text-zinc-600 dark:text-zinc-400 leading-snug font-normal line-clamp-4">
                               {item.description}
                             </p>
                           </div>
-                        </div>
-                      ) : (
-                        <div className="w-full flex-1 mt-auto pointer-events-none" />
-                      )}
+                        ) : (
+                          <div className="w-full h-full pointer-events-none" />
+                        )}
+                      </div>
                     </div>
                   )
                 })}
