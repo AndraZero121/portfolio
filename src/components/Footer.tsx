@@ -1,16 +1,23 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useLenis } from 'lenis/react'
+import { motion } from 'motion/react'
 import {
   ArrowUpRight,
   ArrowUp,
   Mail,
   MapPin,
-  Clock,
-  Sparkles,
   ExternalLink,
   Copy,
   Check,
 } from 'lucide-react'
+import {
+  siReact,
+  siTypescript,
+  siTanstack,
+  siTailwindcss,
+  siBun,
+  siVite,
+} from 'simple-icons'
 
 // GitHub Brand Icon
 const GithubIcon = ({ className }: { className?: string }) => (
@@ -22,33 +29,18 @@ const GithubIcon = ({ className }: { className?: string }) => (
   </svg>
 )
 
+const TECH_STACK = [
+  { name: 'React', icon: siReact },
+  { name: 'TypeScript', icon: siTypescript },
+  { name: 'TanStack', icon: siTanstack },
+  { name: 'Tailwind CSS', icon: siTailwindcss },
+  { name: 'Bun', icon: siBun },
+  { name: 'Vite', icon: siVite },
+]
+
 export default function Footer() {
   const lenis = useLenis()
   const [copied, setCopied] = useState(false)
-  const [currentTime, setCurrentTime] = useState('')
-
-  // Menampilkan Jam Lokal Semarang (WIB / UTC+7) Secara Real-Time
-  useEffect(() => {
-    const updateTime = () => {
-      try {
-        const now = new Date()
-        const formatted = new Intl.DateTimeFormat('id-ID', {
-          timeZone: 'Asia/Jakarta',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          hour12: false,
-        }).format(now)
-        setCurrentTime(`${formatted} WIB`)
-      } catch {
-        setCurrentTime('UTC+7 (WIB)')
-      }
-    }
-
-    updateTime()
-    const interval = setInterval(updateTime, 1000)
-    return () => clearInterval(interval)
-  }, [])
 
   const handleCopyEmail = async () => {
     try {
@@ -56,7 +48,6 @@ export default function Footer() {
       setCopied(true)
       setTimeout(() => setCopied(false), 2500)
     } catch {
-      // Fallback bila clipboard API dibatasi
       window.location.href = 'mailto:diandraanursasyabandira@gmail.com'
     }
   }
@@ -100,24 +91,39 @@ export default function Footer() {
         <div className="border-b border-zinc-200 dark:border-zinc-800/80 pb-14 sm:pb-16 mb-12 sm:mb-16">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
             <div className="max-w-2xl">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="font-jetbrains text-[11px] font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">
-                  // 03 . GET IN TOUCH / お問い合わせ
-                </span>
-              </div>
               <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-zinc-950 dark:text-white leading-[1.1]">
                 Let&apos;s build something{' '}
-                <span className="font-jetbrains text-red-600 dark:text-red-500">solid</span>{' '}
+                <motion.span
+                  className="font-jetbrains font-extrabold text-red-600 dark:text-red-500 tracking-tight inline-block cursor-default"
+                  whileHover={{
+                    scale: 1.08,
+                    y: -2,
+                    textShadow: '0 0 18px rgba(239,68,68,0.7)',
+                  }}
+                  transition={{ type: 'spring', stiffness: 450, damping: 20 }}
+                >
+                  solid
+                </motion.span>{' '}
                 and{' '}
-                <span className="text-blue-600 dark:text-blue-400">remarkable</span>.
+                <motion.span
+                  className="font-black text-blue-600 dark:text-blue-400 inline-block cursor-default"
+                  whileHover={{
+                    scale: 1.08,
+                    y: -2,
+                    textShadow: '0 0 20px rgba(59,130,246,0.7)',
+                  }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 18 }}
+                >
+                  remarkable
+                </motion.span>
+                .
               </h2>
               <p className="mt-4 text-sm sm:text-base text-zinc-600 dark:text-zinc-400 max-w-xl leading-relaxed">
                 Terbuka untuk diskusi proyek rekayasa perangkat lunak, sistem backend & DevOps yang kokoh, kolaborasi tim, atau pertukaran wawasan teknologi.
               </p>
             </div>
 
-            {/* Aksi Kontak Langsung: Salin Email & Tombol Kirim */}
+            {/* Aksi Kontak Langsung: Salin Email & Tombol Kirim Email dengan Teks Jepang */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
               {/* Tombol Salin Email */}
               <button
@@ -130,22 +136,31 @@ export default function Footer() {
                   <>
                     <Check className="w-3.5 h-3.5 text-emerald-500" />
                     <span className="text-emerald-600 dark:text-emerald-400 font-bold">Email Tersalin!</span>
+                    <span className="text-[11px] text-emerald-600/80 dark:text-emerald-400/80 font-sans">
+                      / コピー完了
+                    </span>
                   </>
                 ) : (
                   <>
                     <Copy className="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors" />
                     <span>Salin Email</span>
+                    <span className="text-[11px] text-zinc-500 group-hover:text-zinc-700 dark:text-zinc-400 dark:group-hover:text-zinc-300 font-sans">
+                      / メールをコピー
+                    </span>
                   </>
                 )}
               </button>
 
-              {/* Tombol Hubungi Saya */}
+              {/* Tombol Kirim Email */}
               <a
                 href="mailto:diandraanursasyabandira@gmail.com"
-                className="group inline-flex items-center justify-center gap-3 px-6 py-3.5 bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 font-bold text-xs sm:text-sm tracking-wider uppercase hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all duration-200 shadow-md cursor-pointer no-underline"
+                className="group inline-flex items-center justify-center gap-2.5 px-6 py-3.5 bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 font-bold text-xs sm:text-sm tracking-wider uppercase hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all duration-200 shadow-md cursor-pointer no-underline"
               >
                 <Mail className="w-4 h-4" />
                 <span>KIRIM EMAIL</span>
+                <span className="font-sans text-xs opacity-75 group-hover:opacity-100 transition-opacity">
+                  / メール送信
+                </span>
                 <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </a>
             </div>
@@ -156,34 +171,37 @@ export default function Footer() {
         {/* 2. MAIN FOOTER GRID: IDENTITY, NAVIGATION, SOCIALS, ENVIRONMENT     */}
         {/* =================================================================== */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-12 sm:pb-16 border-b border-zinc-200/80 dark:border-zinc-800/80">
-          {/* Kolom 1: Profil & Identitas (5 Kolom di Desktop) */}
+          {/* Kolom 1: Profil & Identitas Menggunakan Logo dari Navbar (5 Kolom di Desktop) */}
           <div className="lg:col-span-5 flex flex-col justify-between space-y-4">
             <div>
-              <div className="flex items-center gap-2">
-                <span className="font-black text-xl sm:text-2xl tracking-tighter text-zinc-950 dark:text-white">
-                  ANDRA<span className="text-blue-600 dark:text-blue-400">.</span>
-                </span>
-                <span className="font-jetbrains text-[10px] text-zinc-500 dark:text-zinc-500 tracking-wider">
-                  / アンドラ
-                </span>
+              {/* Logo Brand Sesuai Navbar */}
+              <div className="flex items-center gap-3">
+                <img
+                  src="/logoandranew.png"
+                  alt="Logo Andra"
+                  className="w-8 h-8 sm:w-9 sm:h-9 object-contain"
+                />
+                <div className="flex items-baseline gap-2">
+                  <span className="font-bold tracking-tight text-lg sm:text-xl text-zinc-950 dark:text-white">
+                    ANDRA
+                  </span>
+                  <span className="text-xs sm:text-sm font-normal font-sans tracking-wide text-zinc-500 dark:text-zinc-400">
+                    / アンドラ
+                  </span>
+                </div>
               </div>
-              <p className="mt-2 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-sm">
-                <strong className="font-semibold text-zinc-950 dark:text-white">Diandra Anur Sasyabandira</strong> — Full-Stack Developer & DevOps Engineer. Berfokus pada performa sistem, kode yang bersih, serta pengalaman web yang tangguh dan terintegrasi AI.
+
+              <p className="mt-3 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-sm">
+                <strong className="font-semibold text-zinc-950 dark:text-white">Diandra Anursa Syabandira</strong> — Full-Stack Developer & DevOps Engineer. Berfokus pada performa sistem, kode yang bersih, serta pengalaman web yang tangguh dan terintegrasi AI.
               </p>
             </div>
 
-            {/* Lokasi & Status Waktu Nyata */}
-            <div className="pt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-jetbrains text-zinc-600 dark:text-zinc-400">
-              <div className="inline-flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-red-500" />
-                <span>Semarang, Jawa Tengah</span>
-              </div>
-              {currentTime && (
-                <div className="inline-flex items-center gap-1.5 bg-zinc-200/60 dark:bg-zinc-800/60 px-2 py-0.5 rounded text-[11px]">
-                  <Clock className="w-3 h-3 text-zinc-500" />
-                  <span>{currentTime}</span>
-                </div>
-              )}
+            {/* Lokasi dengan Ikon Putih */}
+            <div className="pt-2 flex items-center gap-2 text-xs font-jetbrains text-zinc-600 dark:text-zinc-400">
+              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-zinc-900 dark:bg-zinc-800 border border-zinc-700/60 shadow-xs shrink-0">
+                <MapPin className="w-3.5 h-3.5 text-white" />
+              </span>
+              <span>Semarang, Jawa Tengah, Indonesia</span>
             </div>
           </div>
 
@@ -236,15 +254,15 @@ export default function Footer() {
             <h4 className="font-jetbrains text-[11px] font-bold uppercase tracking-wider text-zinc-950 dark:text-white">
               Koneksi <span className="text-zinc-400 dark:text-zinc-600">/ リンク</span>
             </h4>
-            <ul className="space-y-2 text-xs sm:text-sm">
+            <ul className="space-y-2.5 text-xs sm:text-sm">
               <li>
                 <a
                   href="https://github.com/AndraZero121"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group/link text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-150 inline-flex items-center gap-1.5 no-underline"
+                  className="group/link text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-150 inline-flex items-center gap-2 no-underline"
                 >
-                  <GithubIcon className="w-3.5 h-3.5" />
+                  <GithubIcon className="w-3.5 h-3.5 shrink-0" />
                   <span>GitHub (@AndraZero121)</span>
                   <ExternalLink className="w-2.5 h-2.5 opacity-60 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
                 </a>
@@ -254,45 +272,43 @@ export default function Footer() {
                   href="https://github.com/untrustnova"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group/link text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-150 inline-flex items-center gap-1.5 no-underline"
+                  className="group/link text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-150 inline-flex items-center gap-2 no-underline"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                  {/* Icon Bulat Kecil Novarsity Sebenarnya */}
+                  <img
+                    src="https://avatars.githubusercontent.com/u/98293031?s=200&v=4"
+                    alt="Novarsity Digital Indonesia"
+                    className="w-3.5 h-3.5 rounded-full object-cover shrink-0"
+                  />
                   <span>Novarsity Digital ID</span>
-                  <ExternalLink className="w-2.5 h-2.5 opacity-60 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://crocodic.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group/link text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-150 inline-flex items-center gap-1.5 no-underline"
-                >
-                  <span>Crocodic Studio</span>
                   <ExternalLink className="w-2.5 h-2.5 opacity-60 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
                 </a>
               </li>
             </ul>
           </div>
 
-          {/* Kolom 4: Colophon Lingkungan Teknologi (2 Kolom di Desktop) */}
+          {/* Kolom 4: Colophon Lingkungan Teknologi Berfont Poppins & Simple Icons (2 Kolom di Desktop) */}
           <div className="lg:col-span-2 space-y-3">
             <h4 className="font-jetbrains text-[11px] font-bold uppercase tracking-wider text-zinc-950 dark:text-white">
               Sistem <span className="text-zinc-400 dark:text-zinc-600">/ 構成</span>
             </h4>
             <div className="flex flex-wrap gap-1.5">
-              {['React', 'TypeScript', 'TanStack', 'Tailwind', 'Bun', 'Lenis'].map((tech) => (
+              {TECH_STACK.map((tech) => (
                 <span
-                  key={tech}
-                  className="font-jetbrains text-[10px] px-2 py-0.5 rounded bg-zinc-200/70 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 border border-zinc-300/50 dark:border-zinc-700/50"
+                  key={tech.name}
+                  className="inline-flex items-center gap-1.5 font-poppins text-[11px] font-medium px-2.5 py-1 rounded-md bg-zinc-200/70 dark:bg-zinc-800/80 text-zinc-800 dark:text-zinc-200 border border-zinc-300/60 dark:border-zinc-700/60 hover:border-blue-500/50 transition-colors"
                 >
-                  {tech}
+                  <svg
+                    role="img"
+                    viewBox="0 0 24 24"
+                    className="w-3 h-3 fill-current shrink-0"
+                  >
+                    <path d={tech.icon.path} />
+                  </svg>
+                  <span>{tech.name}</span>
                 </span>
               ))}
             </div>
-            <p className="text-[11px] text-zinc-500 dark:text-zinc-500 leading-tight pt-1">
-              Engineered with 60fps inertial physics and GPU-accelerated motion.
-            </p>
           </div>
         </div>
 
@@ -304,7 +320,7 @@ export default function Footer() {
             <span>
               &copy; {new Date().getFullYear()}{' '}
               <strong className="font-semibold text-zinc-800 dark:text-zinc-200">
-                Diandra Anur Sasyabandira
+                Diandra Anursa Syabandira
               </strong>
               . All rights reserved.
             </span>
