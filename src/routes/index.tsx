@@ -732,181 +732,124 @@ function AboutMeSection() {
           <div
             data-lenis-prevent
             data-lenis-prevent-horizontal
-            className="w-full overflow-x-auto overscroll-x-contain py-2 select-none [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-zinc-300 dark:[&::-webkit-scrollbar-thumb]:bg-zinc-700"
+            className="w-full overflow-x-auto overscroll-x-contain py-4 select-none [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-zinc-300 dark:[&::-webkit-scrollbar-thumb]:bg-zinc-700"
           >
-            <div className="min-w-[1240px] sm:min-w-[1340px] relative px-3 sm:px-6">
+            <div className="w-[1140px] h-[330px] relative mx-auto">
               {/* Garis Poros Horizontal Pusat: ------------o----------o------------ */}
               <div
                 aria-hidden="true"
-                className="absolute top-[164px] sm:top-[170px] -translate-y-1/2 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-500/20 via-zinc-300 dark:via-zinc-700 to-blue-500/20 pointer-events-none z-0"
+                className="absolute top-1/2 left-4 right-4 h-[2px] -translate-y-1/2 bg-gradient-to-r from-blue-500/20 via-zinc-300 dark:via-zinc-700 to-blue-500/20 pointer-events-none z-0"
               />
 
-              {/* 5 Kolom Milestone Bergantian Atas & Bawah */}
-              <div className="grid grid-cols-5 gap-4 sm:gap-6 relative z-10">
-                {ROADMAP_ITEMS.map((item, idx) => {
-                  const isTop = item.position === 'top'
-                  const isFuture = item.isCurrentOrFuture
+              {/* 5 Milestone Tersusun Selang-Seling (Interleaved: 3 Atas, 2 Bawah) Sesuai Sketsa */}
+              {ROADMAP_ITEMS.map((item, idx) => {
+                const isTop = item.position === 'top'
+                const isFuture = item.isCurrentOrFuture
+                const nodeX = [170, 370, 570, 770, 970][idx]
 
-                  return (
+                return (
+                  <div key={idx} className="group">
+                    {/* Kartu Konten Milestone (Persegi Panjang Horisontal) */}
                     <div
-                      key={idx}
-                      className="flex flex-col items-center w-full relative group"
+                      style={{ left: `${nodeX}px` }}
+                      className={`absolute -translate-x-1/2 w-[280px] h-[136px] z-10 ${
+                        isTop ? 'bottom-[calc(50%+16px)]' : 'top-[calc(50%+16px)]'
+                      }`}
                     >
-                      {/* BARIS 1: TOP CARDS (h-[148px] sm:h-[154px]) */}
-                      <div className="h-[148px] sm:h-[154px] w-full flex items-end">
-                        {isTop ? (
-                          <div
-                            className={`w-full h-full p-3.5 sm:p-4 rounded-2xl transition-all duration-300 border bg-white dark:bg-zinc-900 shadow-sm flex flex-col justify-between group-hover:shadow-md ${
-                              isFuture
-                                ? 'border-blue-500/60 dark:border-blue-400/60 ring-1 ring-blue-500/30 bg-blue-50/20 dark:bg-blue-950/20'
-                                : 'border-zinc-200/90 dark:border-zinc-800 group-hover:border-blue-500/50 dark:group-hover:border-blue-400/50'
-                            }`}
-                          >
-                            <div>
-                              {/* Baris Atas: Badge Tahun di Kiri & Logo Bulat Instansi di Kanan */}
-                              <div className="flex items-center justify-between gap-2">
-                                <span
-                                  className={`font-jetbrains text-[9.5px] sm:text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded inline-block ${
-                                    isFuture
-                                      ? 'bg-blue-600 text-white dark:bg-blue-500'
-                                      : 'bg-zinc-100 dark:bg-zinc-800 text-blue-600 dark:text-blue-400'
-                                  }`}
-                                >
-                                  {item.year}
+                      <div
+                        className={`w-full h-full p-3.5 rounded-2xl transition-all duration-300 border bg-white dark:bg-zinc-900 shadow-sm flex flex-col justify-between group-hover:shadow-md ${
+                          isFuture
+                            ? 'border-blue-500/60 dark:border-blue-400/60 ring-1 ring-blue-500/30 bg-blue-50/20 dark:bg-blue-950/20'
+                            : 'border-zinc-200/90 dark:border-zinc-800 group-hover:border-blue-500/50 dark:group-hover:border-blue-400/50'
+                        }`}
+                      >
+                        <div>
+                          {/* Baris Atas: Badge Tahun di Kiri & Logo Bulat Instansi di Kanan */}
+                          <div className="flex items-center justify-between gap-2">
+                            <span
+                              className={`font-jetbrains text-[9.5px] sm:text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded inline-block ${
+                                isFuture
+                                  ? 'bg-blue-600 text-white dark:bg-blue-500'
+                                  : 'bg-zinc-100 dark:bg-zinc-800 text-blue-600 dark:text-blue-400'
+                              }`}
+                            >
+                              {item.year}
+                            </span>
+
+                            {/* Logo Bulat Instansi Terkait */}
+                            <a
+                              href={item.institution.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              title={`Kunjungi website resmi ${item.institution.name}`}
+                              aria-label={`Website resmi ${item.institution.name}`}
+                              onClick={(e) => e.stopPropagation()}
+                              className="relative flex items-center justify-center w-7 h-7 rounded-full border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 hover:border-blue-500 dark:hover:border-blue-400 hover:scale-110 shadow-xs hover:shadow transition-all duration-200 group/inst shrink-0"
+                            >
+                              {item.institution.logo ? (
+                                <img
+                                  src={item.institution.logo}
+                                  alt={item.institution.name}
+                                  className="w-full h-full object-cover rounded-full p-0.5"
+                                />
+                              ) : (
+                                <span className="font-jetbrains text-[10px] sm:text-[10.5px] font-bold text-zinc-700 dark:text-zinc-200 group-hover/inst:text-blue-600 dark:group-hover/inst:text-blue-400 transition-colors">
+                                  {item.institution.short}
                                 </span>
-
-                                {/* Logo Bulat Instansi Terkait */}
-                                <a
-                                  href={item.institution.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  title={`Kunjungi ${item.institution.name}`}
-                                  aria-label={`Website resmi ${item.institution.name}`}
-                                  onClick={(e) => e.stopPropagation()}
-                                  className="relative flex items-center justify-center w-7 h-7 sm:w-7.5 sm:h-7.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 hover:border-blue-500 dark:hover:border-blue-400 hover:scale-110 shadow-xs hover:shadow transition-all duration-200 group/inst shrink-0"
-                                >
-                                  {item.institution.logo ? (
-                                    <img
-                                      src={item.institution.logo}
-                                      alt={item.institution.name}
-                                      className="w-full h-full object-cover rounded-full p-0.5"
-                                    />
-                                  ) : (
-                                    <span className="font-jetbrains text-[10px] sm:text-[10.5px] font-bold text-zinc-700 dark:text-zinc-200 group-hover/inst:text-blue-600 dark:group-hover/inst:text-blue-400 transition-colors">
-                                      {item.institution.short}
-                                    </span>
-                                  )}
-                                  <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-blue-600 text-white flex items-center justify-center opacity-0 group-hover/inst:opacity-100 transition-opacity shadow-xs">
-                                    <ExternalLink className="w-2 h-2" />
-                                  </span>
-                                </a>
-                              </div>
-
-                              <h4 className="text-xs sm:text-[13px] font-bold tracking-tight text-zinc-950 dark:text-white mt-1.5 leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                                {item.title}
-                              </h4>
-                            </div>
-
-                            <p className="text-[10.5px] sm:text-[11px] text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal mt-2">
-                              {item.description}
-                            </p>
+                              )}
+                              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-blue-600 text-white flex items-center justify-center opacity-0 group-hover/inst:opacity-100 transition-opacity shadow-xs">
+                                <ExternalLink className="w-2 h-2" />
+                              </span>
+                            </a>
                           </div>
-                        ) : (
-                          <div className="w-full h-full pointer-events-none" />
-                        )}
-                      </div>
 
-                      {/* BARIS 2: STEM PENGHUBUNG & TITIK NODE PUSAT 'o' (h-8 = 32px) */}
-                      <div className="h-8 w-full relative flex items-center justify-center z-10">
-                        {/* Batang vertikal jika isTop (dari dasar card Row 1 ke dot) */}
-                        {isTop && (
-                          <div
-                            className={`w-[2px] h-1/2 absolute top-0 left-1/2 -translate-x-1/2 transition-colors duration-300 ${
-                              isFuture
-                                ? 'bg-blue-500 dark:bg-blue-400'
-                                : 'bg-zinc-300 dark:bg-zinc-700 group-hover:bg-blue-500 dark:group-hover:bg-blue-400'
-                            }`}
-                          />
-                        )}
-
-                        {/* Titik Node 'o' di Sumbu Poros */}
-                        <div
-                          className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full border-[2.5px] bg-white dark:bg-zinc-950 flex items-center justify-center transition-all duration-300 z-20 ${
-                            isFuture
-                              ? 'border-blue-600 dark:border-blue-400 scale-110 shadow-[0_0_12px_rgba(37,99,235,0.45)]'
-                              : 'border-zinc-400 dark:border-zinc-600 group-hover:border-blue-600 dark:group-hover:border-blue-400 group-hover:scale-125'
-                          }`}
-                        >
-                          <div
-                            className={`w-1 h-1 rounded-full transition-colors duration-300 ${
-                              isFuture
-                                ? 'bg-blue-600 dark:bg-blue-400'
-                                : 'bg-transparent group-hover:bg-blue-600 dark:group-hover:bg-blue-400'
-                            }`}
-                          />
+                          <h4 className="text-xs sm:text-[13px] font-bold tracking-tight text-zinc-950 dark:text-white mt-1.5 leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                            {item.title}
+                          </h4>
                         </div>
 
-                        {/* Batang vertikal jika !isTop (dari dot ke atap card Row 3) */}
-                        {!isTop && (
-                          <div className="w-[2px] h-1/2 absolute bottom-0 left-1/2 -translate-x-1/2 bg-zinc-300 dark:bg-zinc-700 group-hover:bg-blue-500 dark:group-hover:bg-blue-400 transition-colors duration-300" />
-                        )}
-                      </div>
-
-                      {/* BARIS 3: BOTTOM CARDS (h-[148px] sm:h-[154px]) */}
-                      <div className="h-[148px] sm:h-[154px] w-full flex items-start">
-                        {!isTop ? (
-                          <div className="w-full h-full p-3.5 sm:p-4 rounded-2xl transition-all duration-300 border border-zinc-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm flex flex-col justify-between group-hover:shadow-md group-hover:border-blue-500/50 dark:group-hover:border-blue-400/50">
-                            <div>
-                              {/* Baris Atas: Badge Tahun di Kiri & Logo Bulat Instansi di Kanan */}
-                              <div className="flex items-center justify-between gap-2">
-                                <span className="font-jetbrains text-[9.5px] sm:text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-blue-600 dark:text-blue-400 inline-block">
-                                  {item.year}
-                                </span>
-
-                                {/* Logo Bulat Instansi Terkait */}
-                                <a
-                                  href={item.institution.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  title={`Kunjungi ${item.institution.name}`}
-                                  aria-label={`Website resmi ${item.institution.name}`}
-                                  onClick={(e) => e.stopPropagation()}
-                                  className="relative flex items-center justify-center w-7 h-7 sm:w-7.5 sm:h-7.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 hover:border-blue-500 dark:hover:border-blue-400 hover:scale-110 shadow-xs hover:shadow transition-all duration-200 group/inst shrink-0"
-                                >
-                                  {item.institution.logo ? (
-                                    <img
-                                      src={item.institution.logo}
-                                      alt={item.institution.name}
-                                      className="w-full h-full object-cover rounded-full p-0.5"
-                                    />
-                                  ) : (
-                                    <span className="font-jetbrains text-[10px] sm:text-[10.5px] font-bold text-zinc-700 dark:text-zinc-200 group-hover/inst:text-blue-600 dark:group-hover/inst:text-blue-400 transition-colors">
-                                      {item.institution.short}
-                                    </span>
-                                  )}
-                                  <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-blue-600 text-white flex items-center justify-center opacity-0 group-hover/inst:opacity-100 transition-opacity shadow-xs">
-                                    <ExternalLink className="w-2 h-2" />
-                                  </span>
-                                </a>
-                              </div>
-
-                              <h4 className="text-xs sm:text-[13px] font-bold tracking-tight text-zinc-950 dark:text-white mt-1.5 leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                                {item.title}
-                              </h4>
-                            </div>
-
-                            <p className="text-[10.5px] sm:text-[11px] text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal mt-2">
-                              {item.description}
-                            </p>
-                          </div>
-                        ) : (
-                          <div className="w-full h-full pointer-events-none" />
-                        )}
+                        <p className="text-[10.5px] sm:text-[11px] text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal mt-1.5">
+                          {item.description}
+                        </p>
                       </div>
                     </div>
-                  )
-                })}
-              </div>
+
+                    {/* Stem Penghubung Vertikal */}
+                    <div
+                      style={{ left: `${nodeX}px` }}
+                      className={`w-[2px] h-4 absolute -translate-x-1/2 transition-colors duration-300 z-10 ${
+                        isTop ? 'bottom-1/2' : 'top-1/2'
+                      } ${
+                        isFuture
+                          ? 'bg-blue-500 dark:bg-blue-400'
+                          : 'bg-zinc-300 dark:bg-zinc-700 group-hover:bg-blue-500 dark:group-hover:bg-blue-400'
+                      }`}
+                    />
+
+                    {/* Titik Node 'o' di Sumbu Poros */}
+                    <div
+                      style={{ left: `${nodeX}px` }}
+                      className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex items-center justify-center"
+                    >
+                      <div
+                        className={`w-4 h-4 rounded-full border-[2.5px] bg-white dark:bg-zinc-950 flex items-center justify-center transition-all duration-300 ${
+                          isFuture
+                            ? 'border-blue-600 dark:border-blue-400 scale-110 shadow-[0_0_12px_rgba(37,99,235,0.45)]'
+                            : 'border-zinc-400 dark:border-zinc-600 group-hover:border-blue-600 dark:group-hover:border-blue-400 group-hover:scale-125'
+                        }`}
+                      >
+                        <div
+                          className={`w-1 h-1 rounded-full transition-colors duration-300 ${
+                            isFuture
+                              ? 'bg-blue-600 dark:bg-blue-400'
+                              : 'bg-transparent group-hover:bg-blue-600 dark:group-hover:bg-blue-400'
+                          }`}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
