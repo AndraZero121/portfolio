@@ -445,8 +445,9 @@ const ROADMAP_ITEMS: RoadmapItem[] = [
     title: 'First Code & Web',
     institution: {
       name: 'SMPN 35 Semarang',
-      url: 'https://smpn35semarang.sch.id',
+      url: 'https://smpn35.semarangkota.go.id/',
       short: '35',
+      logo: 'https://upload.wikimedia.org/wikipedia/id/3/37/Smpn_35_smrg.png?utm_source=id.wikipedia.org&utm_campaign=imageinfo&utm_content=original',
     },
     description: (
       <>
@@ -456,7 +457,7 @@ const ROADMAP_ITEMS: RoadmapItem[] = [
         </strong>{' '}
         saat masih bersekolah di{' '}
         <a
-          href="https://smpn35semarang.sch.id"
+          href="https://smpn35.semarangkota.go.id/"
           target="_blank"
           rel="noopener noreferrer"
           className="font-semibold text-zinc-950 dark:text-white underline decoration-zinc-400 dark:decoration-zinc-500 underline-offset-2 hover:decoration-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors inline-flex items-center gap-0.5"
@@ -477,6 +478,7 @@ const ROADMAP_ITEMS: RoadmapItem[] = [
       name: 'SMK Palapa Semarang',
       url: 'https://smkpalapasemarang.sch.id',
       short: 'PLP',
+      logo: 'https://smkpalapasemarang.sch.id/images/logo.jpg',
     },
     description: (
       <>
@@ -511,6 +513,7 @@ const ROADMAP_ITEMS: RoadmapItem[] = [
       name: 'Crocodic Studio',
       url: 'https://crocodic.com',
       short: 'CRD',
+      logo: 'https://crocodic.com/wp-content/uploads/2023/07/cropped-fav_icon_crocrocodic-2.png',
     },
     description: (
       <>
@@ -552,6 +555,7 @@ const ROADMAP_ITEMS: RoadmapItem[] = [
       name: 'SMK Palapa Semarang',
       url: 'https://smkpalapasemarang.sch.id',
       short: 'PLP',
+      logo: 'https://smkpalapasemarang.sch.id/images/logo.jpg',
     },
     description: (
       <>
@@ -586,6 +590,7 @@ const ROADMAP_ITEMS: RoadmapItem[] = [
       name: 'Novarsity Digital Indonesia',
       url: 'https://github.com/untrustnova',
       short: 'NDI',
+      logo: 'https://avatars.githubusercontent.com/u/98293031?s=200&v=4',
     },
     description: (
       <>
@@ -784,13 +789,15 @@ function AboutMeSection() {
                               title={`Kunjungi website resmi ${item.institution.name}`}
                               aria-label={`Website resmi ${item.institution.name}`}
                               onClick={(e) => e.stopPropagation()}
-                              className="relative flex items-center justify-center w-7 h-7 rounded-full border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 hover:border-blue-500 dark:hover:border-blue-400 hover:scale-110 shadow-xs hover:shadow transition-all duration-200 group/inst shrink-0"
+                              className="relative flex items-center justify-center w-7 h-7 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:border-blue-500 dark:hover:border-blue-400 hover:scale-110 shadow-xs hover:shadow transition-all duration-200 group/inst shrink-0 overflow-hidden"
                             >
                               {item.institution.logo ? (
                                 <img
                                   src={item.institution.logo}
                                   alt={item.institution.name}
-                                  className="w-full h-full object-cover rounded-full p-0.5"
+                                  loading="lazy"
+                                  referrerPolicy="no-referrer"
+                                  className="w-full h-full object-contain p-0.5 rounded-full"
                                 />
                               ) : (
                                 <span className="font-jetbrains text-[10px] sm:text-[10.5px] font-bold text-zinc-700 dark:text-zinc-200 group-hover/inst:text-blue-600 dark:group-hover/inst:text-blue-400 transition-colors">
