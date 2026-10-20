@@ -30,12 +30,13 @@ const NIGHT_STARS = [
   { x: 1280, y: 220, r: 1.6, dur: 4.2, delay: 1.8 },
 ]
 
-// Ambient Stars & Shooting Stars untuk Langit Malam (Mode Gelap)
-function NightSkyAmbient() {
+// Full Background Pemandangan Tradisional Jepang:
+// Langit, Bintang & Bintang Jatuh (Mode Gelap), Awan Melayang, Lautan Seigaiha, dan Transisi Pesisir Pantai Menuju Daratan (Section About)
+function FullBackgroundScenery() {
   return (
     <div
       aria-hidden="true"
-      className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0 hidden dark:block"
+      className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0 flex items-center justify-center"
       style={{ willChange: 'transform', transform: 'translateZ(0)' }}
     >
       <svg
@@ -43,48 +44,200 @@ function NightSkyAmbient() {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         preserveAspectRatio="xMidYMid slice"
-        className="w-full h-full opacity-40 transition-opacity duration-700"
+        className="w-full h-full opacity-80 dark:opacity-60 transition-opacity duration-700"
       >
         <defs>
-          <linearGradient id="ambientShootingStarGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          {/* Gradien Bintang Jatuh Langit Malam */}
+          <linearGradient id="fullShootingStar1" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
-            <stop offset="35%" stopColor="#60A5FA" stopOpacity="0.85" />
+            <stop offset="35%" stopColor="#C084FC" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#3B82F6" stopOpacity="0" />
+          </linearGradient>
+          <linearGradient id="fullShootingStar2" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+            <stop offset="40%" stopColor="#60A5FA" stopOpacity="0.85" />
             <stop offset="100%" stopColor="#A855F7" stopOpacity="0" />
+          </linearGradient>
+
+          {/* Gradien Lautan Luas */}
+          <linearGradient id="seaGradFull" x1="0" y1="560" x2="0" y2="840" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#1e293b" stopOpacity="0.08" className="dark:stop-color-[#0b1220] dark:stop-opacity-50" />
+            <stop offset="60%" stopColor="#0f172a" stopOpacity="0.22" className="dark:stop-color-[#060a12] dark:stop-opacity-80" />
+            <stop offset="100%" stopColor="#0f172a" stopOpacity="0.35" className="dark:stop-color-[#04060a] dark:stop-opacity-95" />
+          </linearGradient>
+
+          {/* Gradien Transisi Pesisir Pantai (Garis Pantai Menuju Daratan Section About) */}
+          <linearGradient id="coastlineGrad" x1="0" y1="780" x2="0" y2="900" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#e2d9cc" stopOpacity="0.4" className="dark:stop-color-[#12131a] dark:stop-opacity-60" />
+            <stop offset="50%" stopColor="#f4ede2" stopOpacity="0.75" className="dark:stop-color-[#0a0a0f] dark:stop-opacity-85" />
+            <stop offset="100%" stopColor="#ffffff" stopOpacity="1" className="dark:stop-color-[#050507] dark:stop-opacity-1" />
           </linearGradient>
         </defs>
 
-        {/* Bintang-Bintang Berkedip Halus di Latar Belakang */}
-        {NIGHT_STARS.map((star, idx) => (
-          <circle
-            key={idx}
-            cx={star.x}
-            cy={star.y}
-            r={star.r}
-            fill="#ffffff"
-            style={{
-              animation: `starTwinkle ${star.dur}s ease-in-out ${star.delay}s infinite`,
-              transformOrigin: `${star.x}px ${star.y}px`,
-            }}
-          />
-        ))}
+        {/* 1. LANGIT MALAM: BINTANG-BINTANG BERKEDIP & BINTANG JATUH (Mode Gelap) */}
+        <g className="hidden dark:block">
+          {NIGHT_STARS.map((star, idx) => (
+            <circle
+              key={idx}
+              cx={star.x}
+              cy={star.y}
+              r={star.r}
+              fill="#ffffff"
+              style={{
+                animation: `starTwinkle ${star.dur}s ease-in-out ${star.delay}s infinite`,
+                transformOrigin: `${star.x}px ${star.y}px`,
+              }}
+            />
+          ))}
 
-        {/* Bintang Jatuh Meluncur Halus di Latar Langit Kiri */}
-        <g
-          style={{
-            animation: 'shootingStarFly2 10s ease-out 2s infinite',
-            willChange: 'transform',
-          }}
-        >
-          <line
-            x1="520"
-            y1="50"
-            x2="590"
-            y2="24"
-            stroke="url(#ambientShootingStarGrad)"
-            strokeWidth="1.8"
-            strokeLinecap="round"
+          {/* Bintang Jatuh 1: Meluncur dari Langit Kanan Atas */}
+          <g style={{ animation: 'shootingStarFly1 7.2s ease-out infinite', willChange: 'transform' }}>
+            <line
+              x1="1260"
+              y1="55"
+              x2="1330"
+              y2="28"
+              stroke="url(#fullShootingStar1)"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+            />
+            <circle cx="1260" cy="55" r="2.2" fill="#ffffff" />
+          </g>
+
+          {/* Bintang Jatuh 2: Meluncur dari Langit Kiri */}
+          <g style={{ animation: 'shootingStarFly2 9.5s ease-out 3s infinite', willChange: 'transform' }}>
+            <line
+              x1="580"
+              y1="45"
+              x2="645"
+              y2="20"
+              stroke="url(#fullShootingStar2)"
+              strokeWidth="1.9"
+              strokeLinecap="round"
+            />
+            <circle cx="580" cy="45" r="1.9" fill="#ffffff" />
+          </g>
+        </g>
+
+        {/* 2. AWAN TRADISIONAL JEPANG MELAYANG (Stylized Japanese Kumo Clouds Melintasi Langit) */}
+        {/* Awan Kiri */}
+        <g style={{ animation: 'cloudDriftLeft 18s ease-in-out infinite', willChange: 'transform' }}>
+          <path
+            d="M 140 260 C 140 230, 190 220, 220 240 C 240 210, 310 210, 340 240 C 370 225, 420 245, 420 275 C 420 295, 380 310, 340 305 L 160 305 C 140 295, 140 275, 140 260 Z"
+            className="fill-zinc-200/70 dark:fill-zinc-800/40"
           />
-          <circle cx="520" cy="50" r="1.8" fill="#ffffff" />
+          <path
+            d="M 120 295 L 460 295"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeDasharray="4 6"
+            className="text-zinc-400/40 dark:text-zinc-600/30"
+          />
+        </g>
+
+        {/* Awan Tengah Langit */}
+        <g style={{ animation: 'cloudDriftRight 24s ease-in-out 2s infinite', willChange: 'transform' }}>
+          <path
+            d="M 640 180 C 640 155, 680 145, 705 162 C 725 140, 780 140, 805 165 C 828 152, 868 168, 868 194 C 868 212, 835 224, 805 220 L 655 220 C 640 212, 640 195, 640 180 Z"
+            className="fill-zinc-200/50 dark:fill-zinc-800/30"
+          />
+        </g>
+
+        {/* Awan Kanan */}
+        <g style={{ animation: 'cloudDriftRight 22s ease-in-out infinite', willChange: 'transform' }}>
+          <path
+            d="M 980 270 C 980 240, 1030 230, 1060 250 C 1090 225, 1160 225, 1190 255 C 1220 240, 1270 260, 1270 290 C 1270 310, 1230 325, 1190 320 L 1000 320 C 980 310, 980 290, 980 270 Z"
+            className="fill-zinc-200/70 dark:fill-zinc-800/40"
+          />
+          <path
+            d="M 940 310 L 1310 310"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeDasharray="5 7"
+            className="text-zinc-400/40 dark:text-zinc-600/30"
+          />
+        </g>
+
+        {/* 3. LAUTAN AIR DENGAN OMBAK SEIGAIHA MELINTANG PENUH (Full Background Ocean) */}
+        <g>
+          {/* Lapisan Air Laut Dasar */}
+          <rect x="0" y="550" width="1440" height="350" fill="url(#seaGradFull)" />
+
+          {/* Garis Horizon Lautan */}
+          <line
+            x1="0"
+            y1="550"
+            x2="1440"
+            y2="550"
+            className="stroke-zinc-400/40 dark:stroke-zinc-700/40"
+            strokeWidth="1.5"
+          />
+
+          {/* Ombak Layer 1 (Midground Waves) */}
+          <path
+            d="M 0 595 Q 90 580 180 595 T 360 595 T 540 595 T 720 595 T 900 595 T 1080 595 T 1260 595 T 1440 595"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            className="text-zinc-400/50 dark:text-zinc-600/50"
+            style={{ animation: 'waveSway1 6s ease-in-out infinite', willChange: 'transform' }}
+          />
+
+          {/* Ombak Layer 2 (Crest Waves) */}
+          <path
+            d="M 0 655 Q 120 635 240 655 T 480 655 T 720 655 T 960 655 T 1200 655 T 1440 655"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeDasharray="16 8"
+            className="text-zinc-500/40 dark:text-zinc-500/30"
+            style={{ animation: 'waveSway2 7s ease-in-out infinite', willChange: 'transform' }}
+          />
+
+          {/* Ombak Layer 3 (Foreground Waves) */}
+          <path
+            d="M 0 725 Q 150 700 300 725 T 600 725 T 900 725 T 1200 725 T 1440 725"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            className="text-zinc-400/60 dark:text-zinc-700/60"
+            style={{ animation: 'waveSway1 8s ease-in-out infinite', willChange: 'transform' }}
+          />
+        </g>
+
+        {/* 4. TRANSISI ANTARA LAUT DAN DARATAN (Pesisir Pantai Menuju Section About) */}
+        <g>
+          {/* Garis Pantai Berpasir / Daratan Bertahap Menyatu ke Section About */}
+          <path
+            d="M 0 790 Q 240 760 480 795 T 960 775 T 1440 800 L 1440 900 L 0 900 Z"
+            fill="url(#coastlineGrad)"
+          />
+
+          {/* Buih Ombak Garis Pantai (Shoreline Foaming Crest) */}
+          <path
+            d="M 0 788 Q 240 758 480 793 T 960 773 T 1440 798"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeDasharray="14 7"
+            className="text-white dark:text-zinc-500/70 opacity-80"
+          />
+          <path
+            d="M 0 806 Q 260 780 520 812 T 1020 794 T 1440 816"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeDasharray="8 8"
+            className="text-white/70 dark:text-zinc-600/60 opacity-70"
+          />
+          <path
+            d="M 0 830 Q 300 810 600 835 T 1200 825 T 1440 840"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.2"
+            strokeDasharray="4 6"
+            className="text-white/40 dark:text-zinc-700/40 opacity-60"
+          />
         </g>
       </svg>
     </div>
@@ -95,7 +248,7 @@ function NightSkyAmbient() {
 function ToriiGateIllustration() {
   return (
     <div className="relative w-full max-w-[460px] sm:max-w-[500px] lg:max-w-[560px] aspect-square flex items-center justify-center select-none">
-      {/* Pendaran Cahaya Halus di Belakang Torii (Atmospheric Radial Glow) */}
+      {/* Pendaran Cahaya Halus di Belakang Torii */}
       <div
         aria-hidden="true"
         className="absolute inset-0 -z-10 flex items-center justify-center pointer-events-none"
@@ -117,13 +270,6 @@ function ToriiGateIllustration() {
             <stop offset="100%" stopColor="#DC2626" stopOpacity="0" />
           </radialGradient>
 
-          {/* Gradien Bintang Jatuh pada Komposisi Torii */}
-          <linearGradient id="toriiShootingStar" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
-            <stop offset="35%" stopColor="#C084FC" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#3B82F6" stopOpacity="0" />
-          </linearGradient>
-
           {/* Gradien Pilar Torii Silinder */}
           <linearGradient id="toriiPillarLeft" x1="220" y1="280" x2="246" y2="280" gradientUnits="userSpaceOnUse">
             <stop offset="0%" stopColor="#991B1B" />
@@ -134,12 +280,6 @@ function ToriiGateIllustration() {
             <stop offset="0%" stopColor="#991B1B" />
             <stop offset="40%" stopColor="#DC2626" />
             <stop offset="100%" stopColor="#7F1D1D" />
-          </linearGradient>
-
-          {/* Gradien Air Lautan di Bawah Torii */}
-          <linearGradient id="toriiWaterGrad" x1="320" y1="450" x2="320" y2="600" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#1e293b" stopOpacity="0.06" className="dark:stop-color-[#090d16] dark:stop-opacity-50" />
-            <stop offset="100%" stopColor="#0f172a" stopOpacity="0.18" className="dark:stop-color-[#04060a] dark:stop-opacity-90" />
           </linearGradient>
         </defs>
 
@@ -159,62 +299,7 @@ function ToriiGateIllustration() {
           }}
         />
 
-        {/* 2. BINTANG & BINTANG JATUH (Khusus Mode Gelap) */}
-        <g className="hidden dark:block">
-          <circle cx="110" cy="95" r="1.4" fill="#ffffff" style={{ animation: 'starTwinkle 3.2s ease-in-out infinite' }} />
-          <circle cx="180" cy="140" r="1.6" fill="#ffffff" style={{ animation: 'starTwinkle 4.1s ease-in-out 1s infinite' }} />
-          <circle cx="480" cy="85" r="1.8" fill="#ffffff" style={{ animation: 'starTwinkle 3.6s ease-in-out 0.5s infinite' }} />
-          <circle cx="550" cy="130" r="1.3" fill="#ffffff" style={{ animation: 'starTwinkle 4.4s ease-in-out 1.5s infinite' }} />
-          <circle cx="260" cy="70" r="1.2" fill="#ffffff" style={{ animation: 'starTwinkle 2.9s ease-in-out 2s infinite' }} />
-          <circle cx="390" cy="60" r="1.5" fill="#ffffff" style={{ animation: 'starTwinkle 3.8s ease-in-out 0.8s infinite' }} />
-
-          {/* Bintang Jatuh Meluncur di Atas Torii */}
-          <g style={{ animation: 'shootingStarFly1 7.2s ease-out infinite', willChange: 'transform' }}>
-            <line
-              x1="510"
-              y1="50"
-              x2="565"
-              y2="28"
-              stroke="url(#toriiShootingStar)"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-            <circle cx="510" cy="50" r="2" fill="#ffffff" />
-          </g>
-        </g>
-
-        {/* 3. AWAN TRADISIONAL JEPANG MELAYANG (Stylized Kumo Clouds) */}
-        {/* Awan Kiri */}
-        <g style={{ animation: 'cloudDriftLeft 18s ease-in-out infinite', willChange: 'transform' }}>
-          <path
-            d="M 60 250 C 60 228, 95 220, 118 235 C 132 212, 185 212, 208 235 C 230 224, 268 238, 268 262 C 268 276, 238 288, 208 284 L 75 284 C 60 276, 60 262, 60 250 Z"
-            className="fill-zinc-200/60 dark:fill-zinc-800/40"
-          />
-          <path
-            d="M 45 276 L 290 276"
-            stroke="currentColor"
-            strokeWidth="1.2"
-            strokeDasharray="4 5"
-            className="text-zinc-400/40 dark:text-zinc-600/30"
-          />
-        </g>
-
-        {/* Awan Kanan */}
-        <g style={{ animation: 'cloudDriftRight 22s ease-in-out infinite', willChange: 'transform' }}>
-          <path
-            d="M 420 230 C 420 208, 455 200, 478 215 C 498 198, 545 198, 565 218 C 585 208, 620 222, 620 244 C 620 258, 595 268, 565 264 L 435 264 C 420 258, 420 244, 420 230 Z"
-            className="fill-zinc-200/60 dark:fill-zinc-800/40"
-          />
-          <path
-            d="M 390 258 L 610 258"
-            stroke="currentColor"
-            strokeWidth="1.2"
-            strokeDasharray="4 5"
-            className="text-zinc-400/40 dark:text-zinc-600/30"
-          />
-        </g>
-
-        {/* 4. BEBATUAN KARANG MEOTO IWA DI KAKI KIRI */}
+        {/* 2. BEBATUAN KARANG MEOTO IWA DI KAKI KIRI */}
         <g>
           <polygon
             points="80,500 115,395 150,345 180,370 212,410 230,500"
@@ -228,7 +313,7 @@ function ToriiGateIllustration() {
           />
         </g>
 
-        {/* 5. GERBANG TORII JEPANG MEGAH & PRESISI */}
+        {/* 3. GERBANG TORII JEPANG MEGAH & PRESISI */}
         <g className="opacity-95 transition-opacity duration-500">
           {/* Kasagi: Palang Lengkung Paling Atas Torii */}
           <path
@@ -334,53 +419,6 @@ function ToriiGateIllustration() {
             strokeWidth="2.5"
             strokeDasharray="3 5"
             opacity="0.4"
-          />
-        </g>
-
-        {/* 6. LAUTAN AIR DENGAN OMBAK SEIGAIHA */}
-        <g>
-          {/* Lapisan Air Dasar */}
-          <rect x="0" y="445" width="640" height="195" fill="url(#toriiWaterGrad)" />
-
-          {/* Garis Horizon Lautan */}
-          <line
-            x1="0"
-            y1="445"
-            x2="640"
-            y2="445"
-            className="stroke-zinc-400/40 dark:stroke-zinc-700/40"
-            strokeWidth="1.5"
-          />
-
-          {/* Ombak Layer 1 */}
-          <path
-            d="M 0 480 Q 80 468 160 480 T 320 480 T 480 480 T 640 480"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            className="text-zinc-400/50 dark:text-zinc-600/50"
-            style={{ animation: 'waveSway1 6s ease-in-out infinite', willChange: 'transform' }}
-          />
-
-          {/* Ombak Layer 2 */}
-          <path
-            d="M 0 520 Q 100 504 200 520 T 400 520 T 600 520 T 640 520"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeDasharray="14 7"
-            className="text-zinc-500/40 dark:text-zinc-500/30"
-            style={{ animation: 'waveSway2 7s ease-in-out infinite', willChange: 'transform' }}
-          />
-
-          {/* Ombak Foreground Layer 3 */}
-          <path
-            d="M 0 575 Q 120 555 240 575 T 480 575 T 640 575"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            className="text-zinc-400/60 dark:text-zinc-700/60"
-            style={{ animation: 'waveSway1 8s ease-in-out infinite', willChange: 'transform' }}
           />
         </g>
       </svg>
@@ -944,8 +982,8 @@ export default function Home() {
         id="home"
         className="relative min-h-[100dvh] w-full flex items-center justify-center overflow-hidden select-none pt-24 pb-12 sm:pt-28 sm:pb-16 lg:py-0"
       >
-        {/* Background Ambient Langit Malam (Bintang Berkedip & Bintang Jatuh di Mode Gelap) */}
-        <NightSkyAmbient />
+        {/* Background Tradisional Jepang Penuh: Lautan, Awan, Bintang, Bintang Jatuh & Transisi Pantai */}
+        <FullBackgroundScenery />
 
         {/* Kontainer Utama Hero Section: Split Layout (Kiri: Teks & Buttons, Kanan: Torii Gate) */}
         <div className="relative z-10 max-w-7xl w-full mx-auto px-6 sm:px-10 lg:px-12 py-8 lg:py-16">
@@ -954,19 +992,6 @@ export default function Home() {
             {/* KOLOM KIRI: TEKS & TOMBOL AKSI (Rata Kiri, Tipografi Tegas & Modern) */}
             {/* =================================================================== */}
             <div className="lg:col-span-7 flex flex-col items-start text-left">
-              {/* Badge Kicker Arsitektural / Status Ketersediaan */}
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full border border-zinc-200/90 dark:border-zinc-800 bg-zinc-100/80 dark:bg-zinc-900/80 text-zinc-700 dark:text-zinc-300 font-jetbrains text-[11px] font-semibold tracking-wider uppercase mb-5 sm:mb-6 shadow-xs"
-              >
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>FULL-STACK DEVELOPER & DEVOPS</span>
-                <span className="text-zinc-400 dark:text-zinc-600">/</span>
-                <span className="text-zinc-500 dark:text-zinc-400 font-normal">SEMARANG, ID</span>
-              </motion.div>
-
               {/* Headline Utama: Tegas, Modern, dan Presisi */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
