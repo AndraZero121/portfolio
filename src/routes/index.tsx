@@ -731,133 +731,234 @@ function AboutMeSection() {
           </div>
         </div>
 
-        {/* ROADMAP / MILESTONES (Format Horizontal Persegi Panjang: ------------o----------o------------) */}
-        <div className="mt-8 sm:mt-10">
-          {/* Kontainer Horizontal Roadmap Persegi Panjang ke Kanan */}
-          <div
-            data-lenis-prevent
-            data-lenis-prevent-horizontal
-            className="w-full overflow-x-auto overscroll-x-contain py-4 select-none [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-zinc-300 dark:[&::-webkit-scrollbar-thumb]:bg-zinc-700"
-          >
-            <div className="w-[1140px] h-[330px] relative mx-auto">
-              {/* Garis Poros Horizontal Pusat: ------------o----------o------------ */}
-              <div
-                aria-hidden="true"
-                className="absolute top-1/2 left-4 right-4 h-[2px] -translate-y-1/2 bg-gradient-to-r from-blue-500/20 via-zinc-300 dark:via-zinc-700 to-blue-500/20 pointer-events-none z-0"
-              />
+        {/* ROADMAP / MILESTONES (Responsif: Fluid Staggered di Desktop & Vertical Timeline di Mobile - Bebas Scroll Horizontal) */}
+        <div className="mt-10 sm:mt-12">
+          {/* ========================================================================= */}
+          {/* 1. TAMPILAN DESKTOP (md:block): Fluid Staggered Timeline, 100% Pas, No Scroll */}
+          {/* ========================================================================= */}
+          <div className="hidden md:block w-full relative h-[340px] select-none">
+            {/* Garis Poros Horizontal Pusat: ------------o----------o------------ */}
+            <div
+              aria-hidden="true"
+              className="absolute top-1/2 left-2 right-2 h-[2px] -translate-y-1/2 bg-gradient-to-r from-blue-500/20 via-zinc-300 dark:via-zinc-700 to-blue-500/20 pointer-events-none z-0"
+            />
 
-              {/* 5 Milestone Tersusun Selang-Seling (Interleaved: 3 Atas, 2 Bawah) Sesuai Sketsa */}
-              {ROADMAP_ITEMS.map((item, idx) => {
-                const isTop = item.position === 'top'
-                const isFuture = item.isCurrentOrFuture
-                const nodeX = [170, 370, 570, 770, 970][idx]
+            {/* 5 Milestone Selang-Seling Sesuai Sketsa (3 Atas, 2 Bawah) Berbasis Persentase Dinamis */}
+            {ROADMAP_ITEMS.map((item, idx) => {
+              const isTop = item.position === 'top'
+              const isFuture = item.isCurrentOrFuture
+              const nodePercent = ['11.5%', '30.75%', '50%', '69.25%', '88.5%'][idx]
 
-                return (
-                  <div key={idx} className="group">
-                    {/* Kartu Konten Milestone (Persegi Panjang Horisontal) */}
+              return (
+                <div key={idx} className="group">
+                  {/* Kartu Konten Milestone (Persegi Panjang Horisontal Pas Lebar) */}
+                  <div
+                    style={{ left: nodePercent }}
+                    className={`absolute -translate-x-1/2 w-[195px] lg:w-[215px] xl:w-[225px] h-[142px] lg:h-[146px] z-10 ${
+                      isTop ? 'bottom-[calc(50%+16px)]' : 'top-[calc(50%+16px)]'
+                    }`}
+                  >
                     <div
-                      style={{ left: `${nodeX}px` }}
-                      className={`absolute -translate-x-1/2 w-[280px] h-[136px] z-10 ${
-                        isTop ? 'bottom-[calc(50%+16px)]' : 'top-[calc(50%+16px)]'
+                      className={`w-full h-full p-3 lg:p-3.5 rounded-2xl transition-all duration-300 border bg-white dark:bg-zinc-900 shadow-sm flex flex-col justify-between group-hover:shadow-md ${
+                        isFuture
+                          ? 'border-blue-500/60 dark:border-blue-400/60 ring-1 ring-blue-500/30 bg-blue-50/20 dark:bg-blue-950/20'
+                          : 'border-zinc-200/90 dark:border-zinc-800 group-hover:border-blue-500/50 dark:group-hover:border-blue-400/50'
                       }`}
                     >
-                      <div
-                        className={`w-full h-full p-3.5 rounded-2xl transition-all duration-300 border bg-white dark:bg-zinc-900 shadow-sm flex flex-col justify-between group-hover:shadow-md ${
-                          isFuture
-                            ? 'border-blue-500/60 dark:border-blue-400/60 ring-1 ring-blue-500/30 bg-blue-50/20 dark:bg-blue-950/20'
-                            : 'border-zinc-200/90 dark:border-zinc-800 group-hover:border-blue-500/50 dark:group-hover:border-blue-400/50'
-                        }`}
-                      >
-                        <div>
-                          {/* Baris Atas: Badge Tahun di Kiri & Logo Bulat Instansi di Kanan */}
-                          <div className="flex items-center justify-between gap-2">
-                            <span
-                              className={`font-jetbrains text-[9.5px] sm:text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded inline-block ${
-                                isFuture
-                                  ? 'bg-blue-600 text-white dark:bg-blue-500'
-                                  : 'bg-zinc-100 dark:bg-zinc-800 text-blue-600 dark:text-blue-400'
-                              }`}
-                            >
-                              {item.year}
-                            </span>
+                      <div>
+                        {/* Baris Atas: Badge Tahun di Kiri & Logo Bulat Instansi di Kanan */}
+                        <div className="flex items-center justify-between gap-1.5">
+                          <span
+                            className={`font-jetbrains text-[9px] lg:text-[9.5px] font-bold tracking-wider uppercase px-1.5 py-0.5 rounded inline-block ${
+                              isFuture
+                                ? 'bg-blue-600 text-white dark:bg-blue-500'
+                                : 'bg-zinc-100 dark:bg-zinc-800 text-blue-600 dark:text-blue-400'
+                            }`}
+                          >
+                            {item.year}
+                          </span>
 
-                            {/* Logo Bulat Instansi Terkait */}
-                            <a
-                              href={item.institution.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              title={`Kunjungi website resmi ${item.institution.name}`}
-                              aria-label={`Website resmi ${item.institution.name}`}
-                              onClick={(e) => e.stopPropagation()}
-                              className="relative flex items-center justify-center w-7 h-7 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:border-blue-500 dark:hover:border-blue-400 hover:scale-110 shadow-xs hover:shadow transition-all duration-200 group/inst shrink-0 overflow-hidden"
-                            >
-                              {item.institution.logo ? (
-                                <img
-                                  src={item.institution.logo}
-                                  alt={item.institution.name}
-                                  loading="lazy"
-                                  referrerPolicy="no-referrer"
-                                  className="w-full h-full object-contain p-0.5 rounded-full"
-                                />
-                              ) : (
-                                <span className="font-jetbrains text-[10px] sm:text-[10.5px] font-bold text-zinc-700 dark:text-zinc-200 group-hover/inst:text-blue-600 dark:group-hover/inst:text-blue-400 transition-colors">
-                                  {item.institution.short}
-                                </span>
-                              )}
-                              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-blue-600 text-white flex items-center justify-center opacity-0 group-hover/inst:opacity-100 transition-opacity shadow-xs">
-                                <ExternalLink className="w-2 h-2" />
+                          {/* Logo Bulat Instansi Terkait */}
+                          <a
+                            href={item.institution.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={`Kunjungi website resmi ${item.institution.name}`}
+                            aria-label={`Website resmi ${item.institution.name}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="relative flex items-center justify-center w-6 h-6 lg:w-7 lg:h-7 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:border-blue-500 dark:hover:border-blue-400 hover:scale-110 shadow-xs hover:shadow transition-all duration-200 group/inst shrink-0 overflow-hidden"
+                          >
+                            {item.institution.logo ? (
+                              <img
+                                src={item.institution.logo}
+                                alt={item.institution.name}
+                                loading="lazy"
+                                referrerPolicy="no-referrer"
+                                className="w-full h-full object-contain p-0.5 rounded-full"
+                              />
+                            ) : (
+                              <span className="font-jetbrains text-[9.5px] lg:text-[10px] font-bold text-zinc-700 dark:text-zinc-200 group-hover/inst:text-blue-600 dark:group-hover/inst:text-blue-400 transition-colors">
+                                {item.institution.short}
                               </span>
-                            </a>
-                          </div>
-
-                          <h4 className="text-xs sm:text-[13px] font-bold tracking-tight text-zinc-950 dark:text-white mt-1.5 leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                            {item.title}
-                          </h4>
+                            )}
+                            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-blue-600 text-white flex items-center justify-center opacity-0 group-hover/inst:opacity-100 transition-opacity shadow-xs">
+                              <ExternalLink className="w-1.5 h-1.5" />
+                            </span>
+                          </a>
                         </div>
 
-                        <p className="text-[10.5px] sm:text-[11px] text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal mt-1.5">
-                          {item.description}
-                        </p>
+                        <h4 className="text-[11px] lg:text-xs font-bold tracking-tight text-zinc-950 dark:text-white mt-1 leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                          {item.title}
+                        </h4>
                       </div>
-                    </div>
 
-                    {/* Stem Penghubung Vertikal */}
-                    <div
-                      style={{ left: `${nodeX}px` }}
-                      className={`w-[2px] h-4 absolute -translate-x-1/2 transition-colors duration-300 z-10 ${
-                        isTop ? 'bottom-1/2' : 'top-1/2'
-                      } ${
-                        isFuture
-                          ? 'bg-blue-500 dark:bg-blue-400'
-                          : 'bg-zinc-300 dark:bg-zinc-700 group-hover:bg-blue-500 dark:group-hover:bg-blue-400'
-                      }`}
-                    />
-
-                    {/* Titik Node 'o' di Sumbu Poros */}
-                    <div
-                      style={{ left: `${nodeX}px` }}
-                      className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex items-center justify-center"
-                    >
-                      <div
-                        className={`w-4 h-4 rounded-full border-[2.5px] bg-white dark:bg-zinc-950 flex items-center justify-center transition-all duration-300 ${
-                          isFuture
-                            ? 'border-blue-600 dark:border-blue-400 scale-110 shadow-[0_0_12px_rgba(37,99,235,0.45)]'
-                            : 'border-zinc-400 dark:border-zinc-600 group-hover:border-blue-600 dark:group-hover:border-blue-400 group-hover:scale-125'
-                        }`}
-                      >
-                        <div
-                          className={`w-1 h-1 rounded-full transition-colors duration-300 ${
-                            isFuture
-                              ? 'bg-blue-600 dark:bg-blue-400'
-                              : 'bg-transparent group-hover:bg-blue-600 dark:group-hover:bg-blue-400'
-                          }`}
-                        />
-                      </div>
+                      <p className="text-[10px] lg:text-[10.5px] text-zinc-600 dark:text-zinc-400 leading-snug font-normal mt-1 line-clamp-4">
+                        {item.description}
+                      </p>
                     </div>
                   </div>
-                )
-              })}
-            </div>
+
+                  {/* Stem Penghubung Vertikal */}
+                  <div
+                    style={{ left: nodePercent }}
+                    className={`w-[2px] h-4 absolute -translate-x-1/2 transition-colors duration-300 z-10 ${
+                      isTop ? 'bottom-1/2' : 'top-1/2'
+                    } ${
+                      isFuture
+                        ? 'bg-blue-500 dark:bg-blue-400'
+                        : 'bg-zinc-300 dark:bg-zinc-700 group-hover:bg-blue-500 dark:group-hover:bg-blue-400'
+                    }`}
+                  />
+
+                  {/* Titik Node 'o' di Sumbu Poros */}
+                  <div
+                    style={{ left: nodePercent }}
+                    className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex items-center justify-center"
+                  >
+                    <div
+                      className={`w-3.5 h-3.5 lg:w-4 lg:h-4 rounded-full border-[2.5px] bg-white dark:bg-zinc-950 flex items-center justify-center transition-all duration-300 ${
+                        isFuture
+                          ? 'border-blue-600 dark:border-blue-400 scale-110 shadow-[0_0_12px_rgba(37,99,235,0.45)]'
+                          : 'border-zinc-400 dark:border-zinc-600 group-hover:border-blue-600 dark:group-hover:border-blue-400 group-hover:scale-125'
+                      }`}
+                    >
+                      <div
+                        className={`w-1 h-1 rounded-full transition-colors duration-300 ${
+                          isFuture
+                            ? 'bg-blue-600 dark:bg-blue-400'
+                            : 'bg-transparent group-hover:bg-blue-600 dark:group-hover:bg-blue-400'
+                        }`}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* ========================================================================= */}
+          {/* 2. TAMPILAN MOBILE (md:hidden): Vertical Timeline Elegan, 100% Full Width */}
+          {/* ========================================================================= */}
+          <div className="md:hidden relative pl-6 sm:pl-8 space-y-5 pt-1">
+            {/* Garis Poros Vertikal Pusat */}
+            <div
+              aria-hidden="true"
+              className="absolute left-2 sm:left-3 top-3 bottom-3 w-[2px] bg-gradient-to-b from-blue-500/20 via-zinc-300 dark:via-zinc-700 to-blue-500/20 pointer-events-none"
+            />
+
+            {ROADMAP_ITEMS.map((item, idx) => {
+              const isFuture = item.isCurrentOrFuture
+
+              return (
+                <div key={idx} className="relative group">
+                  {/* Titik Node 'o' di Sumbu Vertikal */}
+                  <div
+                    className={`absolute -left-6 sm:-left-8 top-5 -translate-x-1/2 w-4 h-4 rounded-full border-[2.5px] bg-white dark:bg-zinc-950 flex items-center justify-center transition-all duration-300 z-10 ${
+                      isFuture
+                        ? 'border-blue-600 dark:border-blue-400 scale-110 shadow-[0_0_12px_rgba(37,99,235,0.45)]'
+                        : 'border-zinc-400 dark:border-zinc-600 group-hover:border-blue-600 dark:group-hover:border-blue-400 group-hover:scale-125'
+                    }`}
+                  >
+                    <div
+                      className={`w-1 h-1 rounded-full transition-colors duration-300 ${
+                        isFuture
+                          ? 'bg-blue-600 dark:bg-blue-400'
+                          : 'bg-transparent group-hover:bg-blue-600 dark:group-hover:bg-blue-400'
+                      }`}
+                    />
+                  </div>
+
+                  {/* Stem Horisontal Menghubungkan Node ke Atap Kartu */}
+                  <div
+                    className={`absolute -left-4 sm:-left-6 top-7 w-4 sm:w-6 h-[2px] -translate-y-1/2 transition-colors duration-300 ${
+                      isFuture
+                        ? 'bg-blue-500 dark:bg-blue-400'
+                        : 'bg-zinc-300 dark:bg-zinc-700 group-hover:bg-blue-500 dark:group-hover:bg-blue-400'
+                    }`}
+                  />
+
+                  {/* Kartu Konten Milestone Mobile (Full Width Nyaman & Rapi) */}
+                  <div
+                    className={`w-full p-4 rounded-2xl transition-all duration-300 border bg-white dark:bg-zinc-900 shadow-sm flex flex-col justify-between group-hover:shadow-md ${
+                      isFuture
+                        ? 'border-blue-500/60 dark:border-blue-400/60 ring-1 ring-blue-500/30 bg-blue-50/20 dark:bg-blue-950/20'
+                        : 'border-zinc-200/90 dark:border-zinc-800 group-hover:border-blue-500/50 dark:group-hover:border-blue-400/50'
+                    }`}
+                  >
+                    <div>
+                      {/* Baris Atas: Badge Tahun di Kiri & Logo Bulat Instansi di Kanan */}
+                      <div className="flex items-center justify-between gap-2">
+                        <span
+                          className={`font-jetbrains text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded inline-block ${
+                            isFuture
+                              ? 'bg-blue-600 text-white dark:bg-blue-500'
+                              : 'bg-zinc-100 dark:bg-zinc-800 text-blue-600 dark:text-blue-400'
+                          }`}
+                        >
+                          {item.year}
+                        </span>
+
+                        {/* Logo Bulat Instansi Terkait */}
+                        <a
+                          href={item.institution.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title={`Kunjungi website resmi ${item.institution.name}`}
+                          aria-label={`Website resmi ${item.institution.name}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="relative flex items-center justify-center w-7 h-7 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:border-blue-500 dark:hover:border-blue-400 hover:scale-110 shadow-xs hover:shadow transition-all duration-200 group/inst shrink-0 overflow-hidden"
+                        >
+                          {item.institution.logo ? (
+                            <img
+                              src={item.institution.logo}
+                              alt={item.institution.name}
+                              loading="lazy"
+                              referrerPolicy="no-referrer"
+                              className="w-full h-full object-contain p-0.5 rounded-full"
+                            />
+                          ) : (
+                            <span className="font-jetbrains text-[10px] sm:text-[10.5px] font-bold text-zinc-700 dark:text-zinc-200 group-hover/inst:text-blue-600 dark:group-hover/inst:text-blue-400 transition-colors">
+                              {item.institution.short}
+                            </span>
+                          )}
+                          <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-blue-600 text-white flex items-center justify-center opacity-0 group-hover/inst:opacity-100 transition-opacity shadow-xs">
+                            <ExternalLink className="w-2 h-2" />
+                          </span>
+                        </a>
+                      </div>
+
+                      <h4 className="text-sm font-bold tracking-tight text-zinc-950 dark:text-white mt-2 leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                        {item.title}
+                      </h4>
+                    </div>
+
+                    <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal mt-2">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>
