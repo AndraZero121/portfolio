@@ -428,45 +428,188 @@ function JapaneseLandscapeScenery() {
 interface RoadmapItem {
   year: string
   title: string
-  description: string
+  description: React.ReactNode
   position: 'top' | 'bottom'
   isCurrentOrFuture?: boolean
+  institution: {
+    name: string
+    url: string
+    short: string
+    logo?: string
+  }
 }
 
 const ROADMAP_ITEMS: RoadmapItem[] = [
   {
     year: '2022 — 2023',
     title: 'First Code & Web',
-    description:
-      'Mulai koding pertama membuat landing page HTML, CSS, dan JS saat masih bersekolah di SMP 35 Semarang.',
+    institution: {
+      name: 'SMPN 35 Semarang',
+      url: 'https://smpn35semarang.sch.id',
+      short: '35',
+    },
+    description: (
+      <>
+        Mulai koding pertama membuat landing page dengan{' '}
+        <strong className="font-semibold text-zinc-950 dark:text-white">
+          HTML, CSS, dan JavaScript
+        </strong>{' '}
+        saat masih bersekolah di{' '}
+        <a
+          href="https://smpn35semarang.sch.id"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-zinc-950 dark:text-white underline decoration-zinc-400 dark:decoration-zinc-500 underline-offset-2 hover:decoration-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors inline-flex items-center gap-0.5"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <span>SMPN 35 Semarang</span>
+          <ExternalLink className="w-2.5 h-2.5 opacity-60 inline" />
+        </a>
+        .
+      </>
+    ),
     position: 'top',
   },
   {
     year: '2024',
     title: 'SMK Palapa & Juara 3 LKS',
-    description:
-      'Masuk RPL SMK Palapa Semarang, pelajari dasar pemrograman, PHP, Laravel, serta juara 3 LKS di SMK 8 Semarang.',
+    institution: {
+      name: 'SMK Palapa Semarang',
+      url: 'https://smkpalapasemarang.sch.id',
+      short: 'PLP',
+    },
+    description: (
+      <>
+        Masuk jurusan RPL di{' '}
+        <a
+          href="https://smkpalapasemarang.sch.id"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-zinc-950 dark:text-white underline decoration-zinc-400 dark:decoration-zinc-500 underline-offset-2 hover:decoration-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors inline-flex items-center gap-0.5"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <span>SMK Palapa Semarang</span>
+          <ExternalLink className="w-2.5 h-2.5 opacity-60 inline" />
+        </a>
+        , mendalami dasar pemrograman,{' '}
+        <strong className="font-semibold text-zinc-950 dark:text-white">
+          PHP & Laravel
+        </strong>
+        , serta meraih{' '}
+        <strong className="font-semibold text-zinc-950 dark:text-white">
+          Juara 3 LKS
+        </strong>{' '}
+        di SMKN 8 Semarang.
+      </>
+    ),
     position: 'bottom',
   },
   {
     year: '2025',
     title: 'Crocodic & Novarsity',
-    description:
-      'Kelas Industri & magang di Crocodic Tembalang, raih piagam Bank Jateng Syariah, inisiasi Untrustnova, dan rintis Novarsity.',
+    institution: {
+      name: 'Crocodic Studio',
+      url: 'https://crocodic.com',
+      short: 'CRD',
+    },
+    description: (
+      <>
+        Kelas Industri & magang di{' '}
+        <a
+          href="https://crocodic.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-zinc-950 dark:text-white underline decoration-zinc-400 dark:decoration-zinc-500 underline-offset-2 hover:decoration-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors inline-flex items-center gap-0.5"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <span>Crocodic</span>
+          <ExternalLink className="w-2.5 h-2.5 opacity-60 inline" />
+        </a>{' '}
+        Tembalang, raih piagam{' '}
+        <strong className="font-semibold text-zinc-950 dark:text-white">
+          Bank Jateng Syariah
+        </strong>
+        , inisiasi Untrustnova, hingga mendirikan{' '}
+        <a
+          href="https://github.com/untrustnova"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-zinc-950 dark:text-white underline decoration-zinc-400 dark:decoration-zinc-500 underline-offset-2 hover:decoration-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors inline-flex items-center gap-0.5"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <span>Novarsity Digital Indonesia</span>
+          <ExternalLink className="w-2.5 h-2.5 opacity-60 inline" />
+        </a>
+        .
+      </>
+    ),
     position: 'top',
   },
   {
     year: '2026',
     title: 'Lulusan Terbaik & Evaluasi',
-    description:
-      'Lulus Terbaik SMK Palapa & Crocodic. Mengikuti LKS terakhir di SMK 8 Semarang dengan pembelajaran & evaluasi diri.',
+    institution: {
+      name: 'SMK Palapa Semarang',
+      url: 'https://smkpalapasemarang.sch.id',
+      short: 'PLP',
+    },
+    description: (
+      <>
+        Lulus sebagai{' '}
+        <strong className="font-semibold text-zinc-950 dark:text-white">
+          Lulusan Terbaik
+        </strong>{' '}
+        dari{' '}
+        <a
+          href="https://smkpalapasemarang.sch.id"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-zinc-950 dark:text-white underline decoration-zinc-400 dark:decoration-zinc-500 underline-offset-2 hover:decoration-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors inline-flex items-center gap-0.5"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <span>SMK Palapa</span>
+          <ExternalLink className="w-2.5 h-2.5 opacity-60 inline" />
+        </a>{' '}
+        & Kelas Industri Crocodic, serta memetik banyak evaluasi dari ajang{' '}
+        <strong className="font-semibold text-zinc-950 dark:text-white">
+          LKS Terakhir
+        </strong>
+        .
+      </>
+    ),
     position: 'bottom',
   },
   {
     year: 'KEDEPANNYA',
     title: 'Continuous Growth',
-    description:
-      '"I hope that I will become a better person next time :3" — bertekad terus berkembang menjadi engineer yang lebih baik.',
+    institution: {
+      name: 'Novarsity Digital Indonesia',
+      url: 'https://github.com/untrustnova',
+      short: 'NDI',
+    },
+    description: (
+      <>
+        <span className="italic text-zinc-700 dark:text-zinc-300">
+          &ldquo;I hope that I will become a better person next time :3&rdquo;
+        </span>{' '}
+        — bertekad terus berkembang sebagai{' '}
+        <strong className="font-semibold text-zinc-950 dark:text-white">
+          Backend Developer & DevOps Engineer
+        </strong>{' '}
+        di{' '}
+        <a
+          href="https://github.com/untrustnova"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-zinc-950 dark:text-white underline decoration-zinc-400 dark:decoration-zinc-500 underline-offset-2 hover:decoration-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors inline-flex items-center gap-0.5"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <span>Novarsity</span>
+          <ExternalLink className="w-2.5 h-2.5 opacity-60 inline" />
+        </a>
+        .
+      </>
+    ),
     position: 'top',
     isCurrentOrFuture: true,
   },
@@ -583,7 +726,7 @@ function AboutMeSection() {
           </div>
         </div>
 
-        {/* ROADMAP / MILESTONES (Format Horizontal Kompak & Persegi: ------------o----------o------------) */}
+        {/* ROADMAP / MILESTONES (Format Horizontal Persegi Panjang: ------------o----------o------------) */}
         <div className="mt-8 sm:mt-10">
           {/* Kontainer Horizontal Roadmap Persegi Panjang ke Kanan */}
           <div
@@ -591,15 +734,15 @@ function AboutMeSection() {
             data-lenis-prevent-horizontal
             className="w-full overflow-x-auto overscroll-x-contain py-2 select-none [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-zinc-300 dark:[&::-webkit-scrollbar-thumb]:bg-zinc-700"
           >
-            <div className="min-w-[800px] sm:min-w-[860px] relative px-2 sm:px-4">
+            <div className="min-w-[1240px] sm:min-w-[1340px] relative px-3 sm:px-6">
               {/* Garis Poros Horizontal Pusat: ------------o----------o------------ */}
               <div
                 aria-hidden="true"
-                className="absolute top-[148px] sm:top-[152px] -translate-y-1/2 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-500/20 via-zinc-300 dark:via-zinc-700 to-blue-500/20 pointer-events-none z-0"
+                className="absolute top-[164px] sm:top-[170px] -translate-y-1/2 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-500/20 via-zinc-300 dark:via-zinc-700 to-blue-500/20 pointer-events-none z-0"
               />
 
               {/* 5 Kolom Milestone Bergantian Atas & Bawah */}
-              <div className="grid grid-cols-5 gap-3 sm:gap-4 relative z-10">
+              <div className="grid grid-cols-5 gap-4 sm:gap-6 relative z-10">
                 {ROADMAP_ITEMS.map((item, idx) => {
                   const isTop = item.position === 'top'
                   const isFuture = item.isCurrentOrFuture
@@ -609,31 +752,62 @@ function AboutMeSection() {
                       key={idx}
                       className="flex flex-col items-center w-full relative group"
                     >
-                      {/* BARIS 1: TOP CARDS (h-[132px] sm:h-[136px]) */}
-                      <div className="h-[132px] sm:h-[136px] w-full flex items-end">
+                      {/* BARIS 1: TOP CARDS (h-[148px] sm:h-[154px]) */}
+                      <div className="h-[148px] sm:h-[154px] w-full flex items-end">
                         {isTop ? (
                           <div
-                            className={`w-full h-full p-2.5 sm:p-3 rounded-2xl transition-all duration-300 border bg-white dark:bg-zinc-900 shadow-sm flex flex-col justify-start group-hover:shadow-md ${
+                            className={`w-full h-full p-3.5 sm:p-4 rounded-2xl transition-all duration-300 border bg-white dark:bg-zinc-900 shadow-sm flex flex-col justify-between group-hover:shadow-md ${
                               isFuture
                                 ? 'border-blue-500/60 dark:border-blue-400/60 ring-1 ring-blue-500/30 bg-blue-50/20 dark:bg-blue-950/20'
                                 : 'border-zinc-200/90 dark:border-zinc-800 group-hover:border-blue-500/50 dark:group-hover:border-blue-400/50'
                             }`}
                           >
                             <div>
-                              <span
-                                className={`font-jetbrains text-[9.5px] sm:text-[10px] font-bold tracking-wider uppercase px-1.5 py-0.5 rounded inline-block ${
-                                  isFuture
-                                    ? 'bg-blue-600 text-white dark:bg-blue-500'
-                                    : 'bg-zinc-100 dark:bg-zinc-800 text-blue-600 dark:text-blue-400'
-                                }`}
-                              >
-                                {item.year}
-                              </span>
-                              <h4 className="text-[11.5px] sm:text-xs font-bold tracking-tight text-zinc-950 dark:text-white mt-1 leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                              {/* Baris Atas: Badge Tahun di Kiri & Logo Bulat Instansi di Kanan */}
+                              <div className="flex items-center justify-between gap-2">
+                                <span
+                                  className={`font-jetbrains text-[9.5px] sm:text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded inline-block ${
+                                    isFuture
+                                      ? 'bg-blue-600 text-white dark:bg-blue-500'
+                                      : 'bg-zinc-100 dark:bg-zinc-800 text-blue-600 dark:text-blue-400'
+                                  }`}
+                                >
+                                  {item.year}
+                                </span>
+
+                                {/* Logo Bulat Instansi Terkait */}
+                                <a
+                                  href={item.institution.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  title={`Kunjungi ${item.institution.name}`}
+                                  aria-label={`Website resmi ${item.institution.name}`}
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="relative flex items-center justify-center w-7 h-7 sm:w-7.5 sm:h-7.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 hover:border-blue-500 dark:hover:border-blue-400 hover:scale-110 shadow-xs hover:shadow transition-all duration-200 group/inst shrink-0"
+                                >
+                                  {item.institution.logo ? (
+                                    <img
+                                      src={item.institution.logo}
+                                      alt={item.institution.name}
+                                      className="w-full h-full object-cover rounded-full p-0.5"
+                                    />
+                                  ) : (
+                                    <span className="font-jetbrains text-[10px] sm:text-[10.5px] font-bold text-zinc-700 dark:text-zinc-200 group-hover/inst:text-blue-600 dark:group-hover/inst:text-blue-400 transition-colors">
+                                      {item.institution.short}
+                                    </span>
+                                  )}
+                                  <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-blue-600 text-white flex items-center justify-center opacity-0 group-hover/inst:opacity-100 transition-opacity shadow-xs">
+                                    <ExternalLink className="w-2 h-2" />
+                                  </span>
+                                </a>
+                              </div>
+
+                              <h4 className="text-xs sm:text-[13px] font-bold tracking-tight text-zinc-950 dark:text-white mt-1.5 leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                                 {item.title}
                               </h4>
                             </div>
-                            <p className="text-[10.5px] sm:text-[11px] text-zinc-600 dark:text-zinc-400 leading-snug font-normal mt-1 line-clamp-4">
+
+                            <p className="text-[10.5px] sm:text-[11px] text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal mt-2">
                               {item.description}
                             </p>
                           </div>
@@ -678,19 +852,50 @@ function AboutMeSection() {
                         )}
                       </div>
 
-                      {/* BARIS 3: BOTTOM CARDS (h-[132px] sm:h-[136px]) */}
-                      <div className="h-[132px] sm:h-[136px] w-full flex items-start">
+                      {/* BARIS 3: BOTTOM CARDS (h-[148px] sm:h-[154px]) */}
+                      <div className="h-[148px] sm:h-[154px] w-full flex items-start">
                         {!isTop ? (
-                          <div className="w-full h-full p-2.5 sm:p-3 rounded-2xl transition-all duration-300 border border-zinc-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm flex flex-col justify-start group-hover:shadow-md group-hover:border-blue-500/50 dark:group-hover:border-blue-400/50">
+                          <div className="w-full h-full p-3.5 sm:p-4 rounded-2xl transition-all duration-300 border border-zinc-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm flex flex-col justify-between group-hover:shadow-md group-hover:border-blue-500/50 dark:group-hover:border-blue-400/50">
                             <div>
-                              <span className="font-jetbrains text-[9.5px] sm:text-[10px] font-bold tracking-wider uppercase px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-blue-600 dark:text-blue-400 inline-block">
-                                {item.year}
-                              </span>
-                              <h4 className="text-[11.5px] sm:text-xs font-bold tracking-tight text-zinc-950 dark:text-white mt-1 leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                              {/* Baris Atas: Badge Tahun di Kiri & Logo Bulat Instansi di Kanan */}
+                              <div className="flex items-center justify-between gap-2">
+                                <span className="font-jetbrains text-[9.5px] sm:text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-blue-600 dark:text-blue-400 inline-block">
+                                  {item.year}
+                                </span>
+
+                                {/* Logo Bulat Instansi Terkait */}
+                                <a
+                                  href={item.institution.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  title={`Kunjungi ${item.institution.name}`}
+                                  aria-label={`Website resmi ${item.institution.name}`}
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="relative flex items-center justify-center w-7 h-7 sm:w-7.5 sm:h-7.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 hover:border-blue-500 dark:hover:border-blue-400 hover:scale-110 shadow-xs hover:shadow transition-all duration-200 group/inst shrink-0"
+                                >
+                                  {item.institution.logo ? (
+                                    <img
+                                      src={item.institution.logo}
+                                      alt={item.institution.name}
+                                      className="w-full h-full object-cover rounded-full p-0.5"
+                                    />
+                                  ) : (
+                                    <span className="font-jetbrains text-[10px] sm:text-[10.5px] font-bold text-zinc-700 dark:text-zinc-200 group-hover/inst:text-blue-600 dark:group-hover/inst:text-blue-400 transition-colors">
+                                      {item.institution.short}
+                                    </span>
+                                  )}
+                                  <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-blue-600 text-white flex items-center justify-center opacity-0 group-hover/inst:opacity-100 transition-opacity shadow-xs">
+                                    <ExternalLink className="w-2 h-2" />
+                                  </span>
+                                </a>
+                              </div>
+
+                              <h4 className="text-xs sm:text-[13px] font-bold tracking-tight text-zinc-950 dark:text-white mt-1.5 leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                                 {item.title}
                               </h4>
                             </div>
-                            <p className="text-[10.5px] sm:text-[11px] text-zinc-600 dark:text-zinc-400 leading-snug font-normal mt-1 line-clamp-4">
+
+                            <p className="text-[10.5px] sm:text-[11px] text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal mt-2">
                               {item.description}
                             </p>
                           </div>
