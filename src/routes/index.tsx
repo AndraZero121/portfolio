@@ -66,11 +66,11 @@ function FullBackgroundScenery() {
             <stop offset="100%" stopColor="#0f172a" stopOpacity="0.35" className="dark:stop-color-[#04060a] dark:stop-opacity-95" />
           </linearGradient>
 
-          {/* Gradien Transisi Pesisir Pantai (Garis Pantai Menuju Daratan Section About) */}
+          {/* Gradien Transisi Pesisir Pantai (Garis Pantai Pasir Hitam Vulkanik Menuju Daratan) */}
           <linearGradient id="coastlineGrad" x1="0" y1="780" x2="0" y2="900" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#e2d9cc" stopOpacity="0.4" className="dark:stop-color-[#12131a] dark:stop-opacity-60" />
-            <stop offset="50%" stopColor="#f4ede2" stopOpacity="0.75" className="dark:stop-color-[#0a0a0f] dark:stop-opacity-85" />
-            <stop offset="100%" stopColor="#ffffff" stopOpacity="1" className="dark:stop-color-[#050507] dark:stop-opacity-1" />
+            <stop offset="0%" stopColor="#181822" stopOpacity="0.85" />
+            <stop offset="40%" stopColor="#101016" stopOpacity="0.95" />
+            <stop offset="100%" stopColor="#050507" stopOpacity="1" />
           </linearGradient>
         </defs>
 

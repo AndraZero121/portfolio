@@ -4,6 +4,7 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 
 import { ReactLenis } from 'lenis/react'
 import Navbar from '#/components/Navbar'
+import Footer from '#/components/Footer'
 import { getLocale } from '#/paraglide/runtime'
 
 import appCss from '../styles.css?url'
@@ -52,6 +53,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <main className="flex-1">
             {children}
           </main>
+          <Footer />
         </ReactLenis>
         <TanStackDevtools
           config={{
