@@ -7,6 +7,7 @@ import {
   GitFork,
   Globe,
   FolderGit2,
+  ChevronDown,
 } from 'lucide-react'
 import { siGithub } from 'simple-icons'
 import { DEFAULT_WORKS, getWorksFn, type WorkRepo } from '#/server/works'
@@ -21,6 +22,7 @@ export default function WorksSection() {
   const [works, setWorks] = useState<WorkRepo[]>(DEFAULT_WORKS)
   const [accountFilter, setAccountFilter] = useState<'all' | 'untrustnova' | 'AndraZero121'>('all')
   const [languageFilter, setLanguageFilter] = useState<string>('all')
+  const [isMobileExpanded, setIsMobileExpanded] = useState(false)
 
   // Ambil data terbaru secara asinkron via server function TanStack Start
   useEffect(() => {
@@ -189,8 +191,9 @@ export default function WorksSection() {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
         >
           <AnimatePresence mode="popLayout">
-            {filteredWorks.map((work) => {
+            {filteredWorks.map((work, idx) => {
               const isUntrustnova = work.owner === 'untrustnova'
+              const isHiddenOnMobile = !isMobileExpanded && idx >= 3
 
               return (
                 <motion.div
@@ -200,7 +203,9 @@ export default function WorksSection() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200/90 dark:border-zinc-800/90 bg-white/80 dark:bg-[#0c0c10]/80 p-5 sm:p-6 backdrop-blur-xs transition-all duration-300 hover:border-zinc-400 dark:hover:border-zinc-600 hover:shadow-lg dark:hover:shadow-2xl dark:hover:shadow-black/50"
+                  className={`group relative ${
+                    isHiddenOnMobile ? 'hidden sm:flex' : 'flex'
+                  } flex-col justify-between rounded-2xl border border-zinc-200/90 dark:border-zinc-800/90 bg-white/80 dark:bg-[#0c0c10]/80 p-5 sm:p-6 backdrop-blur-xs transition-all duration-300 hover:border-zinc-400 dark:hover:border-zinc-600 hover:shadow-lg dark:hover:shadow-2xl dark:hover:shadow-black/50`}
                 >
                   {/* Watermark Tipografi Halus di Sudut Kartu */}
                   <div
@@ -316,6 +321,30 @@ export default function WorksSection() {
             })}
           </AnimatePresence>
         </motion.div>
+
+        {/* Tombol Tampilkan Lebih Banyak / Lebih Sedikit (Khusus Mobile) */}
+        {filteredWorks.length > 3 && (
+          <div className="sm:hidden mt-6 flex justify-center">
+            <button
+              type="button"
+              onClick={() => setIsMobileExpanded(!isMobileExpanded)}
+              aria-expanded={isMobileExpanded}
+              aria-label={isMobileExpanded ? 'Tampilkan lebih sedikit karya' : 'Tampilkan semua karya'}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-zinc-300 dark:border-zinc-700 bg-white/90 dark:bg-zinc-900/90 text-zinc-900 dark:text-white font-jetbrains text-xs font-semibold shadow-xs hover:border-zinc-950 dark:hover:border-white transition-all cursor-pointer select-none active:scale-95"
+            >
+              <span>
+                {isMobileExpanded
+                  ? 'Tampilkan Lebih Sedikit'
+                  : `Lihat Lebih Banyak (+${filteredWorks.length - 3})`}
+              </span>
+              <ChevronDown
+                className={`w-3.5 h-3.5 transition-transform duration-300 ${
+                  isMobileExpanded ? 'rotate-180' : ''
+                }`}
+              />
+            </button>
+          </div>
+        )}
 
         {/* Footer Section: Hubungan ke Profil GitHub */}
         <div className="mt-12 sm:mt-14 pt-8 border-t border-zinc-200/80 dark:border-zinc-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">

@@ -45,6 +45,8 @@ import {
   siOpencode,
   siComposer,
   siTypescript,
+  siThreedotjs,
+  siGreensock,
 } from 'simple-icons'
 
 // Custom Official SVGs untuk Windows 11, VS Code, ChatGPT, Antigravity, Lenis, dan ElysiaJS
@@ -145,6 +147,8 @@ const STACK_CATEGORIES: StackCategory[] = [
       { name: 'Zed', icon: siZedindustries, color: '#084CCF', isMain: true },
       // Regular Technologies
       { name: 'Docker', icon: siDocker, color: '#2496ED' },
+      { name: 'Three.js', icon: siThreedotjs, color: '#000000' },
+      { name: 'GSAP', icon: siGreensock, color: '#88CE02' },
       { name: 'Pusher', icon: siPusher, color: '#9065FF' },
       { name: 'Filament', icon: siFilament, color: '#FDAE4B' },
       { name: 'JWT', icon: siJsonwebtokens, color: '#FB015B' },
