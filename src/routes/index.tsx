@@ -1153,7 +1153,7 @@ export default function Home() {
       {/* SECTION 2: ABOUT ME SECTION */}
       <AboutMeSection />
 
-      {/* SECTION 3: TECH STACK SECTION */}
+      {/* SECTION 3: TECH STACK & TOOLS SECTION */}
       <TechStackSection />
     </div>
   )
