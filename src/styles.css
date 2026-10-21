@@ -325,11 +325,9 @@ a {
 @keyframes starTwinkle {
   0%, 100% {
     opacity: 0.2;
-    transform: scale(0.85);
   }
   50% {
     opacity: 0.95;
-    transform: scale(1.2);
   }
 }
 
@@ -402,26 +400,6 @@ a {
   }
   50% {
     transform: translate3d(0, -3px, 0);
-  }
-}
-
-@keyframes sunGlowPulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.85;
-  }
-  50% {
-    transform: scale(1.02);
-    opacity: 0.96;
-  }
-}
-
-@keyframes waveBarBounce {
-  0% {
-    transform: scaleY(0.25);
-  }
-  100% {
-    transform: scaleY(1);
   }
 }
 

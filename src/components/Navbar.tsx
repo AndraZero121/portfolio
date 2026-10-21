@@ -47,88 +47,47 @@ const availableLanguages = [
   { code: 'ja', name: '日本語', flag: FlagJP },
 ]
 
-// Kolom Hujan Glif Jepang (Hiragana & Katakana) dengan animasi Motion
-// Kolom Hujan Glif Jepang (Hiragana, Katakana & Aksen Kanji Air/Alam) yang Mengalir Dinamis seperti Air Hujan
+// Kolom Hujan Glif Jepang (Hiragana & Katakana) Ringan & Teroptimasi untuk Performa
 const KANA_RAIN_STREAMS = [
   {
     chars: ['雨', '水', '滴', 'ア', 'ン', 'ド', 'ラ', 'シ', 'ス', 'テ', 'ム', '雫'],
-    speed: 4.8,
-    delay: 1.2,
-    right: '3%',
-    size: 'text-xs',
-    baseOpacity: 0.85,
-  },
-  {
-    chars: ['デ', 'ザ', 'イ', 'ン', 'と', 'コ', 'ー', 'ド', 'の', '調', '和', '蒼'],
-    speed: 6.2,
-    delay: 3.7,
-    right: '8%',
-    size: 'text-[11px]',
-    baseOpacity: 0.65,
-  },
-  {
-    chars: ['み', 'ず', 'の', 'こ', 'と', 'ば', '清', '涼', '透', '明', '感'],
-    speed: 4.2,
-    delay: 0.5,
-    right: '13%',
-    size: 'text-xs',
-    baseOpacity: 0.9,
-  },
-  {
-    chars: ['ク', 'リ', 'エ', 'イ', 'テ', 'ィ', 'ブ', 'な', '道', '創', '造'],
-    speed: 7.5,
-    delay: 4.8,
-    right: '18%',
-    size: 'text-[10px]',
-    baseOpacity: 0.5,
-  },
-  {
-    chars: ['ゆ', 'め', 'ト', 'キ', 'ョ', 'ウ', 'ひ', 'か', 'り', 'ネ', 'オ', 'ン'],
-    speed: 5.1,
-    delay: 2.1,
-    right: '24%',
+    speed: 5.2,
+    delay: 0.8,
+    right: '5%',
     size: 'text-xs',
     baseOpacity: 0.8,
   },
   {
-    chars: ['静', '寂', 'の', '中', 'に', 'あ', 'る', '力', '強', 'さ', '動'],
-    speed: 4.5,
-    delay: 1.8,
-    right: '30%',
-    size: 'text-xs',
-    baseOpacity: 0.88,
+    chars: ['デ', 'ザ', 'イ', 'ン', 'と', 'コ', 'ー', 'ド', 'の', '調', '和', '蒼'],
+    speed: 6.5,
+    delay: 2.5,
+    right: '16%',
+    size: 'text-[11px]',
+    baseOpacity: 0.6,
   },
   {
-    chars: ['次', '世', '代', 'の', 'ウ', 'ェ', 'ブ', '経', '験', '探', '究'],
-    speed: 7.0,
-    delay: 3.2,
-    right: '36%',
+    chars: ['み', 'ず', 'の', 'こ', 'と', 'ば', '清', '涼', '透', '明', '感'],
+    speed: 4.8,
+    delay: 0.2,
+    right: '28%',
+    size: 'text-xs',
+    baseOpacity: 0.85,
+  },
+  {
+    chars: ['ク', 'リ', 'エ', 'イ', 'テ', 'ィ', 'ブ', 'な', '道', '創', '造'],
+    speed: 7.2,
+    delay: 3.8,
+    right: '40%',
     size: 'text-[10px]',
-    baseOpacity: 0.55,
+    baseOpacity: 0.5,
   },
   {
-    chars: ['あ', 'め', 'し', 'ず', 'く', 'な', 'が', 'れ', 'る', '水', '滴'],
-    speed: 4.0,
-    delay: 2.8,
-    right: '42%',
-    size: 'text-xs sm:text-sm',
-    baseOpacity: 0.95,
-  },
-  {
-    chars: ['モ', 'ー', 'シ', 'ョ', 'ン', 'の', '息', 'づ', 'か', 'い', '生'],
-    speed: 5.6,
-    delay: 1.4,
-    right: '48%',
+    chars: ['静', '寂', 'の', '中', 'に', 'あ', 'る', '力', '強', 'さ', '動'],
+    speed: 5.0,
+    delay: 1.5,
+    right: '52%',
     size: 'text-xs',
-    baseOpacity: 0.82,
-  },
-  {
-    chars: ['透', 'き', '通', 'る', '知', '性', 'と', '感', '性', '雫', '雨'],
-    speed: 4.4,
-    delay: 0.4,
-    right: '54%',
-    size: 'text-xs sm:text-sm',
-    baseOpacity: 0.9,
+    baseOpacity: 0.75,
   },
 ]
 
@@ -137,14 +96,11 @@ function FallingKanaRain() {
     <div
       aria-hidden="true"
       className="absolute inset-0 pointer-events-none overflow-hidden select-none"
-      style={{
-        maskImage:
-          'linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%)',
-        WebkitMaskImage:
-          'linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%)',
-        contain: 'strict',
-      }}
     >
+      {/* Top & Bottom Soft Fading Overlays (Jauh lebih hemat performa dibanding maskImage) */}
+      <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-[#08080a] to-transparent z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#08080a] to-transparent z-10 pointer-events-none" />
+
       {KANA_RAIN_STREAMS.map((col, idx) => {
         const lastIdx = col.chars.length - 1
 
@@ -156,7 +112,6 @@ function FallingKanaRain() {
               right: col.right,
               top: 0,
               animation: `kanaRainFall ${col.speed}s linear -${col.delay}s infinite`,
-              willChange: 'transform',
             }}
             className={`flex flex-col items-center gap-1.5 sm:gap-2 font-mono font-medium tracking-widest ${col.size}`}
           >
@@ -175,8 +130,8 @@ function FallingKanaRain() {
                   }}
                   className={`inline-block select-none transition-opacity ${
                     isHead
-                      ? 'text-white font-bold drop-shadow-[0_0_10px_rgba(255,255,255,0.9)] scale-110'
-                      : 'text-zinc-300'
+                      ? 'text-white font-bold drop-shadow-xs'
+                      : 'text-zinc-400'
                   }`}
                 >
                   {char}
@@ -470,10 +425,10 @@ export default function Navbar() {
             role="dialog"
             aria-modal="true"
             aria-label="Navigasi Menu"
-            initial={{ opacity: 0, clipPath: 'inset(0% 0% 100% 0%)' }}
-            animate={{ opacity: 1, clipPath: 'inset(0% 0% 0% 0%)' }}
-            exit={{ opacity: 0, clipPath: 'inset(0% 0% 100% 0%)' }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             className="fixed inset-0 z-40 bg-[#08080a]/98 text-white overflow-y-auto overscroll-contain selection:bg-red-500 selection:text-white"
             style={{ overscrollBehavior: 'contain' }}
           >
@@ -606,15 +561,13 @@ export default function Navbar() {
                         </motion.div>
                       </a>
 
-                      {/* Hairline Border Bawah: Putih ke Hitam/Transparan */}
+                      {/* Hairline Border Bawah: Putih ke Hitam/Transparan (Hardware-Accelerated ScaleX) */}
                       <div className="h-[1px] w-full bg-white/[0.06] relative overflow-hidden">
-                        {isHovered && (
-                          <motion.div
-                            layoutId="menuHairline"
-                            className="absolute inset-0 bg-gradient-to-r from-white via-white/50 to-transparent"
-                            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                          />
-                        )}
+                        <div
+                          className={`absolute inset-0 bg-gradient-to-r from-white via-white/50 to-transparent transition-transform duration-300 origin-left ${
+                            isHovered ? 'scale-x-100' : 'scale-x-0'
+                          }`}
+                        />
                       </div>
                     </motion.li>
                   )

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, memo, useCallback } from 'react'
 import { motion } from 'motion/react'
 import {
   Play,
@@ -150,6 +150,19 @@ export default function HeroMusicPlayer() {
   const isSeekingRef = useRef(false)
   const playlistScrollRef = useRef<HTMLDivElement>(null)
 
+  // Synchronized Mutable Refs untuk mengatasi bug stale closure pada YouTube IFrame event listener
+  const currentIndexRef = useRef(currentIndex)
+  currentIndexRef.current = currentIndex
+  const tracksRef = useRef(tracks)
+  tracksRef.current = tracks
+  const isLoopRef = useRef(isLoop)
+  isLoopRef.current = isLoop
+  const isShuffleRef = useRef(isShuffle)
+  isShuffleRef.current = isShuffle
+  const isPlayingRef = useRef(isPlaying)
+  isPlayingRef.current = isPlaying
+  const handleAutoNextRef = useRef<() => void>(() => {})
+
   const currentTrack = tracks[currentIndex] || tracks[0] || PLAYLIST[0]
 
   // Muat lagu dari database (Supabase / Postgres via Drizzle) jika tersedia
@@ -229,7 +242,8 @@ export default function HeroMusicPlayer() {
           } else if (e.data === 3) {
             setIsBuffering(true)
           } else if (e.data === 0) {
-            handleAutoNext()
+            // Menggunakan ref segar untuk memastikan indeks lagu berpindah ke lagu berikutnya secara benar
+            handleAutoNextRef.current()
           }
         },
         onError: () => {
@@ -245,7 +259,7 @@ export default function HeroMusicPlayer() {
     }
   }, [isApiReady])
 
-  // Timer pemantauan durasi dan posisi scrub
+  // Timer pemantauan durasi dan posisi scrub (750ms menghemat alokasi CPU & render)
   useEffect(() => {
     let interval: any
     if (isPlaying && !isSeekingRef.current) {
@@ -258,72 +272,94 @@ export default function HeroMusicPlayer() {
             if (dur > 0) setDuration(dur)
           } catch {}
         }
-      }, 350)
+      }, 750)
     }
     return () => clearInterval(interval)
   }, [isPlaying])
 
-  // Navigasi Lagu
-  const loadTrackByIndex = (idx: number, playImmediate = true) => {
+  // Navigasi Lagu Berdasarkan Indeks (Stabil & Memoized)
+  const loadTrackByIndex = useCallback((idx: number, playImmediate = true) => {
+    currentIndexRef.current = idx
     setCurrentIndex(idx)
     setCurrentTime(0)
     setDuration(0)
 
-    if (playerRef.current && tracks[idx]) {
+    const list = tracksRef.current
+    if (playerRef.current && list[idx]) {
       try {
         if (playImmediate) {
-          playerRef.current.loadVideoById(tracks[idx].id)
+          playerRef.current.loadVideoById(list[idx].id)
           setIsPlaying(true)
         } else {
-          playerRef.current.cueVideoById(tracks[idx].id)
+          playerRef.current.cueVideoById(list[idx].id)
           setIsPlaying(false)
         }
       } catch {}
     }
-  }
+  }, [])
 
+  const handleSelectTrack = useCallback((idx: number) => {
+    loadTrackByIndex(idx, true)
+  }, [loadTrackByIndex])
+
+  // Otomatis Pindah ke Lagu Berikutnya Saat Lagu Selesai
   const handleAutoNext = () => {
-    if (isLoop) {
+    const curr = currentIndexRef.current
+    const list = tracksRef.current
+    if (isLoopRef.current) {
       if (playerRef.current) {
-        playerRef.current.seekTo(0)
-        playerRef.current.playVideo()
+        try {
+          playerRef.current.seekTo(0, true)
+          playerRef.current.playVideo()
+        } catch {}
       }
-    } else if (isShuffle) {
-      let nextIdx = Math.floor(Math.random() * tracks.length)
-      if (nextIdx === currentIndex && tracks.length > 1) {
-        nextIdx = (nextIdx + 1) % tracks.length
-      }
-      loadTrackByIndex(nextIdx, true)
-    } else {
-      const nextIdx = (currentIndex + 1) % tracks.length
-      loadTrackByIndex(nextIdx, true)
+      return
     }
+
+    if (isShuffleRef.current) {
+      let nextIdx = Math.floor(Math.random() * list.length)
+      if (nextIdx === curr && list.length > 1) {
+        nextIdx = (nextIdx + 1) % list.length
+      }
+      loadTrackByIndex(nextIdx, true)
+      return
+    }
+
+    const nextIdx = (curr + 1) % list.length
+    loadTrackByIndex(nextIdx, true)
   }
+  handleAutoNextRef.current = handleAutoNext
 
   const handleNext = () => {
-    if (isShuffle) {
-      let nextIdx = Math.floor(Math.random() * tracks.length)
-      if (nextIdx === currentIndex && tracks.length > 1) {
-        nextIdx = (nextIdx + 1) % tracks.length
+    const curr = currentIndexRef.current
+    const list = tracksRef.current
+    if (isShuffleRef.current) {
+      let nextIdx = Math.floor(Math.random() * list.length)
+      if (nextIdx === curr && list.length > 1) {
+        nextIdx = (nextIdx + 1) % list.length
       }
-      loadTrackByIndex(nextIdx, isPlaying)
+      loadTrackByIndex(nextIdx, isPlayingRef.current)
     } else {
-      const nextIdx = (currentIndex + 1) % tracks.length
-      loadTrackByIndex(nextIdx, isPlaying)
+      const nextIdx = (curr + 1) % list.length
+      loadTrackByIndex(nextIdx, isPlayingRef.current)
     }
   }
 
   const handlePrev = () => {
+    const curr = currentIndexRef.current
+    const list = tracksRef.current
     if (currentTime > 4) {
       // Jika sudah berjalan lebih dari 4 detik, ulangi dari awal lagu
       if (playerRef.current) {
-        playerRef.current.seekTo(0, true)
-        setCurrentTime(0)
+        try {
+          playerRef.current.seekTo(0, true)
+          setCurrentTime(0)
+        } catch {}
       }
       return
     }
-    const prevIdx = (currentIndex - 1 + tracks.length) % tracks.length
-    loadTrackByIndex(prevIdx, isPlaying)
+    const prevIdx = (curr - 1 + list.length) % list.length
+    loadTrackByIndex(prevIdx, isPlayingRef.current)
   }
 
   const togglePlay = () => {
@@ -381,15 +417,15 @@ export default function HeroMusicPlayer() {
     } catch {}
   }
 
-  // Scroll tombol khusus di dalam daftar putar
-  const scrollPlaylist = (direction: 'up' | 'down') => {
+  // Scroll tombol khusus di dalam daftar putar (Memoized)
+  const scrollPlaylist = useCallback((direction: 'up' | 'down') => {
     if (playlistScrollRef.current) {
       playlistScrollRef.current.scrollBy({
         top: direction === 'up' ? -90 : 90,
         behavior: 'smooth',
       })
     }
-  }
+  }, [])
 
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0
   const thumbnailUrl = `https://i.ytimg.com/vi/${currentTrack.id}/hqdefault.jpg`
@@ -608,88 +644,118 @@ export default function HeroMusicPlayer() {
           </div>
         </div>
 
-        {/* 4. PERMANENT PLAYLIST DRAWER (Selalu Terbuka dengan Tombol Scroll Khusus & Anti-Chaining Scroll) */}
-        <div className="mt-3.5 pt-3 border-t border-zinc-200/80 dark:border-white/10">
-          {/* Header Daftar Putar & Tombol Scroll Khusus */}
-          <div className="flex items-center justify-between mb-2 px-0.5 text-xs font-mono">
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-bold text-zinc-700 dark:text-zinc-300 tracking-wider">
-                DAFTAR PUTAR ({tracks.length})
-              </span>
-              <span className="text-zinc-300 dark:text-zinc-700">•</span>
-              <span className="text-zinc-400 dark:text-zinc-500 font-sans text-[10.5px]">
-                Pilih lagu
-              </span>
-            </div>
-
-            {/* Tombol Scroll Khusus untuk Mempermudah Menggulir Daftar Lagu */}
-            <div className="flex items-center gap-1">
-              <button
-                type="button"
-                onClick={() => scrollPlaylist('up')}
-                aria-label="Scroll daftar lagu ke atas"
-                title="Scroll ke atas"
-                className="p-1 rounded-md bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white border border-zinc-200/80 dark:border-white/5 transition-colors cursor-pointer focus:outline-none"
-              >
-                <ChevronUp className="w-3.5 h-3.5" />
-              </button>
-              <button
-                type="button"
-                onClick={() => scrollPlaylist('down')}
-                aria-label="Scroll daftar lagu ke bawah"
-                title="Scroll ke bawah"
-                className="p-1 rounded-md bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white border border-zinc-200/80 dark:border-white/5 transition-colors cursor-pointer focus:outline-none"
-              >
-                <ChevronDown className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Scrollable Container dengan data-lenis-prevent & overscroll-contain agar tidak men-scroll halaman */}
-          <div
-            ref={playlistScrollRef}
-            data-lenis-prevent
-            className="max-h-36 sm:max-h-40 overflow-y-auto space-y-1 pr-1 font-sans text-xs scrollbar-thin overscroll-contain select-none"
-            style={{ overscrollBehavior: 'contain', touchAction: 'pan-y' }}
-          >
-            {tracks.map((track, idx) => {
-              const isCurrent = idx === currentIndex
-              return (
-                <button
-                  key={`${track.id}-${idx}`}
-                  type="button"
-                  onClick={() => loadTrackByIndex(idx, true)}
-                  className={`w-full flex items-center justify-between p-2 rounded-xl text-left transition-colors cursor-pointer focus:outline-none ${
-                    isCurrent
-                      ? 'bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 font-semibold border border-blue-500/20'
-                      : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900'
-                  }`}
-                >
-                  <div className="flex items-center gap-2 truncate">
-                    <span className="font-mono text-[10.5px] text-zinc-400 dark:text-zinc-500 w-5 shrink-0">
-                      {String(idx + 1).padStart(2, '0')}
-                    </span>
-                    <div className="truncate">
-                      <p className="truncate text-xs font-medium">{track.title}</p>
-                      <p className="truncate text-[10.5px] text-zinc-400 dark:text-zinc-500">
-                        {track.artist}
-                      </p>
-                    </div>
-                  </div>
-
-                  {isCurrent && isPlaying && (
-                    <div className="flex items-end gap-0.5 h-3 shrink-0 ml-2">
-                      <span className="w-0.5 h-full bg-blue-600 dark:bg-blue-400 animate-pulse" />
-                      <span className="w-0.5 h-2/3 bg-blue-600 dark:bg-blue-400 animate-pulse delay-75" />
-                      <span className="w-0.5 h-4/5 bg-blue-600 dark:bg-blue-400 animate-pulse delay-150" />
-                    </div>
-                  )}
-                </button>
-              )
-            })}
-          </div>
-        </div>
+        {/* 4. PERMANENT PLAYLIST DRAWER (Memoized - Tidak re-render saat audio timer berjalan) */}
+        <PlaylistDrawer
+          tracks={tracks}
+          currentIndex={currentIndex}
+          isPlaying={isPlaying}
+          onSelectTrack={handleSelectTrack}
+          playlistScrollRef={playlistScrollRef}
+          scrollPlaylist={scrollPlaylist}
+        />
       </div>
     </div>
   )
 }
+
+// Sub-komponen Daftar Putar yang di-memoize untuk mencegah re-render konstan saat timer audio berdetik
+interface PlaylistDrawerProps {
+  tracks: Track[]
+  currentIndex: number
+  isPlaying: boolean
+  onSelectTrack: (idx: number) => void
+  playlistScrollRef: React.RefObject<HTMLDivElement | null>
+  scrollPlaylist: (dir: 'up' | 'down') => void
+}
+
+const PlaylistDrawer = memo(function PlaylistDrawer({
+  tracks,
+  currentIndex,
+  isPlaying,
+  onSelectTrack,
+  playlistScrollRef,
+  scrollPlaylist,
+}: PlaylistDrawerProps) {
+  return (
+    <div className="mt-3.5 pt-3 border-t border-zinc-200/80 dark:border-white/10">
+      {/* Header Daftar Putar & Tombol Scroll Khusus */}
+      <div className="flex items-center justify-between mb-2 px-0.5 text-xs font-mono">
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] font-bold text-zinc-700 dark:text-zinc-300 tracking-wider">
+            DAFTAR PUTAR ({tracks.length})
+          </span>
+          <span className="text-zinc-300 dark:text-zinc-700">•</span>
+          <span className="text-zinc-400 dark:text-zinc-500 font-sans text-[10.5px]">
+            Pilih lagu
+          </span>
+        </div>
+
+        {/* Tombol Scroll Khusus untuk Mempermudah Menggulir Daftar Lagu */}
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => scrollPlaylist('up')}
+            aria-label="Scroll daftar lagu ke atas"
+            title="Scroll ke atas"
+            className="p-1 rounded-md bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white border border-zinc-200/80 dark:border-white/5 transition-colors cursor-pointer focus:outline-none"
+          >
+            <ChevronUp className="w-3.5 h-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollPlaylist('down')}
+            aria-label="Scroll daftar lagu ke bawah"
+            title="Scroll ke bawah"
+            className="p-1 rounded-md bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white border border-zinc-200/80 dark:border-white/5 transition-colors cursor-pointer focus:outline-none"
+          >
+            <ChevronDown className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </div>
+
+      {/* Scrollable Container dengan data-lenis-prevent & overscroll-contain agar tidak men-scroll halaman */}
+      <div
+        ref={playlistScrollRef}
+        data-lenis-prevent
+        className="max-h-36 sm:max-h-40 overflow-y-auto space-y-1 pr-1 font-sans text-xs scrollbar-thin overscroll-contain select-none"
+        style={{ overscrollBehavior: 'contain', touchAction: 'pan-y' }}
+      >
+        {tracks.map((track, idx) => {
+          const isCurrent = idx === currentIndex
+          return (
+            <button
+              key={`${track.id}-${idx}`}
+              type="button"
+              onClick={() => onSelectTrack(idx)}
+              className={`w-full flex items-center justify-between p-2 rounded-xl text-left transition-colors cursor-pointer focus:outline-none ${
+                isCurrent
+                  ? 'bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 font-semibold border border-blue-500/20'
+                  : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900'
+              }`}
+            >
+              <div className="flex items-center gap-2 truncate">
+                <span className="font-mono text-[10.5px] text-zinc-400 dark:text-zinc-500 w-5 shrink-0">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
+                <div className="truncate">
+                  <p className="truncate text-xs font-medium">{track.title}</p>
+                  <p className="truncate text-[10.5px] text-zinc-400 dark:text-zinc-500">
+                    {track.artist}
+                  </p>
+                </div>
+              </div>
+
+              {isCurrent && isPlaying && (
+                <div className="flex items-end gap-0.5 h-3 shrink-0 ml-2">
+                  <span className="w-0.5 h-full bg-blue-600 dark:bg-blue-400 animate-pulse" />
+                  <span className="w-0.5 h-2/3 bg-blue-600 dark:bg-blue-400 animate-pulse delay-75" />
+                  <span className="w-0.5 h-4/5 bg-blue-600 dark:bg-blue-400 animate-pulse delay-150" />
+                </div>
+              )}
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+})

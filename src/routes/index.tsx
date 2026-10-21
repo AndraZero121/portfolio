@@ -40,7 +40,6 @@ function FullBackgroundScenery() {
     <div
       aria-hidden="true"
       className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0 flex items-center justify-center"
-      style={{ willChange: 'transform', transform: 'translateZ(0)' }}
     >
       <svg
         viewBox="0 0 1440 900"
@@ -95,13 +94,12 @@ function FullBackgroundScenery() {
               fill="#ffffff"
               style={{
                 animation: `starTwinkle ${star.dur}s ease-in-out ${star.delay}s infinite`,
-                transformOrigin: `${star.x}px ${star.y}px`,
               }}
             />
           ))}
 
           {/* Bintang Jatuh 1: Meluncur dari Langit Kanan Atas */}
-          <g style={{ animation: 'shootingStarFly1 7.2s ease-out infinite', willChange: 'transform' }}>
+          <g style={{ animation: 'shootingStarFly1 7.2s ease-out infinite' }}>
             <line
               x1="1260"
               y1="55"
@@ -115,7 +113,7 @@ function FullBackgroundScenery() {
           </g>
 
           {/* Bintang Jatuh 2: Meluncur dari Langit Kiri */}
-          <g style={{ animation: 'shootingStarFly2 9.5s ease-out 3s infinite', willChange: 'transform' }}>
+          <g style={{ animation: 'shootingStarFly2 9.5s ease-out 3s infinite' }}>
             <line
               x1="580"
               y1="45"
@@ -131,7 +129,7 @@ function FullBackgroundScenery() {
 
         {/* 2. AWAN TRADISIONAL JEPANG MELAYANG (Stylized Japanese Kumo Clouds Melintasi Langit) */}
         {/* Awan Kiri */}
-        <g style={{ animation: 'cloudDriftLeft 18s ease-in-out infinite', willChange: 'transform' }}>
+        <g style={{ animation: 'cloudDriftLeft 18s ease-in-out infinite' }}>
           <path
             d="M 140 260 C 140 230, 190 220, 220 240 C 240 210, 310 210, 340 240 C 370 225, 420 245, 420 275 C 420 295, 380 310, 340 305 L 160 305 C 140 295, 140 275, 140 260 Z"
             className="fill-zinc-200/70 dark:fill-zinc-800/40"
@@ -146,7 +144,7 @@ function FullBackgroundScenery() {
         </g>
 
         {/* Awan Tengah Langit */}
-        <g style={{ animation: 'cloudDriftRight 24s ease-in-out 2s infinite', willChange: 'transform' }}>
+        <g style={{ animation: 'cloudDriftRight 24s ease-in-out 2s infinite' }}>
           <path
             d="M 640 180 C 640 155, 680 145, 705 162 C 725 140, 780 140, 805 165 C 828 152, 868 168, 868 194 C 868 212, 835 224, 805 220 L 655 220 C 640 212, 640 195, 640 180 Z"
             className="fill-zinc-200/50 dark:fill-zinc-800/30"
@@ -154,7 +152,7 @@ function FullBackgroundScenery() {
         </g>
 
         {/* Awan Kanan */}
-        <g style={{ animation: 'cloudDriftRight 22s ease-in-out infinite', willChange: 'transform' }}>
+        <g style={{ animation: 'cloudDriftRight 22s ease-in-out infinite' }}>
           <path
             d="M 980 270 C 980 240, 1030 230, 1060 250 C 1090 225, 1160 225, 1190 255 C 1220 240, 1270 260, 1270 290 C 1270 310, 1230 325, 1190 320 L 1000 320 C 980 310, 980 290, 980 270 Z"
             className="fill-zinc-200/70 dark:fill-zinc-800/40"
@@ -190,7 +188,7 @@ function FullBackgroundScenery() {
             stroke="currentColor"
             strokeWidth="1.5"
             className="text-zinc-400/50 dark:text-zinc-600/50"
-            style={{ animation: 'waveSway1 6s ease-in-out infinite', willChange: 'transform' }}
+            style={{ animation: 'waveSway1 6s ease-in-out infinite' }}
           />
 
           {/* Ombak Layer 2 (Crest Waves) */}
@@ -201,7 +199,7 @@ function FullBackgroundScenery() {
             strokeWidth="1.5"
             strokeDasharray="16 8"
             className="text-zinc-500/40 dark:text-zinc-500/30"
-            style={{ animation: 'waveSway2 7s ease-in-out infinite', willChange: 'transform' }}
+            style={{ animation: 'waveSway2 7s ease-in-out infinite' }}
           />
 
           {/* Ombak Layer 3 (Foreground Waves) */}
@@ -211,7 +209,7 @@ function FullBackgroundScenery() {
             stroke="currentColor"
             strokeWidth="2"
             className="text-zinc-400/60 dark:text-zinc-700/60"
-            style={{ animation: 'waveSway1 8s ease-in-out infinite', willChange: 'transform' }}
+            style={{ animation: 'waveSway1 8s ease-in-out infinite' }}
           />
         </g>
 
