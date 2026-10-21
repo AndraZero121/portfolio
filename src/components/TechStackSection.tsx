@@ -47,7 +47,7 @@ import {
   siTypescript,
 } from 'simple-icons'
 
-// Custom Official SVGs untuk Windows 11, VS Code, ChatGPT, dan Antigravity
+// Custom Official SVGs untuk Windows 11, VS Code, ChatGPT, Antigravity, Lenis, dan ElysiaJS
 const Windows11Icon = {
   path: 'M0 0h11v11H0zm13 0h11v11H13zM0 13h11v11H0zm13 0h11v11H13z',
   hex: '0078D4',
@@ -68,6 +68,18 @@ const AntigravityIcon = {
   path: 'M14.0777 13.984C14.945 14.6345 16.2458 14.2008 15.0533 13.0084C11.476 9.53949 12.2349 0 7.79033 0C3.34579 0 4.10461 9.53949 0.527295 13.0084C-0.773543 14.3092 0.635692 14.6345 1.50293 13.984C4.86344 11.7076 4.64663 7.69664 7.79033 7.69664C10.934 7.69664 10.7172 11.7076 14.0777 13.984Z',
   hex: '4285F4',
   viewBox: '0 0 16 15',
+}
+
+const LenisIcon = {
+  path: 'M312.612 124.618L159.947 277.283H129.301C128.305 277.283 127.331 276.987 126.502 276.433C125.674 275.879 125.029 275.092 124.648 274.171C124.268 273.251 124.169 272.238 124.364 271.261C124.559 270.284 125.04 269.386 125.746 268.683L168.89 225.509C172.283 222.109 174.188 217.502 174.187 212.698V84.7975C174.187 84.1351 174.318 83.4792 174.572 82.8674C174.826 82.2557 175.198 81.7 175.667 81.2324L198.982 57.9181C203.767 57.9527 208.344 59.8778 211.715 63.2737C215.087 66.6696 216.979 71.2607 216.979 76.0459V112.452C216.98 114.04 216.668 115.612 216.061 117.079C215.455 118.546 214.565 119.879 213.443 121.003L210.13 124.316L210.745 125.122L267.313 68.5833V0.392893H266.306V25.4193C266.302 26.0667 266.09 26.6958 265.702 27.2138C265.313 27.7317 264.768 28.1112 264.148 28.2962C263.527 28.4813 262.864 28.462 262.255 28.2414C261.646 28.0208 261.125 27.6104 260.767 27.0708C257.11 21.4418 252.105 16.8159 246.206 13.6131C240.307 10.4103 233.701 8.73232 226.989 8.73166H179.656L138.264 50.2743L122.15 66.3878C121.446 67.0904 120.549 67.5684 119.572 67.7614C118.596 67.9545 117.584 67.854 116.665 67.4725C115.746 67.0911 114.961 66.4458 114.408 65.6182C113.855 64.7906 113.56 63.8178 113.56 62.8227V0.382812H112.553V29.2663C112.554 29.9546 112.32 30.6226 111.889 31.1598C111.459 31.697 110.858 32.0711 110.186 32.2202C109.514 32.3694 108.812 32.2847 108.195 31.9801C107.577 31.6756 107.083 31.1694 106.792 30.5454C98.7355 13.2535 86.3986 8.7115 86.3986 8.7115L28.6417 65.8037L29.3469 66.5187L31.8946 64.001C42.5094 53.5373 60.5768 59.6201 62.581 74.3942C63.0117 77.6425 63.2202 80.9165 63.2052 84.1932V271.07L0 334.275L0.714997 334.99L3.19241 332.512C6.58217 329.113 11.1821 327.197 15.9827 327.185H198.72L298.301 226.999C301.698 223.601 303.607 218.994 303.609 214.189V142.413C303.61 137.609 305.519 133.001 308.916 129.603L313.196 125.323L312.612 124.618ZM113.671 129.1V76.3177L132.08 57.908H185.386C186.383 57.9062 187.358 58.2006 188.188 58.7538C189.018 59.307 189.665 60.0941 190.046 61.0154C190.428 61.9366 190.528 62.9504 190.333 63.9283C190.138 64.9063 189.657 65.8044 188.951 66.5087L122.251 133.209C121.547 133.915 120.649 134.396 119.671 134.591C118.693 134.786 117.679 134.686 116.758 134.304C115.837 133.922 115.049 133.275 114.496 132.446C113.943 131.616 113.649 130.641 113.651 129.643L113.671 129.1ZM113.671 143.199L123.862 132.997V210.483L113.651 220.695L113.671 143.199ZM115.685 277.253H70.6778C69.6806 277.255 68.7053 276.961 67.8756 276.407C67.0458 275.854 66.3991 275.067 66.0173 274.146C65.6354 273.225 65.5355 272.211 65.7306 271.233C65.9256 270.255 66.4068 269.357 67.1129 268.653L115.262 220.514C115.966 219.808 116.863 219.327 117.84 219.132C118.817 218.937 119.83 219.035 120.751 219.416C121.672 219.797 122.459 220.442 123.013 221.27C123.566 222.098 123.862 223.072 123.862 224.069V269.015L115.685 277.253ZM253.375 269.348C253.374 270.149 253.055 270.916 252.489 271.483L247.614 276.367C247.048 276.934 246.28 277.252 245.479 277.253H173.492C172.495 277.255 171.52 276.961 170.69 276.407C169.86 275.854 169.213 275.067 168.831 274.146C168.449 273.225 168.35 272.211 168.545 271.233C168.74 270.255 169.221 269.357 169.927 268.653L244.784 193.805C245.489 193.103 246.386 192.625 247.363 192.432C248.339 192.239 249.35 192.339 250.269 192.721C251.188 193.102 251.974 193.747 252.527 194.575C253.08 195.403 253.374 196.375 253.375 197.37V269.348Z',
+  hex: '000000',
+  viewBox: '0 0 315 336',
+}
+
+const ElysiaIcon = {
+  path: 'M69.585 180.693c-4.591-4.721-12.691-17.586-12.691-20.099c0-.433-.26-1.559-.607-2.556c-1.386-3.941-1.69-6.67-1.43-12.128c.477-9.227 2.296-16.331 6.238-24.344c3.162-6.454 7.104-10.613 13.732-14.598c2.599-1.559 2.599-1.559-2.08-1.559c-4.721 0-4.721 0-3.552-1.43c.607-.736 1.777-2.339 2.556-3.552c3.552-5.328 11.133-11.609 14.728-12.215c.866-.13 1.603-.347 1.603-.52c0-.13-.433-.823-.997-1.516c-.996-1.256-.996-1.256.737-3.162c2.122-2.34 2.945-2.816 5.371-3.162c1.82-.217 1.82-.217-.563-3.25c-4.722-5.934-9.443-13.644-8.793-14.337c.173-.13 2.295.693 4.764 1.82c3.942 1.862 4.809 2.122 7.278 2.122c2.079 0 3.205-.217 4.115-.823c1.126-.737 1.776-.78 7.32-.52c9.92.477 13.385.953 17.457 2.469c9.66 3.552 13.342 7.234 16.547 16.59c.953 2.73 1.949 5.458 2.252 5.978c1.56 3.076 8.317 7.884 14.382 10.31c1.342.519 2.599 1.169 2.729 1.386c.866 1.386-8.534 6.8-14.555 8.36c-4.375 1.126-11.392 1.343-14.987.433c-1.646-.39-3.552-1.04-4.289-1.429c-.996-.52-2.599-.694-7.147-.65c-7.234.043-12.302 1.213-19.016 4.461c-6.108 2.989-9.963 5.588-14.511 9.963c-9.097 8.707-15.768 20.316-18.063 31.405c-1.04 4.895-1.083 13.515-.174 17.543c.737 3.162 2.6 8.404 3.509 9.877c.996 1.516.087 1.126-1.863-.867m66.665-89.492c.217-.217-1.04-1.083-3.379-2.21c-4.375-2.079-7.797-4.461-8.187-5.674c-.346-1.04-.996-1.126-1.342-.217c-.953 2.383 2.902 6.585 7.58 8.317c1.646.607 4.635.477 5.328-.216',
+  hex: 'F43F5E',
+  viewBox: '0 0 256 256',
 }
 
 export interface StackItem {
@@ -94,17 +106,20 @@ const STACK_CATEGORIES: StackCategory[] = [
     description:
       'Bahasa inti dan kerangka kerja tingkat lanjut yang digunakan untuk rekayasa perangkat lunak modern.',
     items: [
+      // Main Technologies (Outline Biru)
       { name: 'Go', icon: siGo, color: '#00ADD8', isMain: true },
-      { name: 'Rust', icon: siRust, color: '#DEA584' },
       { name: 'PHP', icon: siPhp, color: '#777BB4', isMain: true },
       { name: 'JavaScript', icon: siJavascript, color: '#F7DF1E', isMain: true },
       { name: 'TypeScript', icon: siTypescript, color: '#3178C6', isMain: true },
+      { name: 'Laravel', icon: siLaravel, color: '#FF2D20', isMain: true },
+      { name: 'React', icon: siReact, color: '#61DAFB', isMain: true },
+      { name: 'Next.js', icon: siNextdotjs, color: '#000000', isMain: true },
+      // Regular Technologies
+      { name: 'Rust', icon: siRust, color: '#DEA584' },
+      { name: 'Elysia.js', icon: ElysiaIcon, color: '#F43F5E' },
+      { name: 'Express.js', icon: siExpress, color: '#000000' },
       { name: 'HTML5', icon: siHtml5, color: '#E34F26' },
       { name: 'CSS3', icon: siCss, color: '#1572B6' },
-      { name: 'Laravel', icon: siLaravel, color: '#FF2D20', isMain: true },
-      { name: 'Express.js', icon: siExpress, color: '#000000' },
-      { name: 'React', icon: siReact, color: '#61DAFB' },
-      { name: 'Next.js', icon: siNextdotjs, color: '#000000' },
       { name: 'Electron', icon: siElectron, color: '#47848F' },
     ],
   },
@@ -115,24 +130,27 @@ const STACK_CATEGORIES: StackCategory[] = [
     description:
       'Pustaka runtime, utilitas styling, editor koding modern, containerization, dan web server berkecepatan tinggi.',
     items: [
-      { name: 'Node.js', icon: siNodedotjs, color: '#5FA04E' },
+      // Main Technologies (Outline Biru)
+      { name: 'Node.js', icon: siNodedotjs, color: '#5FA04E', isMain: true },
       { name: 'Bun', icon: siBun, color: '#000000', isMain: true },
       { name: 'Composer', icon: siComposer, color: '#885630', isMain: true },
       { name: 'Vite', icon: siVite, color: '#646CFF', isMain: true },
-      { name: 'Tailwind CSS', icon: siTailwindcss, color: '#06B6D4' },
-      { name: 'Framer Motion', icon: siFramer, color: '#0055FF' },
+      { name: 'Tailwind CSS', icon: siTailwindcss, color: '#06B6D4', isMain: true },
+      { name: 'Framer Motion', icon: siFramer, color: '#0055FF', isMain: true },
+      { name: 'Lenis', icon: LenisIcon, color: '#000000', isMain: true },
+      { name: 'Podman', icon: siPodman, color: '#892CA0', isMain: true },
+      { name: 'Git', icon: siGit, color: '#F03C2E', isMain: true },
+      { name: 'Postman', icon: siPostman, color: '#FF6C37', isMain: true },
+      { name: 'ngrok', icon: siNgrok, color: '#3B82F6', isMain: true },
+      { name: 'Zed', icon: siZedindustries, color: '#084CCF', isMain: true },
+      // Regular Technologies
+      { name: 'Docker', icon: siDocker, color: '#2496ED' },
       { name: 'Pusher', icon: siPusher, color: '#9065FF' },
       { name: 'Filament', icon: siFilament, color: '#FDAE4B' },
       { name: 'JWT', icon: siJsonwebtokens, color: '#FB015B' },
-      { name: 'Docker', icon: siDocker, color: '#2496ED' },
-      { name: 'Podman', icon: siPodman, color: '#892CA0' },
-      { name: 'Git', icon: siGit, color: '#F03C2E' },
-      { name: 'Postman', icon: siPostman, color: '#FF6C37' },
       { name: 'Apache', icon: siApache, color: '#D22128' },
       { name: 'Nginx', icon: siNginx, color: '#009639' },
-      { name: 'ngrok', icon: siNgrok, color: '#3B82F6' },
       { name: 'VS Code', icon: VsCodeIcon, color: '#007ACC' },
-      { name: 'Zed', icon: siZedindustries, color: '#084CCF', isMain: true },
     ],
   },
   {
@@ -142,20 +160,18 @@ const STACK_CATEGORIES: StackCategory[] = [
     description:
       'Model bahasa cerdas (LLM), asisten koding otonom berbasis agen cerdas, dan utilitas AI untuk akselerasi alur kerja rekayasa perangkat lunak.',
     items: [
-      { name: 'ChatGPT', icon: ChatGptIcon, color: '#10A37F' },
-      { name: 'Claude', icon: siClaude, color: '#D97757' },
-      { name: 'Gemini', icon: siGooglegemini, color: '#8E75B2' },
+      // Main Technologies (Outline Biru)
       {
         name: 'Antigravity',
         icon: AntigravityIcon,
         color: '#4285F4',
         isMain: true,
       },
-      {
-        name: 'OpenCode',
-        icon: siOpencode,
-        color: '#000000',
-      },
+      // Regular Technologies
+      { name: 'ChatGPT', icon: ChatGptIcon, color: '#10A37F' },
+      { name: 'Claude', icon: siClaude, color: '#D97757' },
+      { name: 'Gemini', icon: siGooglegemini, color: '#8E75B2' },
+      { name: 'OpenCode', icon: siOpencode, color: '#000000' },
     ],
   },
   {
@@ -165,13 +181,15 @@ const STACK_CATEGORIES: StackCategory[] = [
     description:
       'Sistem manajemen basis data relasional, document store noSQL, in-memory cache, dan backend database terdistribusi.',
     items: [
-      { name: 'MySQL', icon: siMysql, color: '#4479A1' },
-      { name: 'PostgreSQL', icon: siPostgresql, color: '#4169E1' },
+      // Main Technologies (Outline Biru)
+      { name: 'MySQL', icon: siMysql, color: '#4479A1', isMain: true },
+      { name: 'PostgreSQL', icon: siPostgresql, color: '#4169E1', isMain: true },
+      { name: 'Supabase', icon: siSupabase, color: '#3FCF8E', isMain: true },
+      // Regular Technologies
       { name: 'MariaDB', icon: siMariadb, color: '#003545' },
       { name: 'MongoDB', icon: siMongodb, color: '#47A248' },
       { name: 'SQLite', icon: siSqlite, color: '#38BDF8' },
       { name: 'Redis', icon: siRedis, color: '#FF4438' },
-      { name: 'Supabase', icon: siSupabase, color: '#3FCF8E' },
     ],
   },
   {
@@ -181,6 +199,7 @@ const STACK_CATEGORIES: StackCategory[] = [
     description:
       'Distribusi Linux harian, window manager, serta sistem operasi yang digunakan untuk development dan server.',
     items: [
+      // Main Technologies (Outline Biru)
       {
         name: 'Arch Linux',
         icon: siArchlinux,
@@ -198,7 +217,9 @@ const STACK_CATEGORIES: StackCategory[] = [
         icon: siGithub,
         color: '#A855F7',
         link: 'https://github.com/caelestia-dots/caelestia',
+        isMain: true,
       },
+      // Regular Technologies
       { name: 'Debian', icon: siDebian, color: '#A81D33' },
       { name: 'Ubuntu', icon: siUbuntu, color: '#E95420' },
       { name: 'Windows 11', icon: Windows11Icon, color: '#0078D4' },
@@ -377,9 +398,15 @@ export default function TechStackSection() {
                   </div>
                 )}
 
-                {/* List Capsule Pills Sesuai UI Mockup Gambar 2 */}
+                {/* List Capsule Pills Sesuai UI Mockup Gambar 2 (Item Biru / isMain ditampilkan duluan) */}
                 <div className="flex flex-wrap gap-2.5 sm:gap-3 pt-1">
-                  {category.items.map((item) => {
+                  {[...category.items]
+                    .sort((a, b) => {
+                      if (a.isMain && !b.isMain) return -1
+                      if (!a.isMain && b.isMain) return 1
+                      return 0
+                    })
+                    .map((item) => {
                     const iconFill = item.color || '#61DAFB'
                     const isMonochrome = item.color === '#000000'
                     const isLinked = Boolean(item.link)
