@@ -167,10 +167,10 @@ const STACK_CATEGORIES: StackCategory[] = [
         color: '#4285F4',
         isMain: true,
       },
+      { name: 'Claude', icon: siClaude, color: '#D97757', isMain: true },
+      { name: 'Gemini', icon: siGooglegemini, color: '#8E75B2', isMain: true },
       // Regular Technologies
       { name: 'ChatGPT', icon: ChatGptIcon, color: '#10A37F' },
-      { name: 'Claude', icon: siClaude, color: '#D97757' },
-      { name: 'Gemini', icon: siGooglegemini, color: '#8E75B2' },
       { name: 'OpenCode', icon: siOpencode, color: '#000000' },
     ],
   },
@@ -184,9 +184,9 @@ const STACK_CATEGORIES: StackCategory[] = [
       // Main Technologies (Outline Biru)
       { name: 'MySQL', icon: siMysql, color: '#4479A1', isMain: true },
       { name: 'PostgreSQL', icon: siPostgresql, color: '#4169E1', isMain: true },
+      { name: 'MariaDB', icon: siMariadb, color: '#003545', isMain: true },
       { name: 'Supabase', icon: siSupabase, color: '#3FCF8E', isMain: true },
       // Regular Technologies
-      { name: 'MariaDB', icon: siMariadb, color: '#003545' },
       { name: 'MongoDB', icon: siMongodb, color: '#47A248' },
       { name: 'SQLite', icon: siSqlite, color: '#38BDF8' },
       { name: 'Redis', icon: siRedis, color: '#FF4438' },
