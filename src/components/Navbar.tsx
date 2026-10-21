@@ -339,8 +339,12 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Top Header Bar */}
-      <header className="fixed top-0 left-0 right-0 z-50 transition-colors duration-300">
+      {/* Brand Header: Menempel di atas hero section (stick / anchor ke hero section) */}
+      <header
+        className={`${
+          isOpen ? 'fixed z-50' : 'absolute z-40'
+        } top-0 left-0 right-0 pointer-events-none transition-colors duration-300`}
+      >
         <div className="max-w-7xl mx-auto px-6 sm:px-10 py-5 sm:py-6 flex items-center justify-between">
           {/* Logo / Brand di Kiri Atas dengan Animasi Highlight Menyamping Modern */}
           <a
@@ -352,7 +356,7 @@ export default function Navbar() {
               }
             }}
             onMouseEnter={handleBrandHover}
-            className="group/brand flex items-center gap-3 no-underline select-none cursor-pointer"
+            className="group/brand pointer-events-auto flex items-center gap-3 no-underline select-none cursor-pointer"
           >
             {/* Logo Image langsung tanpa outline/border apapun */}
             <img
@@ -404,57 +408,59 @@ export default function Navbar() {
               </div>
             </div>
           </a>
-
-          {/* Tombol Navigasi (Garis 3 / X) di Kanan Atas - Interaktif dengan Motion & Hover Spin */}
-          <div className="flex items-center gap-4">
-            <motion.button
-              type="button"
-              onClick={() => setIsOpen(!isOpen)}
-              aria-label={isOpen ? 'Tutup navigasi' : 'Buka navigasi'}
-              aria-expanded={isOpen}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.92 }}
-              className={`group relative p-2 focus:outline-none focus:ring-0 outline-none border-0 cursor-pointer transition-colors duration-300 select-none ${
-                isOpen
-                  ? 'text-white hover:text-red-400'
-                  : 'text-zinc-950 dark:text-white hover:text-blue-500'
-              }`}
-            >
-              {/* Ikon 3 Garis dengan Animasi Morphing & 90° Spin Halus pada Tombol X saat Hover */}
-              <div
-                style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
-                className={`w-10 sm:w-11 h-6 flex flex-col justify-between items-center relative transition-transform duration-500 ${
-                  isOpen ? 'group-hover:rotate-90 group-hover:scale-110' : ''
-                }`}
-              >
-                <span
-                  style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
-                  className={`block h-[2px] w-full bg-current rounded-full transition-all duration-400 ${
-                    isOpen
-                      ? 'rotate-45 translate-y-[11px] group-hover:drop-shadow-[0_0_8px_rgba(248,113,113,0.7)]'
-                      : 'group-hover:translate-x-1.5'
-                  }`}
-                />
-                <span
-                  className={`block h-[2px] w-full bg-current rounded-full transition-all duration-300 ease-in-out ${
-                    isOpen
-                      ? 'opacity-0 scale-x-0'
-                      : 'group-hover:-translate-x-1.5'
-                  }`}
-                />
-                <span
-                  style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
-                  className={`block h-[2px] w-full bg-current rounded-full transition-all duration-400 ${
-                    isOpen
-                      ? '-rotate-45 -translate-y-[11px] group-hover:drop-shadow-[0_0_8px_rgba(248,113,113,0.7)]'
-                      : 'group-hover:translate-x-1.5'
-                  }`}
-                />
-              </div>
-            </motion.button>
-          </div>
         </div>
       </header>
+
+      {/* Floating Sidebar Menu Button: Tetap fixed di pojok kanan atas sepanjang scroll halaman */}
+      <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 py-5 sm:py-6 flex items-center justify-end">
+          <motion.button
+            type="button"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? 'Tutup navigasi' : 'Buka navigasi'}
+            aria-expanded={isOpen}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.92 }}
+            className={`pointer-events-auto group relative p-2 focus:outline-none focus:ring-0 outline-none border-0 cursor-pointer transition-colors duration-300 select-none ${
+              isOpen
+                ? 'text-white hover:text-red-400'
+                : 'text-zinc-950 dark:text-white hover:text-blue-500'
+            }`}
+          >
+            {/* Ikon 3 Garis dengan Animasi Morphing & 90° Spin Halus pada Tombol X saat Hover */}
+            <div
+              style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
+              className={`w-10 sm:w-11 h-6 flex flex-col justify-between items-center relative transition-transform duration-500 ${
+                isOpen ? 'group-hover:rotate-90 group-hover:scale-110' : ''
+              }`}
+            >
+              <span
+                style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
+                className={`block h-[2px] w-full bg-current rounded-full transition-all duration-400 ${
+                  isOpen
+                    ? 'rotate-45 translate-y-[11px] group-hover:drop-shadow-[0_0_8px_rgba(248,113,113,0.7)]'
+                    : 'group-hover:translate-x-1.5'
+                }`}
+              />
+              <span
+                className={`block h-[2px] w-full bg-current rounded-full transition-all duration-300 ease-in-out ${
+                  isOpen
+                    ? 'opacity-0 scale-x-0'
+                    : 'group-hover:-translate-x-1.5'
+                }`}
+              />
+              <span
+                style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
+                className={`block h-[2px] w-full bg-current rounded-full transition-all duration-400 ${
+                  isOpen
+                    ? '-rotate-45 -translate-y-[11px] group-hover:drop-shadow-[0_0_8px_rgba(248,113,113,0.7)]'
+                    : 'group-hover:translate-x-1.5'
+                }`}
+              />
+            </div>
+          </motion.button>
+        </div>
+      </div>
 
       {/* Fullscreen Menu Overlay - Modern, Sleek & Interaktif */}
       <AnimatePresence>
