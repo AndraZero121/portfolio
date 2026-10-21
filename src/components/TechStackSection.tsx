@@ -43,6 +43,8 @@ import {
   siClaude,
   siGooglegemini,
   siOpencode,
+  siComposer,
+  siTypescript,
 } from 'simple-icons'
 
 // Custom Official SVGs untuk Windows 11, VS Code, ChatGPT, dan Antigravity
@@ -72,9 +74,8 @@ export interface StackItem {
   name: string
   icon: { path: string; hex?: string; viewBox?: string }
   color?: string
-  badge?: string
+  isMain?: boolean
   link?: string
-  highlight?: boolean
 }
 
 export interface StackCategory {
@@ -93,13 +94,14 @@ const STACK_CATEGORIES: StackCategory[] = [
     description:
       'Bahasa inti dan kerangka kerja tingkat lanjut yang digunakan untuk rekayasa perangkat lunak modern.',
     items: [
-      { name: 'Go', icon: siGo, color: '#00ADD8' },
+      { name: 'Go', icon: siGo, color: '#00ADD8', isMain: true },
       { name: 'Rust', icon: siRust, color: '#DEA584' },
-      { name: 'PHP', icon: siPhp, color: '#777BB4' },
-      { name: 'JavaScript', icon: siJavascript, color: '#F7DF1E' },
+      { name: 'PHP', icon: siPhp, color: '#777BB4', isMain: true },
+      { name: 'JavaScript', icon: siJavascript, color: '#F7DF1E', isMain: true },
+      { name: 'TypeScript', icon: siTypescript, color: '#3178C6', isMain: true },
       { name: 'HTML5', icon: siHtml5, color: '#E34F26' },
       { name: 'CSS3', icon: siCss, color: '#1572B6' },
-      { name: 'Laravel', icon: siLaravel, color: '#FF2D20' },
+      { name: 'Laravel', icon: siLaravel, color: '#FF2D20', isMain: true },
       { name: 'Express.js', icon: siExpress, color: '#000000' },
       { name: 'React', icon: siReact, color: '#61DAFB' },
       { name: 'Next.js', icon: siNextdotjs, color: '#000000' },
@@ -114,8 +116,9 @@ const STACK_CATEGORIES: StackCategory[] = [
       'Pustaka runtime, utilitas styling, editor koding modern, containerization, dan web server berkecepatan tinggi.',
     items: [
       { name: 'Node.js', icon: siNodedotjs, color: '#5FA04E' },
-      { name: 'Bun', icon: siBun, color: '#000000' },
-      { name: 'Vite', icon: siVite, color: '#646CFF' },
+      { name: 'Bun', icon: siBun, color: '#000000', isMain: true },
+      { name: 'Composer', icon: siComposer, color: '#885630', isMain: true },
+      { name: 'Vite', icon: siVite, color: '#646CFF', isMain: true },
       { name: 'Tailwind CSS', icon: siTailwindcss, color: '#06B6D4' },
       { name: 'Framer Motion', icon: siFramer, color: '#0055FF' },
       { name: 'Pusher', icon: siPusher, color: '#9065FF' },
@@ -129,7 +132,7 @@ const STACK_CATEGORIES: StackCategory[] = [
       { name: 'Nginx', icon: siNginx, color: '#009639' },
       { name: 'ngrok', icon: siNgrok, color: '#3B82F6' },
       { name: 'VS Code', icon: VsCodeIcon, color: '#007ACC' },
-      { name: 'Zed', icon: siZedindustries, color: '#084CCF' },
+      { name: 'Zed', icon: siZedindustries, color: '#084CCF', isMain: true },
     ],
   },
   {
@@ -146,13 +149,12 @@ const STACK_CATEGORIES: StackCategory[] = [
         name: 'Antigravity',
         icon: AntigravityIcon,
         color: '#4285F4',
-        badge: 'Agentic AI',
+        isMain: true,
       },
       {
         name: 'OpenCode',
         icon: siOpencode,
         color: '#000000',
-        badge: 'Terminal Agent',
       },
     ],
   },
@@ -183,23 +185,19 @@ const STACK_CATEGORIES: StackCategory[] = [
         name: 'Arch Linux',
         icon: siArchlinux,
         color: '#1793D1',
-        badge: 'Main OS',
-        highlight: true,
+        isMain: true,
       },
       {
         name: 'Hyprland',
         icon: siHyprland,
         color: '#58E1FF',
-        badge: 'Compositor',
-        highlight: true,
+        isMain: true,
       },
       {
         name: 'Caelestia Shell',
         icon: siGithub,
         color: '#A855F7',
-        badge: 'Dots Repo',
         link: 'https://github.com/caelestia-dots/caelestia',
-        highlight: true,
       },
       { name: 'Debian', icon: siDebian, color: '#A81D33' },
       { name: 'Ubuntu', icon: siUbuntu, color: '#E95420' },
@@ -409,13 +407,6 @@ export default function TechStackSection() {
                           {item.name}
                         </span>
 
-                        {/* Badge Tambahan (misal: Main OS, Compositor, Dots Repo) */}
-                        {item.badge && (
-                          <span className="px-1.5 py-0.5 rounded text-[9px] font-jetbrains font-bold uppercase tracking-wider bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-                            {item.badge}
-                          </span>
-                        )}
-
                         {/* Icon External Link jika memiliki tautan repo */}
                         {isLinked && (
                           <svg
@@ -436,9 +427,11 @@ export default function TechStackSection() {
                       </>
                     )
 
+                    const isMain = Boolean(item.isMain)
+
                     const containerClasses = `group inline-flex items-center gap-2.5 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-full border transition-all duration-200 select-none ${
-                      item.highlight
-                        ? 'border-sky-500/35 dark:border-sky-500/35 bg-sky-50/60 dark:bg-sky-950/20 text-zinc-950 dark:text-white shadow-2xs hover:border-sky-500/70'
+                      isMain
+                        ? 'border-blue-500 dark:border-blue-400 bg-white dark:bg-[#121217] text-zinc-950 dark:text-white shadow-2xs hover:border-blue-600 dark:hover:border-blue-300 ring-1 ring-blue-500/25 dark:ring-blue-400/25'
                         : 'border-zinc-200/90 dark:border-zinc-800/90 bg-white dark:bg-[#121217] text-zinc-900 dark:text-zinc-100 hover:border-zinc-400 dark:hover:border-zinc-600 shadow-2xs'
                     } ${
                       isLinked
