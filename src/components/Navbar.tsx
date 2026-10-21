@@ -302,7 +302,7 @@ export default function Navbar() {
   const menuItems = [
     { number: '一', label: 'HOME', jp: 'ホーム', watermark: '始', href: '#home' },
     { number: '二', label: 'ABOUT', jp: '概要', watermark: '意', href: '#about' },
-    { number: '三', label: 'WORKS', jp: '実績', watermark: '作', href: '#projects' },
+    { number: '三', label: 'WORKS', jp: '実績', watermark: '作', href: '#works' },
     { number: '四', label: 'STACK', jp: '技術', watermark: '技', href: '#skills' },
     { number: '五', label: 'EXPERIENCE', jp: '経歴', watermark: '歴', href: '#experience' },
     { number: '六', label: 'CONTACT', jp: '連絡', watermark: '通', href: '#contact' },

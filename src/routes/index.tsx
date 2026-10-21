@@ -5,6 +5,7 @@ import { useLenis } from 'lenis/react'
 import { ArrowUpRight, ExternalLink } from 'lucide-react'
 import TechStackSection from '#/components/TechStackSection'
 import HeroMusicPlayer from '#/components/HeroMusicPlayer'
+import WorksSection from '#/components/WorksSection'
 
 export const Route = createFileRoute('/')({ component: Home })
 
@@ -941,16 +942,16 @@ export default function Home() {
               >
                 {/* Tombol Utama: Jelajahi Karya */}
                 <a
-                  href="#about"
+                  href="#works"
                   onClick={(e) => {
                     e.preventDefault()
                     if (lenis) {
-                      lenis.scrollTo('#about', {
+                      lenis.scrollTo('#works', {
                         duration: 1.3,
                         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
                       })
                     } else {
-                      document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' })
+                      document.querySelector('#works')?.scrollIntoView({ behavior: 'smooth' })
                     }
                   }}
                   className="group relative inline-flex items-center gap-3 px-7 sm:px-8 py-3.5 sm:py-4 bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 font-bold text-xs sm:text-sm tracking-wider uppercase rounded-none hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all duration-300 no-underline shadow-md hover:shadow-lg cursor-pointer"
@@ -988,7 +989,10 @@ export default function Home() {
       {/* SECTION 2: ABOUT ME SECTION */}
       <AboutMeSection />
 
-      {/* SECTION 3: TECH STACK & TOOLS SECTION */}
+      {/* SECTION 3: WORKS / SELECTED REPOSITORIES SECTION */}
+      <WorksSection />
+
+      {/* SECTION 4: TECH STACK & TOOLS SECTION */}
       <TechStackSection />
     </div>
   )

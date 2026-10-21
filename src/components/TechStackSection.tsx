@@ -256,7 +256,7 @@ export default function TechStackSection() {
         <div className="flex items-center gap-3 mb-4 sm:mb-6">
           <span className="h-[1px] w-8 sm:w-12 bg-blue-600 dark:bg-blue-400" />
           <span className="font-jetbrains text-xs sm:text-sm font-semibold tracking-widest text-zinc-600 dark:text-zinc-400 uppercase">
-            // 03 . TECH STACK & TOOLS / 技術スタック
+            // 04 . TECH STACK & TOOLS / 技術スタック
           </span>
         </div>
 
