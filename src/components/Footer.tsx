@@ -239,6 +239,19 @@ export default function Footer() {
               </li>
               <li>
                 <a
+                  href="#stack"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    handleNavClick('#stack')
+                  }}
+                  className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white transition-colors duration-150 inline-flex items-center gap-1 no-underline"
+                >
+                  <span>Tech Stack</span>
+                  <span className="text-[10px] text-zinc-400 dark:text-zinc-600 font-jetbrains">/ 03</span>
+                </a>
+              </li>
+              <li>
+                <a
                   href="/about"
                   className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white transition-colors duration-150 inline-flex items-center gap-1 no-underline"
                 >

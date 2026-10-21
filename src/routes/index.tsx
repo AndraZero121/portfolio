@@ -3,6 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { motion, AnimatePresence } from 'motion/react'
 import { useLenis } from 'lenis/react'
 import { ArrowUpRight, ExternalLink } from 'lucide-react'
+import TechStackSection from '#/components/TechStackSection'
 
 export const Route = createFileRoute('/')({ component: Home })
 
@@ -1151,6 +1152,9 @@ export default function Home() {
 
       {/* SECTION 2: ABOUT ME SECTION */}
       <AboutMeSection />
+
+      {/* SECTION 3: TECH STACK SECTION */}
+      <TechStackSection />
     </div>
   )
 }
