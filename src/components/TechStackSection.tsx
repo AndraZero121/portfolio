@@ -37,6 +37,7 @@ import {
   siHyprland,
   siDebian,
   siUbuntu,
+  siGithub,
 } from 'simple-icons'
 
 // Custom Official SVGs untuk Windows 11 & VS Code
@@ -54,6 +55,9 @@ export interface StackItem {
   name: string
   icon: { path: string; hex?: string }
   color?: string
+  badge?: string
+  link?: string
+  highlight?: boolean
 }
 
 export interface StackCategory {
@@ -110,11 +114,11 @@ const STACK_CATEGORIES: StackCategory[] = [
     ],
   },
   {
-    id: 'others',
-    title: 'Kategori Lainnya',
-    jp: 'データベース・OS環境',
+    id: 'databases-storage',
+    title: 'Database & Storage',
+    jp: 'データベースとストレージ',
     description:
-      'Database relasional & non-relasional, caching, backend-as-a-service, dan sistem operasi Linux & desktop.',
+      'Sistem manajemen basis data relasional, document store noSQL, in-memory cache, dan backend database terdistribusi.',
     items: [
       { name: 'MySQL', icon: siMysql, color: '#4479A1' },
       { name: 'PostgreSQL', icon: siPostgresql, color: '#4169E1' },
@@ -123,8 +127,37 @@ const STACK_CATEGORIES: StackCategory[] = [
       { name: 'SQLite', icon: siSqlite, color: '#38BDF8' },
       { name: 'Redis', icon: siRedis, color: '#FF4438' },
       { name: 'Supabase', icon: siSupabase, color: '#3FCF8E' },
-      { name: 'Arch Linux', icon: siArchlinux, color: '#1793D1' },
-      { name: 'Hyprland', icon: siHyprland, color: '#58E1FF' },
+    ],
+  },
+  {
+    id: 'os-environment',
+    title: 'Sistem Operasi & Environment',
+    jp: 'オペレーティングシステムと環境',
+    description:
+      'Distribusi Linux harian, window manager, serta sistem operasi yang digunakan untuk development dan server.',
+    items: [
+      {
+        name: 'Arch Linux',
+        icon: siArchlinux,
+        color: '#1793D1',
+        badge: 'Main OS',
+        highlight: true,
+      },
+      {
+        name: 'Hyprland',
+        icon: siHyprland,
+        color: '#58E1FF',
+        badge: 'Compositor',
+        highlight: true,
+      },
+      {
+        name: 'Caelestia Shell',
+        icon: siGithub,
+        color: '#A855F7',
+        badge: 'Dots Repo',
+        link: 'https://github.com/caelestia-dots/caelestia',
+        highlight: true,
+      },
       { name: 'Debian', icon: siDebian, color: '#A81D33' },
       { name: 'Ubuntu', icon: siUbuntu, color: '#E95420' },
       { name: 'Windows 11', icon: Windows11Icon, color: '#0078D4' },
@@ -247,16 +280,70 @@ export default function TechStackSection() {
                   </span>
                 </div>
 
+                {/* Highlight Callout Khusus untuk OS Environment */}
+                {category.id === 'os-environment' && (
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3.5 p-4 rounded-2xl border border-sky-500/25 bg-gradient-to-r from-sky-500/5 via-sky-500/10 to-transparent dark:from-sky-500/10 dark:via-sky-500/5 dark:to-transparent backdrop-blur-xs">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-sky-500/15 dark:bg-sky-500/20 border border-sky-500/30 flex items-center justify-center shrink-0 text-sky-500 dark:text-sky-400">
+                        <svg role="img" viewBox="0 0 24 24" className="w-5 h-5 fill-current">
+                          <path d={siArchlinux.path} />
+                        </svg>
+                      </div>
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-poppins text-sm sm:text-base font-bold text-zinc-950 dark:text-white">
+                            Daily Driver: Arch Linux + Hyprland
+                          </span>
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-jetbrains font-bold uppercase tracking-wider bg-sky-500/20 text-sky-600 dark:text-sky-400 border border-sky-500/30">
+                            Main OS
+                          </span>
+                        </div>
+                        <p className="text-xs text-zinc-600 dark:text-zinc-400 font-normal mt-0.5">
+                          Konfigurasi desktop harian dinamis menggunakan{' '}
+                          <span className="font-semibold text-zinc-900 dark:text-zinc-100">
+                            Caelestia Shell
+                          </span>
+                          .
+                        </p>
+                      </div>
+                    </div>
+
+                    <a
+                      href="https://github.com/caelestia-dots/caelestia"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-jetbrains font-medium text-sky-600 dark:text-sky-300 bg-sky-500/10 hover:bg-sky-500/20 dark:bg-sky-500/15 dark:hover:bg-sky-500/25 border border-sky-500/30 transition-all shrink-0 group/link shadow-2xs hover:shadow-sm"
+                    >
+                      <svg role="img" viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current">
+                        <path d={siGithub.path} />
+                      </svg>
+                      <span>caelestia-dots/caelestia</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="w-3 h-3 opacity-60 group-hover/link:opacity-100 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-all"
+                      >
+                        <path d="M15 3h6v6" />
+                        <path d="M10 14L21 3" />
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                      </svg>
+                    </a>
+                  </div>
+                )}
+
                 {/* List Capsule Pills Sesuai UI Mockup Gambar 2 */}
                 <div className="flex flex-wrap gap-2.5 sm:gap-3 pt-1">
                   {category.items.map((item) => {
                     const iconFill = item.color || '#61DAFB'
+                    const isLinked = Boolean(item.link)
 
-                    return (
-                      <div
-                        key={item.name}
-                        className="group inline-flex items-center gap-2.5 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-full border border-zinc-200/90 dark:border-zinc-800/90 bg-white dark:bg-[#121217] text-zinc-900 dark:text-zinc-100 hover:border-zinc-400 dark:hover:border-zinc-600 shadow-2xs hover:shadow-sm hover:scale-[1.03] transition-all duration-200 cursor-default select-none"
-                      >
+                    const pillContent = (
+                      <>
                         {/* Icon Brand Berwarna dari Simple Icons */}
                         <span
                           className="flex items-center justify-center shrink-0 w-4 h-4 sm:w-4.5 sm:h-4.5 transition-transform duration-200 group-hover:scale-110"
@@ -275,6 +362,61 @@ export default function TechStackSection() {
                         <span className="font-poppins text-xs sm:text-sm font-medium tracking-wide">
                           {item.name}
                         </span>
+
+                        {/* Badge Tambahan (misal: Main OS, Compositor, Dots Repo) */}
+                        {item.badge && (
+                          <span className="px-1.5 py-0.5 rounded text-[9px] font-jetbrains font-bold uppercase tracking-wider bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                            {item.badge}
+                          </span>
+                        )}
+
+                        {/* Icon External Link jika memiliki tautan repo */}
+                        {isLinked && (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="w-3 h-3 text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-700 dark:group-hover:text-zinc-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"
+                          >
+                            <path d="M15 3h6v6" />
+                            <path d="M10 14L21 3" />
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                          </svg>
+                        )}
+                      </>
+                    )
+
+                    const containerClasses = `group inline-flex items-center gap-2.5 px-4 py-2 sm:px-4.5 sm:py-2.5 rounded-full border transition-all duration-200 select-none ${
+                      item.highlight
+                        ? 'border-sky-500/35 dark:border-sky-500/35 bg-sky-50/60 dark:bg-sky-950/20 text-zinc-950 dark:text-white shadow-2xs hover:border-sky-500/70'
+                        : 'border-zinc-200/90 dark:border-zinc-800/90 bg-white dark:bg-[#121217] text-zinc-900 dark:text-zinc-100 hover:border-zinc-400 dark:hover:border-zinc-600 shadow-2xs'
+                    } ${
+                      isLinked
+                        ? 'cursor-pointer hover:shadow-sm hover:scale-[1.03]'
+                        : 'cursor-default hover:shadow-sm hover:scale-[1.03]'
+                    }`
+
+                    if (isLinked && item.link) {
+                      return (
+                        <a
+                          key={item.name}
+                          href={item.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={containerClasses}
+                        >
+                          {pillContent}
+                        </a>
+                      )
+                    }
+
+                    return (
+                      <div key={item.name} className={containerClasses}>
+                        {pillContent}
                       </div>
                     )
                   })}
