@@ -629,8 +629,8 @@ export default function Navbar() {
               transition={{ delay: 0.2, duration: 0.35 }}
               className="max-w-5xl w-full mx-auto pt-6 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-5 text-xs font-mono relative z-10"
             >
-              {/* Kontrol Kiri: Bendera Bahasa (UK, ID, JP) & Ikon Mode Gelap/Terang Polos */}
-              <div className="flex items-center gap-4">
+              {/* Kontrol Kiri: Bendera Bahasa (UK, ID, JP) & Ikon Mode Gelap/Terang Polos (Disembunyikan di Mobile) */}
+              <div className="hidden sm:flex items-center gap-4">
                 {/* Bendera Bahasa Saja: Inggris, Indonesia, Jepang */}
                 <div className="flex items-center gap-2.5">
                   {availableLanguages.map((lang) => {
@@ -690,7 +690,7 @@ export default function Navbar() {
               </div>
 
               {/* Tautan Kontak Email & Sosmed Berwarna Putih Murni */}
-              <div className="flex flex-wrap items-center gap-4 sm:gap-5 text-white">
+              <div className="flex flex-wrap items-center justify-center sm:justify-end gap-4 sm:gap-5 text-white">
                 <a
                   href="mailto:diandraanursasyabandira@gmail.com"
                   className="!text-white hover:!opacity-80 transition-opacity no-underline font-mono text-xs select-all"

@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'motion/react'
 import { useLenis } from 'lenis/react'
 import { ArrowUpRight, ExternalLink } from 'lucide-react'
 import TechStackSection from '#/components/TechStackSection'
+import HeroMusicPlayer from '#/components/HeroMusicPlayer'
 
 export const Route = createFileRoute('/')({ component: Home })
 
@@ -67,11 +68,18 @@ function FullBackgroundScenery() {
             <stop offset="100%" stopColor="#0f172a" stopOpacity="0.35" className="dark:stop-color-[#04060a] dark:stop-opacity-95" />
           </linearGradient>
 
-          {/* Gradien Transisi Pesisir Pantai (Garis Pantai Pasir Hitam Vulkanik Menuju Daratan) */}
-          <linearGradient id="coastlineGrad" x1="0" y1="780" x2="0" y2="900" gradientUnits="userSpaceOnUse">
+          {/* Gradien Transisi Pesisir Pantai Pasir Hitam Vulkanik di Mode Gelap */}
+          <linearGradient id="coastlineGradDark" x1="0" y1="780" x2="0" y2="900" gradientUnits="userSpaceOnUse">
             <stop offset="0%" stopColor="#181822" stopOpacity="0.85" />
             <stop offset="40%" stopColor="#101016" stopOpacity="0.95" />
             <stop offset="100%" stopColor="#050507" stopOpacity="1" />
+          </linearGradient>
+
+          {/* Gradien Transisi Pesisir Pantai Pasir Putih Bersih di Mode Terang (Light Mode) */}
+          <linearGradient id="coastlineGradLight" x1="0" y1="760" x2="0" y2="900" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#e2e8f0" stopOpacity="0.4" />
+            <stop offset="40%" stopColor="#f8fafc" stopOpacity="0.85" />
+            <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
           </linearGradient>
         </defs>
 
@@ -208,10 +216,18 @@ function FullBackgroundScenery() {
 
         {/* 4. TRANSISI ANTARA LAUT DAN DARATAN (Pesisir Pantai Menuju Section About) */}
         <g>
-          {/* Garis Pantai Berpasir / Daratan Bertahap Menyatu ke Section About */}
+          {/* Garis Pantai Berpasir Putih di Mode Terang (Light Mode Menyatu ke About) */}
           <path
             d="M 0 790 Q 240 760 480 795 T 960 775 T 1440 800 L 1440 900 L 0 900 Z"
-            fill="url(#coastlineGrad)"
+            fill="url(#coastlineGradLight)"
+            className="block dark:hidden"
+          />
+
+          {/* Garis Pantai Berpasir Hitam Vulkanik di Mode Gelap (Dark Mode) */}
+          <path
+            d="M 0 790 Q 240 760 480 795 T 960 775 T 1440 800 L 1440 900 L 0 900 Z"
+            fill="url(#coastlineGradDark)"
+            className="hidden dark:block"
           />
 
           {/* Buih Ombak Garis Pantai (Shoreline Foaming Crest) */}
@@ -221,7 +237,7 @@ function FullBackgroundScenery() {
             stroke="currentColor"
             strokeWidth="2.5"
             strokeDasharray="14 7"
-            className="text-white dark:text-zinc-500/70 opacity-80"
+            className="text-blue-300/80 dark:text-zinc-500/70 opacity-80"
           />
           <path
             d="M 0 806 Q 260 780 520 812 T 1020 794 T 1440 816"
@@ -229,7 +245,7 @@ function FullBackgroundScenery() {
             stroke="currentColor"
             strokeWidth="1.8"
             strokeDasharray="8 8"
-            className="text-white/70 dark:text-zinc-600/60 opacity-70"
+            className="text-blue-200/70 dark:text-zinc-600/60 opacity-70"
           />
           <path
             d="M 0 830 Q 300 810 600 835 T 1200 825 T 1440 840"
@@ -237,189 +253,7 @@ function FullBackgroundScenery() {
             stroke="currentColor"
             strokeWidth="1.2"
             strokeDasharray="4 6"
-            className="text-white/40 dark:text-zinc-700/40 opacity-60"
-          />
-        </g>
-      </svg>
-    </div>
-  )
-}
-
-// Ilustrasi Gerbang Torii Tradisional Jepang Megah (Focal Art Piece di Sisi Kanan Hero)
-function ToriiGateIllustration() {
-  return (
-    <div className="relative w-full max-w-[460px] sm:max-w-[500px] lg:max-w-[560px] aspect-square flex items-center justify-center select-none">
-      {/* Pendaran Cahaya Halus di Belakang Torii */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 flex items-center justify-center pointer-events-none"
-      >
-        <div className="w-[85%] h-[85%] rounded-full bg-radial from-red-500/15 via-red-500/5 to-transparent dark:from-red-600/25 dark:via-red-600/8 dark:to-transparent blur-2xl" />
-      </div>
-
-      <svg
-        viewBox="0 0 640 640"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-full drop-shadow-sm transition-transform duration-500 hover:scale-[1.015]"
-      >
-        <defs>
-          {/* Pendaran Aura Matahari Merah */}
-          <radialGradient id="toriiSunAura" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#E11D48" stopOpacity="0.32" className="dark:stop-opacity-45" />
-            <stop offset="65%" stopColor="#DC2626" stopOpacity="0.08" className="dark:stop-opacity-18" />
-            <stop offset="100%" stopColor="#DC2626" stopOpacity="0" />
-          </radialGradient>
-
-          {/* Gradien Pilar Torii Silinder */}
-          <linearGradient id="toriiPillarLeft" x1="220" y1="280" x2="246" y2="280" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#991B1B" />
-            <stop offset="40%" stopColor="#DC2626" />
-            <stop offset="100%" stopColor="#7F1D1D" />
-          </linearGradient>
-          <linearGradient id="toriiPillarRight" x1="394" y1="280" x2="420" y2="280" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#991B1B" />
-            <stop offset="40%" stopColor="#DC2626" />
-            <stop offset="100%" stopColor="#7F1D1D" />
-          </linearGradient>
-        </defs>
-
-        {/* 1. MATAHARI MERAH JEPANG (Radiant Japanese Sun Disc) */}
-        {/* Aura Pendaran Luar */}
-        <circle cx="320" cy="275" r="185" fill="url(#toriiSunAura)" />
-
-        {/* Piringan Utama Matahari Merah */}
-        <circle
-          cx="320"
-          cy="275"
-          r="115"
-          className="fill-red-500/35 dark:fill-red-600/90 transition-colors duration-500"
-          style={{
-            animation: 'sunGlowPulse 8s ease-in-out infinite',
-            transformOrigin: '320px 275px',
-          }}
-        />
-
-        {/* 2. BEBATUAN KARANG MEOTO IWA DI KAKI KIRI */}
-        <g>
-          <polygon
-            points="80,500 115,395 150,345 180,370 212,410 230,500"
-            className="fill-zinc-300/80 dark:fill-[#121217] stroke-zinc-400/40 dark:stroke-zinc-700/50"
-            strokeWidth="1.5"
-          />
-          <path
-            d="M 150 345 L 168 405 L 212 410 M 115 395 L 168 405 L 150 500"
-            className="stroke-zinc-400/30 dark:stroke-zinc-700/40"
-            strokeWidth="1"
-          />
-        </g>
-
-        {/* 3. GERBANG TORII JEPANG MEGAH & PRESISI */}
-        <g className="opacity-95 transition-opacity duration-500">
-          {/* Kasagi: Palang Lengkung Paling Atas Torii */}
-          <path
-            d="M 130 258 Q 320 228 510 258 L 502 276 Q 320 250 138 276 Z"
-            className="fill-zinc-900 dark:fill-zinc-950 stroke-red-600 dark:stroke-red-500"
-            strokeWidth="2"
-          />
-
-          {/* Shimaki: Palang Kedua Tepat di Bawah Kasagi */}
-          <rect
-            x="162"
-            y="276"
-            width="316"
-            height="15"
-            rx="1"
-            className="fill-red-600 dark:fill-red-600 stroke-zinc-900 dark:stroke-zinc-950"
-            strokeWidth="1.5"
-          />
-
-          {/* Gakuzuka: Plakat Tengah Bersih */}
-          <rect
-            x="308"
-            y="276"
-            width="24"
-            height="62"
-            className="fill-zinc-950 stroke-zinc-400/80 dark:stroke-zinc-600"
-            strokeWidth="1.5"
-          />
-          <rect
-            x="312"
-            y="281"
-            width="16"
-            height="52"
-            className="fill-zinc-900 dark:fill-zinc-900 stroke-amber-500/50"
-            strokeWidth="1"
-          />
-
-          {/* Nuki: Palang Pengikat Horisontal Antar Pilar */}
-          <rect
-            x="174"
-            y="336"
-            width="292"
-            height="15"
-            rx="1"
-            className="fill-red-600 dark:fill-red-600 stroke-zinc-950"
-            strokeWidth="1.5"
-          />
-
-          {/* Kusabi: Baji Pengunci Samping */}
-          <polygon points="204,332 209,332 206,354" className="fill-zinc-950" />
-          <polygon points="431,332 436,332 433,354" className="fill-zinc-950" />
-
-          {/* Pilar Kiri (Hashira) */}
-          <rect
-            x="220"
-            y="276"
-            width="24"
-            height="182"
-            fill="url(#toriiPillarLeft)"
-            className="stroke-zinc-950/60 dark:stroke-black"
-            strokeWidth="1.5"
-          />
-          <line x1="223" y1="276" x2="223" y2="458" className="stroke-white/20" strokeWidth="1.5" />
-          <line x1="240" y1="276" x2="240" y2="458" className="stroke-black/30 dark:stroke-black/70" strokeWidth="1.8" />
-          {/* Pondasi Kaki Batu Kiri (Daiishi) */}
-          <rect
-            x="213"
-            y="453"
-            width="38"
-            height="15"
-            rx="2"
-            className="fill-zinc-800 dark:fill-zinc-900 stroke-zinc-950"
-            strokeWidth="1.5"
-          />
-
-          {/* Pilar Kanan (Hashira) */}
-          <rect
-            x="396"
-            y="276"
-            width="24"
-            height="182"
-            fill="url(#toriiPillarRight)"
-            className="stroke-zinc-950/60 dark:stroke-black"
-            strokeWidth="1.5"
-          />
-          <line x1="399" y1="276" x2="399" y2="458" className="stroke-white/20" strokeWidth="1.5" />
-          <line x1="416" y1="276" x2="416" y2="458" className="stroke-black/30 dark:stroke-black/70" strokeWidth="1.8" />
-          {/* Pondasi Kaki Batu Kanan (Daiishi) */}
-          <rect
-            x="389"
-            y="453"
-            width="38"
-            height="15"
-            rx="2"
-            className="fill-zinc-800 dark:fill-zinc-900 stroke-zinc-950"
-            strokeWidth="1.5"
-          />
-
-          {/* Pantulan Bayangan Merah Torii di Permukaan Air */}
-          <path
-            d="M 232 468 L 235 528 M 408 468 L 405 528"
-            stroke="#DC2626"
-            strokeWidth="2.5"
-            strokeDasharray="3 5"
-            opacity="0.4"
+            className="text-blue-200/50 dark:text-zinc-700/40 opacity-60"
           />
         </g>
       </svg>
@@ -1141,10 +975,10 @@ export default function Home() {
             </div>
 
             {/* =================================================================== */}
-            {/* KOLOM KANAN: GAMBAR / ILUSTRASI GERBANG TORII JEPANG (Art Focal) */}
+            {/* KOLOM KANAN: MUSIC PLAYER MODERN & UNIK (YouTube Interactive Audio) */}
             {/* =================================================================== */}
             <div className="lg:col-span-5 flex items-center justify-center lg:justify-end w-full">
-              <ToriiGateIllustration />
+              <HeroMusicPlayer />
             </div>
           </div>
         </div>
