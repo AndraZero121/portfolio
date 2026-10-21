@@ -22,7 +22,7 @@ export default function WorksSection() {
   const [works, setWorks] = useState<WorkRepo[]>(DEFAULT_WORKS)
   const [accountFilter, setAccountFilter] = useState<'all' | 'untrustnova' | 'AndraZero121'>('all')
   const [languageFilter, setLanguageFilter] = useState<string>('all')
-  const [isMobileExpanded, setIsMobileExpanded] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(false)
 
   // Ambil data terbaru secara asinkron via server function TanStack Start
   useEffect(() => {
@@ -62,6 +62,24 @@ export default function WorksSection() {
   // Total hitungan per akun
   const countUntrustnova = useMemo(() => works.filter((w) => w.owner === 'untrustnova').length, [works])
   const countAndraZero121 = useMemo(() => works.filter((w) => w.owner === 'AndraZero121').length, [works])
+
+  // Batasi karya yang ditampilkan menjadi 3 item (berlaku untuk desktop & mobile)
+  const visibleWorks = useMemo(() => {
+    return isExpanded ? filteredWorks : filteredWorks.slice(0, 3)
+  }, [filteredWorks, isExpanded])
+
+  // Fungsi toggle ekspansi karya dengan scroll mulus jika ditutup
+  const handleToggleExpand = () => {
+    if (isExpanded) {
+      setIsExpanded(false)
+      const section = document.getElementById('works')
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    } else {
+      setIsExpanded(true)
+    }
+  }
 
   return (
     <section
@@ -113,7 +131,10 @@ export default function WorksSection() {
           <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
-              onClick={() => setAccountFilter('all')}
+              onClick={() => {
+                setAccountFilter('all')
+                setIsExpanded(false)
+              }}
               className={`font-jetbrains text-xs font-semibold px-4 py-2 rounded-full transition-all duration-200 cursor-pointer ${
                 accountFilter === 'all'
                   ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-sm'
@@ -125,7 +146,10 @@ export default function WorksSection() {
 
             <button
               type="button"
-              onClick={() => setAccountFilter('untrustnova')}
+              onClick={() => {
+                setAccountFilter('untrustnova')
+                setIsExpanded(false)
+              }}
               className={`font-jetbrains text-xs font-semibold px-4 py-2 rounded-full transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
                 accountFilter === 'untrustnova'
                   ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-sm'
@@ -139,7 +163,10 @@ export default function WorksSection() {
 
             <button
               type="button"
-              onClick={() => setAccountFilter('AndraZero121')}
+              onClick={() => {
+                setAccountFilter('AndraZero121')
+                setIsExpanded(false)
+              }}
               className={`font-jetbrains text-xs font-semibold px-4 py-2 rounded-full transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
                 accountFilter === 'AndraZero121'
                   ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-sm'
@@ -159,7 +186,10 @@ export default function WorksSection() {
             </span>
             <button
               type="button"
-              onClick={() => setLanguageFilter('all')}
+              onClick={() => {
+                setLanguageFilter('all')
+                setIsExpanded(false)
+              }}
               className={`font-jetbrains text-[11px] font-medium px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
                 languageFilter === 'all'
                   ? 'bg-zinc-300 dark:bg-zinc-700 text-zinc-950 dark:text-white font-bold'
@@ -172,7 +202,10 @@ export default function WorksSection() {
               <button
                 key={lang}
                 type="button"
-                onClick={() => setLanguageFilter(lang)}
+                onClick={() => {
+                  setLanguageFilter(lang)
+                  setIsExpanded(false)
+                }}
                 className={`font-jetbrains text-[11px] font-medium px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
                   languageFilter === lang
                     ? 'bg-zinc-300 dark:bg-zinc-700 text-zinc-950 dark:text-white font-bold'
@@ -191,9 +224,8 @@ export default function WorksSection() {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
         >
           <AnimatePresence mode="popLayout">
-            {filteredWorks.map((work, idx) => {
+            {visibleWorks.map((work) => {
               const isUntrustnova = work.owner === 'untrustnova'
-              const isHiddenOnMobile = !isMobileExpanded && idx >= 3
 
               return (
                 <motion.div
@@ -203,9 +235,7 @@ export default function WorksSection() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  className={`group relative ${
-                    isHiddenOnMobile ? 'hidden sm:flex' : 'flex'
-                  } flex-col justify-between rounded-2xl border border-zinc-200/90 dark:border-zinc-800/90 bg-white/80 dark:bg-[#0c0c10]/80 p-5 sm:p-6 backdrop-blur-xs transition-all duration-300 hover:border-zinc-400 dark:hover:border-zinc-600 hover:shadow-lg dark:hover:shadow-2xl dark:hover:shadow-black/50`}
+                  className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200/90 dark:border-zinc-800/90 bg-white/80 dark:bg-[#0c0c10]/80 p-5 sm:p-6 backdrop-blur-xs transition-all duration-300 hover:border-zinc-400 dark:hover:border-zinc-600 hover:shadow-lg dark:hover:shadow-2xl dark:hover:shadow-black/50"
                 >
                   {/* Watermark Tipografi Halus di Sudut Kartu */}
                   <div
@@ -322,24 +352,24 @@ export default function WorksSection() {
           </AnimatePresence>
         </motion.div>
 
-        {/* Tombol Tampilkan Lebih Banyak / Lebih Sedikit (Khusus Mobile) */}
+        {/* Tombol Tampilkan Lebih Banyak / Lebih Sedikit (Berlaku untuk Desktop & Mobile) */}
         {filteredWorks.length > 3 && (
-          <div className="sm:hidden mt-6 flex justify-center">
+          <div className="mt-8 sm:mt-10 flex justify-center">
             <button
               type="button"
-              onClick={() => setIsMobileExpanded(!isMobileExpanded)}
-              aria-expanded={isMobileExpanded}
-              aria-label={isMobileExpanded ? 'Tampilkan lebih sedikit karya' : 'Tampilkan semua karya'}
+              onClick={handleToggleExpand}
+              aria-expanded={isExpanded}
+              aria-label={isExpanded ? 'Tampilkan lebih sedikit karya' : 'Tampilkan semua karya'}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-zinc-300 dark:border-zinc-700 bg-white/90 dark:bg-zinc-900/90 text-zinc-900 dark:text-white font-jetbrains text-xs font-semibold shadow-xs hover:border-zinc-950 dark:hover:border-white transition-all cursor-pointer select-none active:scale-95"
             >
               <span>
-                {isMobileExpanded
+                {isExpanded
                   ? 'Tampilkan Lebih Sedikit'
                   : `Lihat Lebih Banyak (+${filteredWorks.length - 3})`}
               </span>
               <ChevronDown
                 className={`w-3.5 h-3.5 transition-transform duration-300 ${
-                  isMobileExpanded ? 'rotate-180' : ''
+                  isExpanded ? 'rotate-180' : ''
                 }`}
               />
             </button>
