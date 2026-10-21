@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
+import { motion } from 'motion/react'
 import {
   Play,
   Pause,
@@ -9,9 +9,11 @@ import {
   Repeat,
   Volume2,
   VolumeX,
-  ListMusic,
   ExternalLink,
+  ChevronUp,
+  ChevronDown,
 } from 'lucide-react'
+import { getMusicTracksFn } from '#/server/music'
 
 export interface Track {
   id: string
@@ -20,7 +22,7 @@ export interface Track {
   jp?: string
 }
 
-// Urutan Lagu Sesuai Permintaan:
+// 15 Lagu Pilihan Sesuai Urutan Permintaan:
 // Haruka -> Itte -> Bunny Girl -> Tetoris -> Sasayaka Na Inori -> Komorebi No Yell ->
 // Brightest Heart -> Umapyoi Legend -> Make Debut -> Oddloop -> Veil -> Kanade ->
 // Surat Cinta Untuk Starla -> Klebus -> Kisinan
@@ -132,6 +134,7 @@ declare global {
 }
 
 export default function HeroMusicPlayer() {
+  const [tracks, setTracks] = useState<Track[]>(PLAYLIST)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const [isBuffering, setIsBuffering] = useState(false)
@@ -141,13 +144,29 @@ export default function HeroMusicPlayer() {
   const [isMuted, setIsMuted] = useState(false)
   const [isLoop, setIsLoop] = useState(false)
   const [isShuffle, setIsShuffle] = useState(false)
-  const [showPlaylist, setShowPlaylist] = useState(false)
   const [isApiReady, setIsApiReady] = useState(false)
 
   const playerRef = useRef<any>(null)
   const isSeekingRef = useRef(false)
+  const playlistScrollRef = useRef<HTMLDivElement>(null)
 
-  const currentTrack = PLAYLIST[currentIndex]
+  const currentTrack = tracks[currentIndex] || tracks[0] || PLAYLIST[0]
+
+  // Muat lagu dari database (Supabase / Postgres via Drizzle) jika tersedia
+  useEffect(() => {
+    let isMounted = true
+    getMusicTracksFn()
+      .then((dbTracks) => {
+        if (isMounted && dbTracks && dbTracks.length > 0) {
+          setTracks(dbTracks)
+        }
+      })
+      .catch(() => {})
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   // Inisialisasi YouTube IFrame API
   useEffect(() => {
@@ -180,7 +199,7 @@ export default function HeroMusicPlayer() {
     const player = new window.YT.Player('hero-youtube-audio-iframe', {
       height: '1',
       width: '1',
-      videoId: PLAYLIST[currentIndex].id,
+      videoId: currentTrack.id,
       playerVars: {
         autoplay: 0,
         controls: 0,
@@ -250,13 +269,13 @@ export default function HeroMusicPlayer() {
     setCurrentTime(0)
     setDuration(0)
 
-    if (playerRef.current) {
+    if (playerRef.current && tracks[idx]) {
       try {
         if (playImmediate) {
-          playerRef.current.loadVideoById(PLAYLIST[idx].id)
+          playerRef.current.loadVideoById(tracks[idx].id)
           setIsPlaying(true)
         } else {
-          playerRef.current.cueVideoById(PLAYLIST[idx].id)
+          playerRef.current.cueVideoById(tracks[idx].id)
           setIsPlaying(false)
         }
       } catch {}
@@ -270,26 +289,26 @@ export default function HeroMusicPlayer() {
         playerRef.current.playVideo()
       }
     } else if (isShuffle) {
-      let nextIdx = Math.floor(Math.random() * PLAYLIST.length)
-      if (nextIdx === currentIndex && PLAYLIST.length > 1) {
-        nextIdx = (nextIdx + 1) % PLAYLIST.length
+      let nextIdx = Math.floor(Math.random() * tracks.length)
+      if (nextIdx === currentIndex && tracks.length > 1) {
+        nextIdx = (nextIdx + 1) % tracks.length
       }
       loadTrackByIndex(nextIdx, true)
     } else {
-      const nextIdx = (currentIndex + 1) % PLAYLIST.length
+      const nextIdx = (currentIndex + 1) % tracks.length
       loadTrackByIndex(nextIdx, true)
     }
   }
 
   const handleNext = () => {
     if (isShuffle) {
-      let nextIdx = Math.floor(Math.random() * PLAYLIST.length)
-      if (nextIdx === currentIndex && PLAYLIST.length > 1) {
-        nextIdx = (nextIdx + 1) % PLAYLIST.length
+      let nextIdx = Math.floor(Math.random() * tracks.length)
+      if (nextIdx === currentIndex && tracks.length > 1) {
+        nextIdx = (nextIdx + 1) % tracks.length
       }
       loadTrackByIndex(nextIdx, isPlaying)
     } else {
-      const nextIdx = (currentIndex + 1) % PLAYLIST.length
+      const nextIdx = (currentIndex + 1) % tracks.length
       loadTrackByIndex(nextIdx, isPlaying)
     }
   }
@@ -303,7 +322,7 @@ export default function HeroMusicPlayer() {
       }
       return
     }
-    const prevIdx = (currentIndex - 1 + PLAYLIST.length) % PLAYLIST.length
+    const prevIdx = (currentIndex - 1 + tracks.length) % tracks.length
     loadTrackByIndex(prevIdx, isPlaying)
   }
 
@@ -362,6 +381,16 @@ export default function HeroMusicPlayer() {
     } catch {}
   }
 
+  // Scroll tombol khusus di dalam daftar putar
+  const scrollPlaylist = (direction: 'up' | 'down') => {
+    if (playlistScrollRef.current) {
+      playlistScrollRef.current.scrollBy({
+        top: direction === 'up' ? -90 : 90,
+        behavior: 'smooth',
+      })
+    }
+  }
+
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0
   const thumbnailUrl = `https://i.ytimg.com/vi/${currentTrack.id}/hqdefault.jpg`
 
@@ -374,7 +403,7 @@ export default function HeroMusicPlayer() {
         className="fixed bottom-1 right-1 w-[2px] h-[2px] opacity-[0.01] pointer-events-none overflow-hidden -z-50"
       />
 
-      {/* Main Music Player Card: Compact, Modern, Sleek */}
+      {/* Main Music Player Card: Compact, Modern, Sleek with Permanent Playlist */}
       <div className="relative rounded-2xl sm:rounded-3xl border border-zinc-200/90 dark:border-white/10 bg-white/85 dark:bg-[#09090d]/90 backdrop-blur-xl shadow-xl hover:shadow-2xl transition-all duration-300 p-4 sm:p-5 overflow-hidden">
         {/* Subtle Background Glow Accent */}
         <div
@@ -418,25 +447,14 @@ export default function HeroMusicPlayer() {
 
           {/* Sisi Kanan: Judul, Artist, Indikator Lagu & Scrubber */}
           <div className="flex-1 min-w-0 flex flex-col justify-between h-24 sm:h-28 py-0.5">
-            {/* Header Mini: Counter & Playlist Toggle */}
+            {/* Header Mini: Counter Indikator Lagu */}
             <div className="flex items-center justify-between gap-2">
               <span className="font-mono text-[10.5px] sm:text-[11px] text-zinc-400 dark:text-zinc-500 font-medium tracking-wider">
-                {String(currentIndex + 1).padStart(2, '0')} / {String(PLAYLIST.length).padStart(2, '0')}
+                {String(currentIndex + 1).padStart(2, '0')} / {String(tracks.length).padStart(2, '0')}
               </span>
-
-              <button
-                type="button"
-                onClick={() => setShowPlaylist(!showPlaylist)}
-                aria-label={showPlaylist ? 'Tutup daftar lagu' : 'Buka daftar lagu'}
-                title="Daftar Putar Lagu"
-                className={`p-1 rounded-md border transition-all cursor-pointer focus:outline-none ${
-                  showPlaylist
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-blue-500 hover:border-blue-500'
-                }`}
-              >
-                <ListMusic className="w-3.5 h-3.5" />
-              </button>
+              <span className="text-[10px] font-mono text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
+                NOW PLAYING
+              </span>
             </div>
 
             {/* Title & Artist */}
@@ -554,23 +572,25 @@ export default function HeroMusicPlayer() {
           </button>
         </div>
 
-        {/* 3. BOTTOM ROW: Volume Slider */}
+        {/* 3. VOLUME ROW: Slider & Angka Volume yang Lebih Besar */}
         <div className="mt-3 pt-2.5 border-t border-zinc-200/60 dark:border-white/5 flex items-center justify-between gap-3 px-1 text-xs font-mono">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <button
               type="button"
               onClick={toggleMute}
               aria-label={isMuted ? 'Nyalakan suara' : 'Bisukan suara'}
               title={isMuted ? 'Nyalakan Suara' : 'Bisukan'}
-              className="text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors cursor-pointer focus:outline-none"
+              className="text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white transition-colors cursor-pointer focus:outline-none"
             >
               {isMuted || volume === 0 ? (
-                <VolumeX className="w-3.5 h-3.5 text-red-500" />
+                <VolumeX className="w-4 h-4 text-red-500" />
               ) : (
-                <Volume2 className="w-3.5 h-3.5" />
+                <Volume2 className="w-4 h-4" />
               )}
             </button>
-            <span className="text-[10px] text-zinc-400 dark:text-zinc-500">
+
+            {/* Angka Volume yang Diperbesar & Jelas */}
+            <span className="text-xs sm:text-sm font-bold font-mono text-zinc-800 dark:text-zinc-100 min-w-8">
               {isMuted ? '0%' : `${volume}%`}
             </span>
           </div>
@@ -588,63 +608,87 @@ export default function HeroMusicPlayer() {
           </div>
         </div>
 
-        {/* 4. Collapsible Playlist Drawer (15 Lagu Sesuai Urutan Pengguna) */}
-        <AnimatePresence>
-          {showPlaylist && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="overflow-hidden mt-3 pt-3 border-t border-zinc-200/80 dark:border-white/10"
-            >
-              <div className="flex items-center justify-between mb-2 text-xs font-mono">
-                <span className="text-[11px] text-zinc-400 dark:text-zinc-500">DAFTAR PUTAR (15)</span>
-                <span className="text-blue-600 dark:text-blue-400 text-[10.5px]">
-                  Klik untuk memutar
-                </span>
-              </div>
+        {/* 4. PERMANENT PLAYLIST DRAWER (Selalu Terbuka dengan Tombol Scroll Khusus & Anti-Chaining Scroll) */}
+        <div className="mt-3.5 pt-3 border-t border-zinc-200/80 dark:border-white/10">
+          {/* Header Daftar Putar & Tombol Scroll Khusus */}
+          <div className="flex items-center justify-between mb-2 px-0.5 text-xs font-mono">
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-bold text-zinc-700 dark:text-zinc-300 tracking-wider">
+                DAFTAR PUTAR ({tracks.length})
+              </span>
+              <span className="text-zinc-300 dark:text-zinc-700">•</span>
+              <span className="text-zinc-400 dark:text-zinc-500 font-sans text-[10.5px]">
+                Pilih lagu
+              </span>
+            </div>
 
-              <div className="max-h-48 overflow-y-auto space-y-1 pr-1 font-sans text-xs scrollbar-thin">
-                {PLAYLIST.map((track, idx) => {
-                  const isCurrent = idx === currentIndex
-                  return (
-                    <button
-                      key={track.id}
-                      type="button"
-                      onClick={() => loadTrackByIndex(idx, true)}
-                      className={`w-full flex items-center justify-between p-2 rounded-xl text-left transition-colors cursor-pointer focus:outline-none ${
-                        isCurrent
-                          ? 'bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 font-semibold border border-blue-500/20'
-                          : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2 truncate">
-                        <span className="font-mono text-[10.5px] text-zinc-400 dark:text-zinc-500 w-5 shrink-0">
-                          {String(idx + 1).padStart(2, '0')}
-                        </span>
-                        <div className="truncate">
-                          <p className="truncate text-xs font-medium">{track.title}</p>
-                          <p className="truncate text-[10.5px] text-zinc-400 dark:text-zinc-500">
-                            {track.artist}
-                          </p>
-                        </div>
-                      </div>
+            {/* Tombol Scroll Khusus untuk Mempermudah Menggulir Daftar Lagu */}
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => scrollPlaylist('up')}
+                aria-label="Scroll daftar lagu ke atas"
+                title="Scroll ke atas"
+                className="p-1 rounded-md bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white border border-zinc-200/80 dark:border-white/5 transition-colors cursor-pointer focus:outline-none"
+              >
+                <ChevronUp className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollPlaylist('down')}
+                aria-label="Scroll daftar lagu ke bawah"
+                title="Scroll ke bawah"
+                className="p-1 rounded-md bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white border border-zinc-200/80 dark:border-white/5 transition-colors cursor-pointer focus:outline-none"
+              >
+                <ChevronDown className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
 
-                      {isCurrent && isPlaying && (
-                        <div className="flex items-end gap-0.5 h-3 shrink-0 ml-2">
-                          <span className="w-0.5 h-full bg-blue-600 dark:bg-blue-400 animate-pulse" />
-                          <span className="w-0.5 h-2/3 bg-blue-600 dark:bg-blue-400 animate-pulse delay-75" />
-                          <span className="w-0.5 h-4/5 bg-blue-600 dark:bg-blue-400 animate-pulse delay-150" />
-                        </div>
-                      )}
-                    </button>
-                  )
-                })}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+          {/* Scrollable Container dengan data-lenis-prevent & overscroll-contain agar tidak men-scroll halaman */}
+          <div
+            ref={playlistScrollRef}
+            data-lenis-prevent
+            className="max-h-36 sm:max-h-40 overflow-y-auto space-y-1 pr-1 font-sans text-xs scrollbar-thin overscroll-contain select-none"
+            style={{ overscrollBehavior: 'contain', touchAction: 'pan-y' }}
+          >
+            {tracks.map((track, idx) => {
+              const isCurrent = idx === currentIndex
+              return (
+                <button
+                  key={`${track.id}-${idx}`}
+                  type="button"
+                  onClick={() => loadTrackByIndex(idx, true)}
+                  className={`w-full flex items-center justify-between p-2 rounded-xl text-left transition-colors cursor-pointer focus:outline-none ${
+                    isCurrent
+                      ? 'bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 font-semibold border border-blue-500/20'
+                      : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900'
+                  }`}
+                >
+                  <div className="flex items-center gap-2 truncate">
+                    <span className="font-mono text-[10.5px] text-zinc-400 dark:text-zinc-500 w-5 shrink-0">
+                      {String(idx + 1).padStart(2, '0')}
+                    </span>
+                    <div className="truncate">
+                      <p className="truncate text-xs font-medium">{track.title}</p>
+                      <p className="truncate text-[10.5px] text-zinc-400 dark:text-zinc-500">
+                        {track.artist}
+                      </p>
+                    </div>
+                  </div>
+
+                  {isCurrent && isPlaying && (
+                    <div className="flex items-end gap-0.5 h-3 shrink-0 ml-2">
+                      <span className="w-0.5 h-full bg-blue-600 dark:bg-blue-400 animate-pulse" />
+                      <span className="w-0.5 h-2/3 bg-blue-600 dark:bg-blue-400 animate-pulse delay-75" />
+                      <span className="w-0.5 h-4/5 bg-blue-600 dark:bg-blue-400 animate-pulse delay-150" />
+                    </div>
+                  )}
+                </button>
+              )
+            })}
+          </div>
+        </div>
       </div>
     </div>
   )
