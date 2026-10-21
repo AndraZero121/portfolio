@@ -838,11 +838,11 @@ export default function Home() {
                   {/* Baris 1: Building with a secure, playful, and creative */}
                   <span className="block">
                     Building with a{' '}
-                    {/* Kata 'secure': Font monospaced tegas, aksen merah */}
+                    {/* Kata 'secure': Font monospaced tegas teknis, aksen merah */}
                     <motion.span
                       className="font-jetbrains font-extrabold text-red-600 dark:text-red-500 tracking-tight inline-block cursor-default"
                       whileHover={{
-                        scale: 1.05,
+                        scale: 1.06,
                         y: -1,
                         textShadow: '0 0 16px rgba(239,68,68,0.6)',
                       }}
@@ -851,28 +851,29 @@ export default function Home() {
                       secure
                     </motion.span>
                     ,{' '}
-                    {/* Kata 'playful': Hangat amber, micro-bounce ceria */}
+                    {/* Kata 'playful': Font bubbly bulat ceria (Fredoka), hangat amber, micro-bounce ceria */}
                     <motion.span
-                      className="font-black text-amber-500 dark:text-amber-400 inline-block cursor-default"
+                      className="font-fredoka font-extrabold text-amber-500 dark:text-amber-400 inline-block cursor-default tracking-wide"
                       whileHover={{
-                        scale: 1.08,
-                        y: -2,
+                        scale: 1.14,
+                        rotate: -4,
+                        y: -3,
                         textShadow: '0 0 16px rgba(245,158,11,0.6)',
                       }}
-                      transition={{ type: 'spring', stiffness: 400, damping: 18 }}
+                      transition={{ type: 'spring', stiffness: 450, damping: 14 }}
                     >
                       playful
                     </motion.span>
                     , and{' '}
-                    {/* Kata 'creative': Biru modern, aksen bercahaya */}
+                    {/* Kata 'creative': Font editorial italic berseni (Instrument Serif), biru artistik */}
                     <motion.span
-                      className="font-black text-blue-600 dark:text-blue-400 inline-block cursor-default"
+                      className="font-instrument italic font-normal text-blue-600 dark:text-blue-400 inline-block cursor-default text-[1.12em] tracking-normal"
                       whileHover={{
-                        scale: 1.06,
+                        scale: 1.08,
                         y: -2,
                         textShadow: '0 0 18px rgba(59,130,246,0.6)',
                       }}
-                      transition={{ type: 'spring', stiffness: 380, damping: 20 }}
+                      transition={{ type: 'spring', stiffness: 380, damping: 22 }}
                     >
                       creative
                     </motion.span>
