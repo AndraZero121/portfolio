@@ -1,13 +1,137 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { motion, AnimatePresence } from 'motion/react'
-import { useLenis } from 'lenis/react'
-import { ArrowUpRight, ExternalLink } from 'lucide-react'
+import { motion } from 'motion/react'
+import { ExternalLink, Download, Sparkles, ArrowUpRight } from 'lucide-react'
 import TechStackSection from '#/components/TechStackSection'
 import HeroMusicPlayer from '#/components/HeroMusicPlayer'
 import WorksSection from '#/components/WorksSection'
 
 export const Route = createFileRoute('/')({ component: Home })
+
+export type Season = 'spring' | 'summer' | 'autumn' | 'winter'
+
+export interface SeasonInfo {
+  id: Season
+  name: string
+  kanji: string
+  romaji: string
+  desc: string
+  icon: string
+  color: string
+}
+
+export const SEASONS_DATA: SeasonInfo[] = [
+  {
+    id: 'spring',
+    name: 'Musim Semi',
+    kanji: '春',
+    romaji: 'Haru',
+    desc: 'Bunga Sakura Mekar & Semilir Hangat',
+    icon: '🌸',
+    color: '#f472b6',
+  },
+  {
+    id: 'summer',
+    name: 'Musim Panas',
+    kanji: '夏',
+    romaji: 'Natsu',
+    desc: 'Lautan Seigaiha & Bintang Malam',
+    icon: '🌊',
+    color: '#38bdf8',
+  },
+  {
+    id: 'autumn',
+    name: 'Musim Gugur',
+    kanji: '秋',
+    romaji: 'Aki',
+    desc: 'Guguran Daun Momiji & Senja Emas',
+    icon: '🍁',
+    color: '#f97316',
+  },
+  {
+    id: 'winter',
+    name: 'Musim Dingin',
+    kanji: '冬',
+    romaji: 'Fuyu',
+    desc: 'Hujan Salju & Malam Sunyi Hening',
+    icon: '❄️',
+    color: '#93c5fd',
+  },
+]
+
+// 18 Sakura Petals for Spring
+const SAKURA_PETALS = [
+  { left: '4%', dur: 9.2, delay: 0.2, size: 16, rotate: 15 },
+  { left: '11%', dur: 11.5, delay: 2.1, size: 14, rotate: 45 },
+  { left: '19%', dur: 8.4, delay: 4.3, size: 18, rotate: -25 },
+  { left: '26%', dur: 10.1, delay: 1.1, size: 15, rotate: 30 },
+  { left: '33%', dur: 12.0, delay: 3.5, size: 20, rotate: -40 },
+  { left: '41%', dur: 9.0, delay: 0.8, size: 14, rotate: 60 },
+  { left: '49%', dur: 10.8, delay: 5.2, size: 17, rotate: 20 },
+  { left: '56%', dur: 8.6, delay: 2.8, size: 15, rotate: -35 },
+  { left: '63%', dur: 11.2, delay: 1.6, size: 19, rotate: 50 },
+  { left: '71%', dur: 9.8, delay: 4.0, size: 16, rotate: -15 },
+  { left: '78%', dur: 12.4, delay: 0.5, size: 14, rotate: 35 },
+  { left: '85%', dur: 8.9, delay: 3.1, size: 18, rotate: -55 },
+  { left: '92%', dur: 10.4, delay: 1.9, size: 15, rotate: 25 },
+  { left: '15%', dur: 9.6, delay: 6.0, size: 17, rotate: -20 },
+  { left: '38%', dur: 11.0, delay: 7.2, size: 16, rotate: 40 },
+  { left: '60%', dur: 8.8, delay: 6.5, size: 15, rotate: -30 },
+  { left: '82%', dur: 10.5, delay: 5.8, size: 18, rotate: 10 },
+  { left: '96%', dur: 9.3, delay: 7.0, size: 14, rotate: -45 },
+]
+
+// 18 Momiji (Maple Leaves) for Autumn
+const MOMIJI_LEAVES = [
+  { left: '6%', dur: 9.8, delay: 0.4, size: 22, color: '#ef4444' },
+  { left: '14%', dur: 12.2, delay: 2.5, size: 18, color: '#f97316' },
+  { left: '22%', dur: 8.9, delay: 4.8, size: 24, color: '#ea580c' },
+  { left: '30%', dur: 10.6, delay: 1.3, size: 19, color: '#f59e0b' },
+  { left: '37%', dur: 13.0, delay: 3.9, size: 26, color: '#dc2626' },
+  { left: '45%', dur: 9.4, delay: 0.9, size: 17, color: '#f97316' },
+  { left: '53%', dur: 11.4, delay: 5.5, size: 23, color: '#b91c1c' },
+  { left: '61%', dur: 9.0, delay: 3.2, size: 20, color: '#ea580c' },
+  { left: '69%', dur: 11.8, delay: 1.8, size: 25, color: '#d97706' },
+  { left: '76%', dur: 10.2, delay: 4.2, size: 18, color: '#ef4444' },
+  { left: '84%', dur: 12.8, delay: 0.7, size: 22, color: '#f97316' },
+  { left: '91%', dur: 9.2, delay: 3.5, size: 21, color: '#c2410c' },
+  { left: '12%', dur: 10.0, delay: 6.2, size: 19, color: '#f59e0b' },
+  { left: '34%', dur: 11.6, delay: 7.5, size: 24, color: '#dc2626' },
+  { left: '58%', dur: 9.1, delay: 6.8, size: 18, color: '#ea580c' },
+  { left: '79%', dur: 10.9, delay: 6.0, size: 22, color: '#ef4444' },
+  { left: '95%', dur: 9.7, delay: 7.2, size: 20, color: '#f97316' },
+  { left: '48%', dur: 12.0, delay: 8.0, size: 25, color: '#b91c1c' },
+]
+
+// 26 Snowflakes for Winter
+const SNOW_FLAKES = [
+  { left: '3%', dur: 6.8, delay: 0.1, size: 4.5, opacity: 0.8 },
+  { left: '9%', dur: 8.5, delay: 1.7, size: 3.0, opacity: 0.6 },
+  { left: '16%', dur: 6.2, delay: 3.4, size: 5.5, opacity: 0.9 },
+  { left: '23%', dur: 7.9, delay: 0.8, size: 3.5, opacity: 0.7 },
+  { left: '31%', dur: 9.2, delay: 2.6, size: 6.0, opacity: 0.85 },
+  { left: '39%', dur: 6.6, delay: 0.5, size: 3.2, opacity: 0.65 },
+  { left: '46%', dur: 8.1, delay: 4.1, size: 5.0, opacity: 0.9 },
+  { left: '54%', dur: 6.4, delay: 2.1, size: 4.0, opacity: 0.75 },
+  { left: '61%', dur: 8.8, delay: 1.2, size: 5.8, opacity: 0.85 },
+  { left: '68%', dur: 7.3, delay: 3.0, size: 3.6, opacity: 0.7 },
+  { left: '75%', dur: 9.5, delay: 0.3, size: 6.2, opacity: 0.95 },
+  { left: '82%', dur: 6.7, delay: 2.4, size: 4.2, opacity: 0.8 },
+  { left: '89%', dur: 8.3, delay: 1.5, size: 3.4, opacity: 0.65 },
+  { left: '96%', dur: 7.1, delay: 3.8, size: 5.2, opacity: 0.9 },
+  { left: '12%', dur: 7.5, delay: 4.8, size: 4.8, opacity: 0.8 },
+  { left: '27%', dur: 8.7, delay: 5.6, size: 3.8, opacity: 0.7 },
+  { left: '43%', dur: 6.9, delay: 5.1, size: 5.4, opacity: 0.85 },
+  { left: '58%', dur: 8.4, delay: 5.9, size: 3.2, opacity: 0.6 },
+  { left: '72%', dur: 7.0, delay: 4.5, size: 5.0, opacity: 0.9 },
+  { left: '86%', dur: 9.0, delay: 5.3, size: 4.4, opacity: 0.75 },
+  { left: '94%', dur: 6.5, delay: 5.7, size: 3.6, opacity: 0.7 },
+  { left: '7%', dur: 8.0, delay: 6.3, size: 5.6, opacity: 0.9 },
+  { left: '35%', dur: 7.2, delay: 6.7, size: 4.0, opacity: 0.8 },
+  { left: '65%', dur: 8.6, delay: 6.1, size: 3.5, opacity: 0.65 },
+  { left: '80%', dur: 6.8, delay: 6.9, size: 5.2, opacity: 0.85 },
+  { left: '50%', dur: 7.6, delay: 7.1, size: 4.6, opacity: 0.8 },
+]
 
 // Koordinat Bintang Malam Jepang di Mode Gelap (Twinkling Night Sky)
 const NIGHT_STARS = [
@@ -33,22 +157,119 @@ const NIGHT_STARS = [
   { x: 1280, y: 220, r: 1.6, dur: 4.2, delay: 1.8 },
 ]
 
-// Full Background Pemandangan Tradisional Jepang:
-// Langit, Bintang & Bintang Jatuh (Mode Gelap), Awan Melayang, Lautan Seigaiha, dan Transisi Pesisir Pantai Menuju Daratan (Section About)
-function FullBackgroundScenery() {
+// Full Background Pemandangan Tradisional Jepang dengan Sistem Empat Musim (四季)
+function FullBackgroundScenery({
+  season,
+  onCycleSeason,
+}: {
+  season: Season
+  onCycleSeason: () => void
+}) {
   return (
     <div
-      aria-hidden="true"
-      className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0 flex items-center justify-center"
+      onClick={onCycleSeason}
+      aria-label={`Pemandangan latar belakang: ${season}. Klik untuk mengganti musim.`}
+      className="absolute inset-0 cursor-pointer select-none overflow-hidden z-0 flex items-center justify-center group/scenery"
     >
+      {/* 1. EFEK PARTIKEL MUSIM (Sakura, Momiji, atau Salju) */}
+      {season === 'spring' && (
+        <div className="absolute inset-0 pointer-events-none overflow-hidden z-1">
+          {SAKURA_PETALS.map((petal, idx) => (
+            <div
+              key={idx}
+              style={{
+                position: 'absolute',
+                left: petal.left,
+                top: '-30px',
+                animation: `sakuraFall ${petal.dur}s linear -${petal.delay}s infinite`,
+              }}
+              className="pointer-events-none"
+            >
+              <svg
+                width={petal.size}
+                height={petal.size}
+                viewBox="0 0 32 32"
+                fill="none"
+                style={{ transform: `rotate(${petal.rotate}deg)` }}
+              >
+                <path
+                  d="M16 2 C19 8, 28 10, 27 18 C26 26, 18 29, 16 30 C14 29, 6 26, 5 18 C4 10, 13 8, 16 2 Z"
+                  fill="url(#sakuraGrad)"
+                  opacity="0.88"
+                />
+              </svg>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {season === 'autumn' && (
+        <div className="absolute inset-0 pointer-events-none overflow-hidden z-1">
+          {MOMIJI_LEAVES.map((leaf, idx) => (
+            <div
+              key={idx}
+              style={{
+                position: 'absolute',
+                left: leaf.left,
+                top: '-35px',
+                animation: `momijiFall ${leaf.dur}s ease-in-out -${leaf.delay}s infinite`,
+              }}
+              className="pointer-events-none"
+            >
+              <svg width={leaf.size} height={leaf.size} viewBox="0 0 32 32" fill="none">
+                <path
+                  d="M16 2 L18 10 L26 8 L22 15 L29 19 L21 21 L22 28 L16 23 L10 28 L11 21 L3 19 L10 15 L6 8 L14 10 Z"
+                  fill={leaf.color}
+                  opacity="0.85"
+                />
+              </svg>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {season === 'winter' && (
+        <div className="absolute inset-0 pointer-events-none overflow-hidden z-1">
+          {SNOW_FLAKES.map((snow, idx) => (
+            <div
+              key={idx}
+              style={{
+                position: 'absolute',
+                left: snow.left,
+                top: '-20px',
+                animation: `snowFall ${snow.dur}s linear -${snow.delay}s infinite`,
+              }}
+              className="pointer-events-none"
+            >
+              <div
+                style={{
+                  width: `${snow.size}px`,
+                  height: `${snow.size}px`,
+                  opacity: snow.opacity,
+                }}
+                className="rounded-full bg-sky-200/90 dark:bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 2. SVG SCENERY UTAMA */}
       <svg
         viewBox="0 0 1440 900"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         preserveAspectRatio="xMidYMid slice"
-        className="w-full h-full opacity-80 dark:opacity-60 transition-opacity duration-700"
+        className="w-full h-full opacity-80 dark:opacity-60 transition-opacity duration-700 pointer-events-none"
       >
         <defs>
+          {/* Gradien Bunga Sakura */}
+          <linearGradient id="sakuraGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#fbcfe8" stopOpacity="0.95" />
+            <stop offset="60%" stopColor="#f472b6" stopOpacity="0.85" />
+            <stop offset="100%" stopColor="#db2777" stopOpacity="0.75" />
+          </linearGradient>
+
           {/* Gradien Bintang Jatuh Langit Malam */}
           <linearGradient id="fullShootingStar1" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
@@ -98,36 +319,39 @@ function FullBackgroundScenery() {
             />
           ))}
 
-          {/* Bintang Jatuh 1: Meluncur dari Langit Kanan Atas */}
-          <g style={{ animation: 'shootingStarFly1 7.2s ease-out infinite' }}>
-            <line
-              x1="1260"
-              y1="55"
-              x2="1330"
-              y2="28"
-              stroke="url(#fullShootingStar1)"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-            />
-            <circle cx="1260" cy="55" r="2.2" fill="#ffffff" />
-          </g>
+          {/* Bintang Jatuh (Ditampilkan pada Musim Panas & Dingin) */}
+          {(season === 'summer' || season === 'winter') && (
+            <>
+              <g style={{ animation: 'shootingStarFly1 7.2s ease-out infinite' }}>
+                <line
+                  x1="1260"
+                  y1="55"
+                  x2="1330"
+                  y2="28"
+                  stroke="url(#fullShootingStar1)"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                />
+                <circle cx="1260" cy="55" r="2.2" fill="#ffffff" />
+              </g>
 
-          {/* Bintang Jatuh 2: Meluncur dari Langit Kiri */}
-          <g style={{ animation: 'shootingStarFly2 9.5s ease-out 3s infinite' }}>
-            <line
-              x1="580"
-              y1="45"
-              x2="645"
-              y2="20"
-              stroke="url(#fullShootingStar2)"
-              strokeWidth="1.9"
-              strokeLinecap="round"
-            />
-            <circle cx="580" cy="45" r="1.9" fill="#ffffff" />
-          </g>
+              <g style={{ animation: 'shootingStarFly2 9.5s ease-out 3s infinite' }}>
+                <line
+                  x1="580"
+                  y1="45"
+                  x2="645"
+                  y2="20"
+                  stroke="url(#fullShootingStar2)"
+                  strokeWidth="1.9"
+                  strokeLinecap="round"
+                />
+                <circle cx="580" cy="45" r="1.9" fill="#ffffff" />
+              </g>
+            </>
+          )}
         </g>
 
-        {/* 2. AWAN TRADISIONAL JEPANG MELAYANG (Stylized Japanese Kumo Clouds Melintasi Langit) */}
+        {/* 2. AWAN TRADISIONAL JEPANG MELAYANG (Stylized Japanese Kumo Clouds) */}
         {/* Awan Kiri */}
         <g style={{ animation: 'cloudDriftLeft 18s ease-in-out infinite' }}>
           <path
@@ -166,12 +390,10 @@ function FullBackgroundScenery() {
           />
         </g>
 
-        {/* 3. LAUTAN AIR DENGAN OMBAK SEIGAIHA MELINTANG PENUH (Full Background Ocean) */}
+        {/* 3. LAUTAN AIR DENGAN OMBAK SEIGAIHA MELINTANG PENUH */}
         <g>
-          {/* Lapisan Air Laut Dasar */}
           <rect x="0" y="550" width="1440" height="350" fill="url(#seaGradFull)" />
 
-          {/* Garis Horizon Lautan */}
           <line
             x1="0"
             y1="550"
@@ -181,17 +403,23 @@ function FullBackgroundScenery() {
             strokeWidth="1.5"
           />
 
-          {/* Ombak Layer 1 (Midground Waves) */}
+          {/* Ombak Layer 1 */}
           <path
             d="M 0 595 Q 90 580 180 595 T 360 595 T 540 595 T 720 595 T 900 595 T 1080 595 T 1260 595 T 1440 595"
             fill="none"
             stroke="currentColor"
             strokeWidth="1.5"
-            className="text-zinc-400/50 dark:text-zinc-600/50"
+            className={
+              season === 'autumn'
+                ? 'text-amber-500/30 dark:text-amber-600/30'
+                : season === 'spring'
+                ? 'text-pink-400/30 dark:text-pink-500/30'
+                : 'text-zinc-400/50 dark:text-zinc-600/50'
+            }
             style={{ animation: 'waveSway1 6s ease-in-out infinite' }}
           />
 
-          {/* Ombak Layer 2 (Crest Waves) */}
+          {/* Ombak Layer 2 */}
           <path
             d="M 0 655 Q 120 635 240 655 T 480 655 T 720 655 T 960 655 T 1200 655 T 1440 655"
             fill="none"
@@ -202,7 +430,7 @@ function FullBackgroundScenery() {
             style={{ animation: 'waveSway2 7s ease-in-out infinite' }}
           />
 
-          {/* Ombak Layer 3 (Foreground Waves) */}
+          {/* Ombak Layer 3 */}
           <path
             d="M 0 725 Q 150 700 300 725 T 600 725 T 900 725 T 1200 725 T 1440 725"
             fill="none"
@@ -213,23 +441,20 @@ function FullBackgroundScenery() {
           />
         </g>
 
-        {/* 4. TRANSISI ANTARA LAUT DAN DARATAN (Pesisir Pantai Menuju Section About) */}
+        {/* 4. TRANSISI ANTARA LAUT DAN DARATAN */}
         <g>
-          {/* Garis Pantai Berpasir Putih di Mode Terang (Light Mode Menyatu ke About) */}
           <path
             d="M 0 790 Q 240 760 480 795 T 960 775 T 1440 800 L 1440 900 L 0 900 Z"
             fill="url(#coastlineGradLight)"
             className="block dark:hidden"
           />
 
-          {/* Garis Pantai Berpasir Hitam Vulkanik di Mode Gelap (Dark Mode) */}
           <path
             d="M 0 790 Q 240 760 480 795 T 960 775 T 1440 800 L 1440 900 L 0 900 Z"
             fill="url(#coastlineGradDark)"
             className="hidden dark:block"
           />
 
-          {/* Buih Ombak Garis Pantai (Shoreline Foaming Crest) */}
           <path
             d="M 0 788 Q 240 758 480 793 T 960 773 T 1440 798"
             fill="none"
@@ -805,9 +1030,19 @@ function AboutMeSection() {
 }
 
 export default function Home() {
-  const lenis = useLenis()
-  // Mode Switch Interaktif: 'ready' (AI Ready) vs 'included' (AI Included)
-  const [aiMode, setAiMode] = useState<'ready' | 'included'>('ready')
+  // Sistem Empat Musim Jepang: 'spring' | 'summer' | 'autumn' | 'winter'
+  const [season, setSeason] = useState<Season>('spring')
+
+  const cycleSeason = useCallback(() => {
+    setSeason((prev) => {
+      const order: Season[] = ['spring', 'summer', 'autumn', 'winter']
+      const nextIdx = (order.indexOf(prev) + 1) % order.length
+      return order[nextIdx]
+    })
+  }, [])
+
+  const currentSeasonConfig =
+    SEASONS_DATA.find((s) => s.id === season) || SEASONS_DATA[0]
 
   return (
     <div className="relative w-full min-h-screen bg-white dark:bg-[#050507] text-zinc-950 dark:text-white transition-colors duration-500 selection:bg-blue-500 selection:text-white">
@@ -816,118 +1051,85 @@ export default function Home() {
         id="home"
         className="relative min-h-[100dvh] w-full flex items-center justify-center overflow-hidden select-none pt-24 pb-12 sm:pt-28 sm:pb-16 lg:py-0"
       >
-        {/* Background Tradisional Jepang Penuh: Lautan, Awan, Bintang, Bintang Jatuh & Transisi Pantai */}
-        <FullBackgroundScenery />
+        {/* Background Tradisional Jepang Penuh dengan Sistem 4 Musim Interaktif */}
+        <FullBackgroundScenery season={season} onCycleSeason={cycleSeason} />
 
-        {/* Kontainer Utama Hero Section: Split Layout (Kiri: Teks & Buttons, Kanan: Torii Gate) */}
+        {/* Floating Season Indicator Badge (Klik untuk Ganti Musim) */}
+        <div className="absolute top-24 sm:top-28 right-6 sm:right-10 lg:right-14 z-20 pointer-events-auto">
+          <button
+            type="button"
+            onClick={cycleSeason}
+            aria-label={`Musim saat ini: ${currentSeasonConfig.name}. Klik untuk mengganti musim.`}
+            title="Klik untuk ganti musim (Musim Semi, Panas, Gugur, Dingin)"
+            className="group inline-flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full border border-zinc-200/90 dark:border-white/10 bg-white/80 dark:bg-zinc-950/70 backdrop-blur-md shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer select-none text-xs font-mono"
+          >
+            <span className="text-sm select-none">{currentSeasonConfig.icon}</span>
+            <span className="font-bold text-zinc-800 dark:text-zinc-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              {currentSeasonConfig.kanji} · {currentSeasonConfig.name}
+            </span>
+            <span className="text-[10px] text-zinc-400 dark:text-zinc-500 hidden sm:inline flex items-center gap-1 font-sans">
+              <Sparkles className="w-2.5 h-2.5 text-amber-500" />
+              Klik background
+            </span>
+          </button>
+        </div>
+
+        {/* Kontainer Utama Hero Section: Split Layout (Kiri: Teks & Buttons, Kanan: Music Player) */}
         <div className="relative z-10 max-w-7xl w-full mx-auto px-6 sm:px-10 lg:px-12 py-8 lg:py-16">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
             {/* =================================================================== */}
-            {/* KOLOM KIRI: TEKS & TOMBOL AKSI (Rata Kiri, Tipografi Tegas & Modern) */}
+            {/* KOLOM KIRI: TEKS & TOMBOL AKSI (Rata Kiri, Tipografi Tegas & Ramah) */}
             {/* =================================================================== */}
             <div className="lg:col-span-7 flex flex-col items-start text-left">
-              {/* Headline Utama: Tegas, Modern, dan Presisi */}
+              {/* Headline Utama: Meet me, Diandra Anursa Syabandira... */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                 className="w-full"
               >
-                <h1 className="text-3xl sm:text-5xl lg:text-[3.5rem] xl:text-6xl font-black tracking-tight text-zinc-950 dark:text-white leading-[1.15] sm:leading-[1.12]">
-                  {/* Baris 1: Building with a secure, playful, and creative */}
-                  <span className="block">
-                    Building with a{' '}
-                    {/* Kata 'secure': Font monospaced tegas teknis, aksen merah */}
-                    <motion.span
-                      className="font-jetbrains font-extrabold text-red-600 dark:text-red-500 tracking-tight inline-block cursor-default"
-                      whileHover={{
-                        scale: 1.06,
-                        y: -1,
-                        textShadow: '0 0 16px rgba(239,68,68,0.6)',
-                      }}
-                      transition={{ type: 'spring', stiffness: 450, damping: 20 }}
-                    >
-                      secure
-                    </motion.span>
-                    ,{' '}
-                    {/* Kata 'playful': Font bubbly bulat ceria (Fredoka), hangat amber, micro-bounce ceria */}
-                    <motion.span
-                      className="font-fredoka font-extrabold text-amber-500 dark:text-amber-400 inline-block cursor-default tracking-wide"
-                      whileHover={{
-                        scale: 1.14,
-                        rotate: -4,
-                        y: -3,
-                        textShadow: '0 0 16px rgba(245,158,11,0.6)',
-                      }}
-                      transition={{ type: 'spring', stiffness: 450, damping: 14 }}
-                    >
-                      playful
-                    </motion.span>
-                    , and{' '}
-                    {/* Kata 'creative': Font editorial italic berseni (Instrument Serif), biru artistik */}
-                    <motion.span
-                      className="font-instrument italic font-normal text-blue-600 dark:text-blue-400 inline-block cursor-default text-[1.12em] tracking-normal"
-                      whileHover={{
-                        scale: 1.08,
-                        y: -2,
-                        textShadow: '0 0 18px rgba(59,130,246,0.6)',
-                      }}
-                      transition={{ type: 'spring', stiffness: 380, damping: 22 }}
-                    >
-                      creative
-                    </motion.span>
+                <h1 className="text-3xl sm:text-5xl lg:text-[3.3rem] xl:text-[3.8rem] font-black tracking-tight text-zinc-950 dark:text-white leading-[1.18] sm:leading-[1.14]">
+                  {/* Baris 1: Meet me, */}
+                  <span className="block text-lg sm:text-2xl lg:text-3xl font-medium text-zinc-500 dark:text-zinc-400 mb-1 sm:mb-2 font-mono">
+                    Meet me,
                   </span>
 
-                  {/* Baris 2: with [AI Ready / AI Included] website. */}
-                  <span className="mt-2 sm:mt-3 flex flex-wrap items-center justify-start gap-x-2.5 sm:gap-x-3 gap-y-1.5 font-black text-2xl sm:text-4xl lg:text-[2.75rem] xl:text-5xl">
-                    <span>with</span>{' '}
-                    {/* Tombol Switch Mode Interaktif */}
-                    <motion.button
-                      type="button"
-                      onClick={() => setAiMode(aiMode === 'ready' ? 'included' : 'ready')}
-                      aria-label={`Mode saat ini: ${aiMode === 'ready' ? 'AI Ready' : 'AI Included'}. Klik untuk beralih mode.`}
-                      whileHover={{ scale: 1.03, y: -1 }}
-                      whileTap={{ scale: 0.97 }}
-                      className="group relative inline-flex items-center cursor-pointer select-none align-baseline focus:outline-none transition-transform duration-150"
+                  {/* Baris 2: Diandra Anursa Syabandira */}
+                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 dark:from-blue-400 dark:via-sky-300 dark:to-indigo-300 font-black">
+                    Diandra Anursa Syabandira
+                  </span>
+
+                  {/* Baris 3: your friendliest Programmer you ever meet. */}
+                  <span className="mt-2 sm:mt-3 block text-2xl sm:text-4xl lg:text-[2.6rem] xl:text-[2.9rem] font-extrabold text-zinc-800 dark:text-zinc-200">
+                    your{' '}
+                    <motion.span
+                      className="font-fredoka font-semibold text-amber-500 dark:text-amber-400 inline-block cursor-default tracking-wide"
+                      whileHover={{ scale: 1.12, rotate: -3 }}
+                      transition={{ type: 'spring', stiffness: 450, damping: 14 }}
                     >
-                      <AnimatePresence mode="wait">
-                        <motion.span
-                          key={aiMode}
-                          initial={{ y: 8, opacity: 0, filter: 'blur(2px)' }}
-                          animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
-                          exit={{ y: -8, opacity: 0, filter: 'blur(2px)' }}
-                          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                          className={`font-black tracking-tight underline decoration-[3px] underline-offset-6 transition-colors duration-200 ${
-                            aiMode === 'ready'
-                              ? 'text-emerald-500 dark:text-emerald-400 decoration-emerald-500/80 group-hover:decoration-emerald-400'
-                              : 'text-purple-600 dark:text-purple-400 decoration-purple-500/80 group-hover:decoration-purple-400'
-                          }`}
-                        >
-                          {aiMode === 'ready' ? 'AI Ready' : 'AI Included'}
-                        </motion.span>
-                      </AnimatePresence>
-                    </motion.button>{' '}
-                    <span>website.</span>
+                      friendliest
+                    </motion.span>{' '}
+                    <motion.span
+                      className="font-jetbrains font-bold text-sky-500 dark:text-sky-400 inline-block cursor-default tracking-tight"
+                      whileHover={{ scale: 1.08, y: -2 }}
+                      transition={{ type: 'spring', stiffness: 450, damping: 20 }}
+                    >
+                      Programmer
+                    </motion.span>{' '}
+                    you ever meet.
                   </span>
                 </h1>
 
-                {/* Deskripsi Alami & Lugas Mengenai Kapabilitas & Efisiensi */}
+                {/* Deskripsi Alami & Lugas Mengenai Kapabilitas */}
                 <motion.div
-                  key={aiMode}
-                  initial={{ opacity: 0, y: 6 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: 0.5, delay: 0.15 }}
                   className="mt-5 sm:mt-6 text-sm sm:text-base text-zinc-600 dark:text-zinc-300 max-w-xl font-normal leading-relaxed"
                 >
-                  {aiMode === 'ready' ? (
-                    <p>
-                      Membangun website modern dengan arsitektur kode yang bersih, kokoh, dan berkinerja tinggi—dirancang dengan alur kerja efisien dan siap diintegrasikan dengan kapabilitas AI masa kini kapan pun Anda membutuhkannya.
-                    </p>
-                  ) : (
-                    <p>
-                      Menghadirkan website interaktif dengan kecerdasan AI terintegrasi langsung—memangkas siklus pengembangan, mengotomatisasi interaksi digital, dan memberikan efisiensi nyata bagi pengalaman pengguna Anda.
-                    </p>
-                  )}
+                  <p>
+                    Full-Stack Developer & DevOps Engineer yang berfokus pada arsitektur sistem yang bersih, performa web tinggi, serta pengalaman digital yang intuitif dan terintegrasi AI.
+                  </p>
                 </motion.div>
               </motion.div>
 
@@ -938,27 +1140,17 @@ export default function Home() {
                 transition={{ duration: 0.6, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 className="mt-8 sm:mt-10 flex flex-wrap items-center justify-start gap-4 sm:gap-5"
               >
-                {/* Tombol Utama: Jelajahi Karya */}
+                {/* Tombol Utama: DOWNLOAD CV */}
                 <a
-                  href="#works"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    if (lenis) {
-                      lenis.scrollTo('#works', {
-                        duration: 1.3,
-                        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-                      })
-                    } else {
-                      document.querySelector('#works')?.scrollIntoView({ behavior: 'smooth' })
-                    }
-                  }}
+                  href="/cv.pdf"
+                  download="CV-Diandra-Anursa-Syabandira.pdf"
                   className="group relative inline-flex items-center gap-3 px-7 sm:px-8 py-3.5 sm:py-4 bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 font-bold text-xs sm:text-sm tracking-wider uppercase rounded-none hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all duration-300 no-underline shadow-md hover:shadow-lg cursor-pointer"
                 >
-                  <span>JELAJAHI KARYA</span>
+                  <Download className="w-4 h-4 transition-transform duration-300 group-hover:translate-y-0.5" />
+                  <span>DOWNLOAD CV</span>
                   <span className="font-sans text-xs opacity-70 group-hover:opacity-100 transition-opacity">
-                    / 実績を見る
+                    / 履歴書
                   </span>
-                  <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </a>
 
                 {/* Tombol Sekunder: Hubungi Saya */}

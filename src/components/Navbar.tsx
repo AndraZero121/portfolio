@@ -49,7 +49,7 @@ const availableLanguages = [
 
 // CMatrix Japanese Character Set (Katakana, Hiragana, Kanji & Numeric Digits)
 const CMATRIX_CHARACTERS =
-  'ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜﾝあいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん零壱弐参肆伍陸漆捌玖拾雨水滴蒼龍風光暗桜星雫幽夢命魂虚無電脳道術結界0123456789'
+  'ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜﾝあいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん零壱弐参肆伍陸漆捌玖拾雨水滴蒼龍風光暗桜星雫幽夢命魂虚無0123456789'
 
 interface StreamColumn {
   x: number
@@ -59,7 +59,6 @@ interface StreamColumn {
   chars: string[]
   fontSize: number
   nextMutation: number
-  isBackground: boolean
 }
 
 function FallingKanaRain() {
@@ -78,13 +77,15 @@ function FallingKanaRain() {
     let width = 0
     let height = 0
     let columns: StreamColumn[] = []
+    let lastTime = 0
+    const frameInterval = 32 // ~30fps throttle: ultra-light on battery & older devices
 
     const getRandomChar = () =>
       CMATRIX_CHARACTERS[Math.floor(Math.random() * CMATRIX_CHARACTERS.length)]
 
     function initColumns() {
       if (!container || !canvas) return
-      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
       const rect = container.getBoundingClientRect()
       width = rect.width
       height = rect.height
@@ -97,31 +98,27 @@ function FallingKanaRain() {
       ctx?.scale(dpr, dpr)
 
       const baseFontSize = width < 640 ? 13 : 15
-      const colSpacing = baseFontSize * 1.2
+      // Balanced column spacing: ~25-35 columns on desktop, ~12-14 on mobile (gentle on older devices)
+      const colSpacing = baseFontSize * 2.3
       const numCols = Math.max(1, Math.floor(width / colSpacing))
-      const totalRows = Math.ceil(height / baseFontSize) + 10
+      const totalRows = Math.ceil(height / baseFontSize) + 8
       columns = []
 
-      // Generate dense streams distributed across the entire screen
       for (let i = 0; i < numCols; i++) {
-        const isBackground = i % 3 === 0
-        const fontSize = isBackground ? Math.max(10, baseFontSize - 2) : baseFontSize
-        const streamLength = Math.floor(Math.random() * 18) + (isBackground ? 10 : 14)
+        const streamLength = Math.floor(Math.random() * 8) + 9
         const chars: string[] = []
         for (let j = 0; j < streamLength; j++) {
           chars.push(getRandomChar())
         }
 
         columns.push({
-          x: i * colSpacing + colSpacing * 0.3,
-          // Uniformly distribute initial y across the screen so matrix rain is dense immediately
-          y: Math.random() * (totalRows + 20) - 10,
-          speed: isBackground ? 0.3 + Math.random() * 0.35 : 0.45 + Math.random() * 0.65,
+          x: i * colSpacing + colSpacing * 0.35,
+          y: Math.random() * (totalRows + 10) - 5,
+          speed: 0.35 + Math.random() * 0.45,
           length: streamLength,
           chars,
-          fontSize,
-          nextMutation: Math.floor(Math.random() * 4) + 2,
-          isBackground,
+          fontSize: baseFontSize,
+          nextMutation: Math.floor(Math.random() * 5) + 3,
         })
       }
     }
@@ -133,78 +130,67 @@ function FallingKanaRain() {
     }
     window.addEventListener('resize', handleResize)
 
-    // Render loop
-    function draw() {
+    // Render loop with time throttling for low battery/older device efficiency
+    function draw(timestamp: number) {
       if (!ctx) return
 
-      ctx.clearRect(0, 0, width, height)
+      if (timestamp - lastTime >= frameInterval) {
+        lastTime = timestamp
+        ctx.clearRect(0, 0, width, height)
 
-      const baseFontSize = width < 640 ? 13 : 15
-      const totalRows = Math.ceil(height / baseFontSize) + 12
+        const baseFontSize = width < 640 ? 13 : 15
+        const totalRows = Math.ceil(height / baseFontSize) + 8
 
-      for (let i = 0; i < columns.length; i++) {
-        const col = columns[i]
-        col.y += col.speed
+        for (let i = 0; i < columns.length; i++) {
+          const col = columns[i]
+          col.y += col.speed
 
-        // Frequent character mutation for dynamic living cyber-terminal effect
-        col.nextMutation--
-        if (col.nextMutation <= 0) {
-          const randIdx = Math.floor(Math.random() * col.chars.length)
-          col.chars[randIdx] = getRandomChar()
-          col.nextMutation = Math.floor(Math.random() * 4) + 2
-        }
-
-        // Reset column smoothly once its tail leaves the bottom edge
-        if (col.y - col.length > totalRows) {
-          col.y = -Math.floor(Math.random() * 12)
-          col.speed = col.isBackground
-            ? 0.3 + Math.random() * 0.35
-            : 0.45 + Math.random() * 0.65
-          col.length = Math.floor(Math.random() * 18) + (col.isBackground ? 10 : 14)
-          col.chars = []
-          for (let j = 0; j < col.length; j++) {
-            col.chars.push(getRandomChar())
+          // Character mutation (cmatrix terminal glitch)
+          col.nextMutation--
+          if (col.nextMutation <= 0) {
+            const randIdx = Math.floor(Math.random() * col.chars.length)
+            col.chars[randIdx] = getRandomChar()
+            col.nextMutation = Math.floor(Math.random() * 6) + 3
           }
-        }
 
-        const headRow = Math.floor(col.y)
+          // Reset column once stream leaves bottom edge
+          if (col.y - col.length > totalRows) {
+            col.y = -Math.floor(Math.random() * 10)
+            col.speed = 0.35 + Math.random() * 0.45
+            col.length = Math.floor(Math.random() * 8) + 9
+            col.chars = []
+            for (let j = 0; j < col.length; j++) {
+              col.chars.push(getRandomChar())
+            }
+          }
 
-        for (let k = 0; k < col.length; k++) {
-          const row = headRow - k
-          const yPos = row * col.fontSize
+          const headRow = Math.floor(col.y)
 
-          if (yPos >= -col.fontSize && yPos <= height + col.fontSize) {
-            const char = col.chars[k] || getRandomChar()
+          for (let k = 0; k < col.length; k++) {
+            const row = headRow - k
+            const yPos = row * col.fontSize
 
-            if (k === 0) {
-              // Head character: glowing bright white (or light cyan for background stream)
-              ctx.font = `bold ${col.fontSize}px monospace`
-              if (col.isBackground) {
-                ctx.fillStyle = '#bae6fd'
-                ctx.shadowColor = 'rgba(56, 189, 248, 0.4)'
-                ctx.shadowBlur = 4
-              } else {
+            if (yPos >= -col.fontSize && yPos <= height + col.fontSize) {
+              const char = col.chars[k] || getRandomChar()
+
+              if (k === 0) {
+                // Head character: bright bold white
+                ctx.font = `bold ${col.fontSize}px monospace`
                 ctx.fillStyle = '#ffffff'
-                ctx.shadowColor = 'rgba(56, 189, 248, 0.9)'
-                ctx.shadowBlur = 8
+                ctx.fillText(char, col.x, yPos)
+              } else if (k === 1) {
+                // Neck character: bright light sky cyan
+                ctx.font = `500 ${col.fontSize}px monospace`
+                ctx.fillStyle = '#bae6fd'
+                ctx.fillText(char, col.x, yPos)
+              } else {
+                // Trailing characters: soft electric blue fade
+                const ratio = k / col.length
+                const alpha = Math.max(0.08, (1 - ratio) * 0.7)
+                ctx.font = `400 ${col.fontSize}px monospace`
+                ctx.fillStyle = `rgba(56, 189, 248, ${alpha.toFixed(2)})`
+                ctx.fillText(char, col.x, yPos)
               }
-              ctx.fillText(char, col.x, yPos)
-              ctx.shadowBlur = 0
-            } else if (k === 1) {
-              // Neck character: bright light cyan
-              ctx.font = `500 ${col.fontSize}px monospace`
-              ctx.fillStyle = col.isBackground
-                ? 'rgba(186, 230, 253, 0.7)'
-                : '#bae6fd'
-              ctx.fillText(char, col.x, yPos)
-            } else {
-              // Trailing characters: gradual fade in electric blue
-              const ratio = k / col.length
-              const maxAlpha = col.isBackground ? 0.35 : 0.82
-              const alpha = Math.max(0.04, (1 - ratio) * maxAlpha)
-              ctx.font = `400 ${col.fontSize}px monospace`
-              ctx.fillStyle = `rgba(56, 189, 248, ${alpha.toFixed(2)})`
-              ctx.fillText(char, col.x, yPos)
             }
           }
         }

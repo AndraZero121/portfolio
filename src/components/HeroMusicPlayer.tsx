@@ -439,13 +439,53 @@ export default function HeroMusicPlayer() {
         className="fixed bottom-1 right-1 w-[2px] h-[2px] opacity-[0.01] pointer-events-none overflow-hidden -z-50"
       />
 
-      {/* Main Music Player Card: Compact, Modern, Sleek with Permanent Playlist */}
-      <div className="relative rounded-2xl sm:rounded-3xl border border-zinc-200/90 dark:border-white/10 bg-white/85 dark:bg-[#09090d]/90 backdrop-blur-xl shadow-xl hover:shadow-2xl transition-all duration-300 p-4 sm:p-5 overflow-hidden">
-        {/* Subtle Background Glow Accent */}
+      {/* Main Music Player Card: Cyber Hi-Fi Deck with Modern Glassmorphism */}
+      <div className="relative rounded-2xl sm:rounded-3xl border border-zinc-200/90 dark:border-white/10 bg-white/90 dark:bg-[#0a0a0f]/95 backdrop-blur-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-4 sm:p-5 overflow-hidden">
+        {/* Subtle Background Glow Accent matching playback state */}
         <div
           aria-hidden="true"
-          className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-blue-500/10 dark:bg-blue-600/15 blur-3xl pointer-events-none"
+          className={`absolute -top-16 -right-16 w-52 h-52 rounded-full blur-3xl pointer-events-none transition-all duration-700 ${
+            isPlaying
+              ? 'bg-blue-500/20 dark:bg-sky-500/25 scale-110'
+              : 'bg-blue-500/8 dark:bg-blue-600/10 scale-90'
+          }`}
         />
+
+        {/* 0. DECK STATUS BAR: Telemetry & Sound Indicator */}
+        <div className="flex items-center justify-between pb-3 mb-3 border-b border-zinc-200/70 dark:border-white/5 text-[10.5px] font-mono">
+          <div className="flex items-center gap-2">
+            {/* Animated Equalizer Waveform */}
+            <div className="flex items-end gap-0.5 h-3">
+              <span
+                className={`w-0.5 bg-blue-500 rounded-full transition-all ${
+                  isPlaying ? 'h-full animate-pulse' : 'h-1.5'
+                }`}
+              />
+              <span
+                className={`w-0.5 bg-sky-400 rounded-full transition-all ${
+                  isPlaying ? 'h-3/4 animate-pulse delay-75' : 'h-1'
+                }`}
+              />
+              <span
+                className={`w-0.5 bg-indigo-500 rounded-full transition-all ${
+                  isPlaying ? 'h-4/5 animate-pulse delay-150' : 'h-2'
+                }`}
+              />
+            </div>
+            <span className="font-bold tracking-wider text-zinc-700 dark:text-zinc-300">
+              SOUND DECK // 音響
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2 text-zinc-400 dark:text-zinc-500">
+            <span className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800/80 text-[10px] font-bold text-zinc-600 dark:text-zinc-400">
+              {String(currentIndex + 1).padStart(2, '0')}/{String(tracks.length).padStart(2, '0')}
+            </span>
+            <span className="text-[9.5px] uppercase tracking-widest hidden sm:inline">
+              {isPlaying ? 'PLAYING' : 'IDLE'}
+            </span>
+          </div>
+        </div>
 
         {/* 1. TOP ROW: Cover Persegi di Kiri + Info & Scrubber di Kanan */}
         <div className="flex items-center gap-3.5 sm:gap-4">
@@ -455,7 +495,7 @@ export default function HeroMusicPlayer() {
             target="_blank"
             rel="noopener noreferrer"
             title={`Buka "${currentTrack.title}" di YouTube`}
-            className="group/cover relative aspect-square w-24 h-24 sm:w-28 sm:h-28 rounded-xl sm:rounded-2xl overflow-hidden shrink-0 border border-zinc-200/80 dark:border-white/10 shadow-sm block bg-zinc-950 transition-transform duration-300 hover:scale-[1.03] cursor-pointer"
+            className="group/cover relative aspect-square w-24 h-24 sm:w-28 sm:h-28 rounded-xl sm:rounded-2xl overflow-hidden shrink-0 border border-zinc-200/80 dark:border-white/10 shadow-md block bg-zinc-950 transition-all duration-300 hover:scale-[1.03] cursor-pointer"
           >
             <img
               src={thumbnailUrl}
@@ -467,13 +507,13 @@ export default function HeroMusicPlayer() {
             />
 
             {/* Subtle Hover Overlay showing YouTube External Link */}
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/cover:opacity-100 transition-opacity flex items-center justify-center text-white">
+            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/cover:opacity-100 transition-opacity flex items-center justify-center text-white backdrop-blur-[1px]">
               <ExternalLink className="w-5 h-5 drop-shadow-md" />
             </div>
 
             {/* Subtle dynamic wave indicator in bottom corner if playing */}
             {isPlaying && (
-              <div className="absolute bottom-1.5 left-1.5 flex items-end gap-0.5 h-3 bg-black/60 backdrop-blur-xs px-1.5 py-0.5 rounded-md pointer-events-none">
+              <div className="absolute bottom-1.5 left-1.5 flex items-end gap-0.5 h-3 bg-black/70 backdrop-blur-xs px-1.5 py-0.5 rounded-md pointer-events-none">
                 <span className="w-0.5 h-full bg-blue-400 animate-pulse" />
                 <span className="w-0.5 h-2/3 bg-blue-400 animate-pulse delay-75" />
                 <span className="w-0.5 h-4/5 bg-blue-400 animate-pulse delay-150" />
@@ -481,34 +521,31 @@ export default function HeroMusicPlayer() {
             )}
           </a>
 
-          {/* Sisi Kanan: Judul, Artist, Indikator Lagu & Scrubber */}
+          {/* Sisi Kanan: Judul, Artist, Tag Jepang & Scrubber */}
           <div className="flex-1 min-w-0 flex flex-col justify-between h-24 sm:h-28 py-0.5">
-            {/* Header Mini: Counter Indikator Lagu */}
-            <div className="flex items-center justify-between gap-2">
-              <span className="font-mono text-[10.5px] sm:text-[11px] text-zinc-400 dark:text-zinc-500 font-medium tracking-wider">
-                {String(currentIndex + 1).padStart(2, '0')} / {String(tracks.length).padStart(2, '0')}
-              </span>
-              <span className="text-[10px] font-mono text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
-                NOW PLAYING
-              </span>
-            </div>
-
             {/* Title & Artist */}
             <div className="min-w-0">
               <h3 className="font-bold text-sm sm:text-base tracking-tight text-zinc-950 dark:text-white truncate leading-snug">
                 {currentTrack.title}
               </h3>
-              <p className="text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400 truncate mt-0.5">
-                {currentTrack.artist}
-              </p>
+              <div className="flex items-center gap-1.5 mt-0.5 truncate">
+                <p className="text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400 truncate">
+                  {currentTrack.artist}
+                </p>
+                {currentTrack.jp && (
+                  <span className="hidden sm:inline-block px-1 py-0.2 rounded bg-zinc-100 dark:bg-zinc-800/60 text-[9px] font-mono text-zinc-400 shrink-0">
+                    {currentTrack.jp}
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* Seek Scrubber Bar & Timestamps */}
             <div>
               <div className="relative group/scrub py-1 flex items-center">
-                <div className="w-full h-1 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden relative">
+                <div className="w-full h-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden relative">
                   <div
-                    className="h-full bg-blue-600 dark:bg-blue-500 transition-all duration-150 rounded-full"
+                    className="h-full bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-500 dark:from-blue-500 dark:via-sky-400 dark:to-indigo-400 transition-all duration-150 rounded-full"
                     style={{ width: `${Math.min(100, Math.max(0, progressPercent))}%` }}
                   />
                 </div>
@@ -528,7 +565,7 @@ export default function HeroMusicPlayer() {
                 />
               </div>
 
-              <div className="flex justify-between items-center text-[10px] font-mono text-zinc-400 dark:text-zinc-500">
+              <div className="flex justify-between items-center text-[10px] font-mono text-zinc-400 dark:text-zinc-500 mt-0.5">
                 <span>{formatTime(currentTime)}</span>
                 <span>{isBuffering ? 'Memuat...' : formatTime(duration)}</span>
               </div>
@@ -536,7 +573,7 @@ export default function HeroMusicPlayer() {
           </div>
         </div>
 
-        {/* 2. MIDDLE ROW: Primary Controls (Shuffle, Back, Pause/Play, Skip, Reply) */}
+        {/* 2. MIDDLE ROW: Primary Controls (Shuffle, Back, Pause/Play, Skip, Loop) */}
         <div className="mt-4 pt-3 border-t border-zinc-200/70 dark:border-white/5 flex items-center justify-between gap-2 px-1 sm:px-2">
           {/* Shuffle */}
           <button
@@ -544,10 +581,10 @@ export default function HeroMusicPlayer() {
             onClick={() => setIsShuffle(!isShuffle)}
             aria-label={isShuffle ? 'Matikan acak lagu' : 'Nyalakan acak lagu'}
             title={isShuffle ? 'Acak: Aktif' : 'Acak: Mati'}
-            className={`p-1.5 rounded-lg transition-all cursor-pointer focus:outline-none ${
+            className={`p-2 rounded-xl transition-all cursor-pointer focus:outline-none ${
               isShuffle
-                ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40'
-                : 'text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200'
+                ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 shadow-xs'
+                : 'text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800/40'
             }`}
           >
             <Shuffle className="w-3.5 h-3.5" />
@@ -559,7 +596,7 @@ export default function HeroMusicPlayer() {
             onClick={handlePrev}
             aria-label="Lagu sebelumnya"
             title="Lagu Sebelumnya"
-            className="p-1.5 rounded-lg text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all cursor-pointer focus:outline-none active:scale-90"
+            className="p-2 rounded-xl text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800/60 transition-all cursor-pointer focus:outline-none active:scale-90"
           >
             <SkipBack className="w-4 h-4 fill-current" />
           </button>
@@ -568,11 +605,11 @@ export default function HeroMusicPlayer() {
           <motion.button
             type="button"
             onClick={togglePlay}
-            whileHover={{ scale: 1.06 }}
-            whileTap={{ scale: 0.94 }}
+            whileHover={{ scale: 1.07 }}
+            whileTap={{ scale: 0.93 }}
             aria-label={isPlaying ? 'Jeda pemutaran musik' : 'Putar musik'}
             title={isPlaying ? 'Jeda' : 'Putar'}
-            className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 flex items-center justify-center shadow-md hover:shadow-lg transition-shadow cursor-pointer focus:outline-none"
+            className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow cursor-pointer focus:outline-none"
           >
             {isPlaying ? (
               <Pause className="w-4 h-4 fill-current" />
@@ -587,36 +624,36 @@ export default function HeroMusicPlayer() {
             onClick={handleNext}
             aria-label="Lagu berikutnya"
             title="Lagu Berikutnya"
-            className="p-1.5 rounded-lg text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all cursor-pointer focus:outline-none active:scale-90"
+            className="p-2 rounded-xl text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800/60 transition-all cursor-pointer focus:outline-none active:scale-90"
           >
             <SkipForward className="w-4 h-4 fill-current" />
           </button>
 
-          {/* Reply / Repeat / Loop */}
+          {/* Repeat / Loop */}
           <button
             type="button"
             onClick={() => setIsLoop(!isLoop)}
             aria-label={isLoop ? 'Matikan ulang lagu' : 'Ulangi lagu ini'}
             title={isLoop ? 'Ulangi: Aktif' : 'Ulangi: Mati'}
-            className={`p-1.5 rounded-lg transition-all cursor-pointer focus:outline-none ${
+            className={`p-2 rounded-xl transition-all cursor-pointer focus:outline-none ${
               isLoop
-                ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40'
-                : 'text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200'
+                ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 shadow-xs'
+                : 'text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800/40'
             }`}
           >
             <Repeat className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        {/* 3. VOLUME ROW: Slider & Angka Volume yang Lebih Besar */}
+        {/* 3. VOLUME ROW: Slider & Angka Volume yang Rapi */}
         <div className="mt-3 pt-2.5 border-t border-zinc-200/60 dark:border-white/5 flex items-center justify-between gap-3 px-1 text-xs font-mono">
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={toggleMute}
               aria-label={isMuted ? 'Nyalakan suara' : 'Bisukan suara'}
               title={isMuted ? 'Nyalakan Suara' : 'Bisukan'}
-              className="text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white transition-colors cursor-pointer focus:outline-none"
+              className="text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white transition-colors cursor-pointer focus:outline-none"
             >
               {isMuted || volume === 0 ? (
                 <VolumeX className="w-4 h-4 text-red-500" />
@@ -625,13 +662,12 @@ export default function HeroMusicPlayer() {
               )}
             </button>
 
-            {/* Angka Volume yang Diperbesar & Jelas */}
-            <span className="text-xs sm:text-sm font-bold font-mono text-zinc-800 dark:text-zinc-100 min-w-8">
+            <span className="text-xs font-bold font-mono text-zinc-700 dark:text-zinc-200 min-w-8">
               {isMuted ? '0%' : `${volume}%`}
             </span>
           </div>
 
-          <div className="flex-1 max-w-[160px] sm:max-w-[200px] flex items-center">
+          <div className="flex-1 max-w-[170px] sm:max-w-[210px] flex items-center">
             <input
               type="range"
               min={0}
@@ -639,12 +675,12 @@ export default function HeroMusicPlayer() {
               value={isMuted ? 0 : volume}
               onChange={handleVolumeChange}
               aria-label="Volume audio"
-              className="w-full h-1 bg-zinc-200 dark:bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-blue-600 dark:accent-blue-500"
+              className="w-full h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-blue-600 dark:accent-blue-500"
             />
           </div>
         </div>
 
-        {/* 4. PERMANENT PLAYLIST DRAWER (Memoized - Tidak re-render saat audio timer berjalan) */}
+        {/* 4. PERMANENT PLAYLIST DRAWER (Memoized) */}
         <PlaylistDrawer
           tracks={tracks}
           currentIndex={currentIndex}
@@ -727,31 +763,41 @@ const PlaylistDrawer = memo(function PlaylistDrawer({
               key={`${track.id}-${idx}`}
               type="button"
               onClick={() => onSelectTrack(idx)}
-              className={`w-full flex items-center justify-between p-2 rounded-xl text-left transition-colors cursor-pointer focus:outline-none ${
+              className={`w-full flex items-center justify-between p-2 rounded-xl text-left transition-all cursor-pointer focus:outline-none ${
                 isCurrent
-                  ? 'bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 font-semibold border border-blue-500/20'
-                  : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900'
+                  ? 'bg-blue-50/90 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 font-semibold border border-blue-500/30 shadow-xs'
+                  : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/60 border border-transparent'
               }`}
             >
-              <div className="flex items-center gap-2 truncate">
-                <span className="font-mono text-[10.5px] text-zinc-400 dark:text-zinc-500 w-5 shrink-0">
+              <div className="flex items-center gap-2.5 truncate">
+                <span
+                  className={`font-mono text-[10.5px] w-5 shrink-0 ${
+                    isCurrent
+                      ? 'text-blue-600 dark:text-blue-400 font-bold'
+                      : 'text-zinc-400 dark:text-zinc-500'
+                  }`}
+                >
                   {String(idx + 1).padStart(2, '0')}
                 </span>
                 <div className="truncate">
-                  <p className="truncate text-xs font-medium">{track.title}</p>
+                  <p className="truncate text-xs font-medium leading-snug">{track.title}</p>
                   <p className="truncate text-[10.5px] text-zinc-400 dark:text-zinc-500">
                     {track.artist}
                   </p>
                 </div>
               </div>
 
-              {isCurrent && isPlaying && (
+              {isCurrent && isPlaying ? (
                 <div className="flex items-end gap-0.5 h-3 shrink-0 ml-2">
                   <span className="w-0.5 h-full bg-blue-600 dark:bg-blue-400 animate-pulse" />
                   <span className="w-0.5 h-2/3 bg-blue-600 dark:bg-blue-400 animate-pulse delay-75" />
                   <span className="w-0.5 h-4/5 bg-blue-600 dark:bg-blue-400 animate-pulse delay-150" />
                 </div>
-              )}
+              ) : isCurrent ? (
+                <span className="text-[9px] font-mono uppercase text-blue-500/80 px-1 py-0.5 rounded bg-blue-100/50 dark:bg-blue-900/30">
+                  READY
+                </span>
+              ) : null}
             </button>
           )
         })}
