@@ -84,38 +84,31 @@ export default function WorksSection() {
   return (
     <section
       id="works"
-      className="relative z-10 w-full py-16 sm:py-24 lg:py-28 px-6 sm:px-10 lg:px-16 flex flex-col justify-center items-center border-t border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50/70 dark:bg-[#050508]/80 text-zinc-950 dark:text-white transition-colors duration-500 overflow-hidden"
+      className="relative z-10 w-full py-16 sm:py-20 lg:py-24 px-6 sm:px-10 lg:px-16 flex flex-col justify-center items-center border-t border-zinc-200/70 dark:border-zinc-800/70 bg-zinc-50/50 dark:bg-[#050507] text-zinc-950 dark:text-white transition-colors duration-500 overflow-hidden"
     >
       {/* Anchor pendukung untuk link `#projects` agar kompatibel dengan menu navbar */}
       <span id="projects" className="absolute -top-24 opacity-0 pointer-events-none" aria-hidden="true" />
 
-      {/* Subtle Cyber Glow Backing */}
+      {/* Pendaran Latar Belakang Halus */}
       <div
         aria-hidden="true"
-        className="absolute top-1/4 right-1/4 w-[600px] h-[300px] bg-blue-500/5 dark:bg-blue-600/10 rounded-full blur-3xl pointer-events-none"
+        className="absolute top-1/4 right-1/4 w-[600px] h-[300px] bg-blue-500/5 dark:bg-blue-600/8 rounded-full blur-3xl pointer-events-none"
       />
 
       <div className="max-w-6xl w-full mx-auto relative z-10">
         {/* Kicker Monospace */}
-        <div className="flex items-center justify-between gap-4 mb-4 sm:mb-6">
-          <div className="flex items-center gap-3">
-            <span className="h-[2px] w-8 sm:w-12 bg-blue-600 dark:bg-blue-400" />
-            <span className="font-jetbrains text-xs sm:text-sm font-semibold tracking-widest text-zinc-600 dark:text-zinc-400 uppercase">
-              // 03 . FEATURED WORKS / 開発実績アーカイブ
-            </span>
-          </div>
-
-          <div className="shrink-0 inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 font-jetbrains text-xs font-semibold text-zinc-700 dark:text-zinc-300 shadow-xs">
-            <FolderGit2 className="w-3.5 h-3.5 text-blue-500" />
-            <span>{works.length} Curated Repositories</span>
-          </div>
+        <div className="flex items-center gap-3 mb-4 sm:mb-6">
+          <span className="h-[1px] w-8 sm:w-12 bg-blue-600 dark:bg-blue-400" />
+          <span className="font-jetbrains text-xs sm:text-sm font-semibold tracking-widest text-zinc-600 dark:text-zinc-400 uppercase">
+            // 03 . FEATURED WORKS / 実績
+          </span>
         </div>
 
         {/* Header Judul Utama */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-10">
           <div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-zinc-950 dark:text-white leading-[1.12]">
-              Mission Logs & Open Source
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-zinc-950 dark:text-white leading-[1.15]">
+              Selected Works & Open Source
             </h2>
             <p className="mt-3 text-sm sm:text-base text-zinc-600 dark:text-zinc-400 max-w-2xl font-normal leading-relaxed">
               Kompilasi proyek open source, framework, perkakas CLI, dan aplikasi terpilih yang saya kembangkan di organisasi{' '}
@@ -124,9 +117,15 @@ export default function WorksSection() {
               <strong className="font-semibold text-zinc-900 dark:text-zinc-200">AndraZero121</strong>.
             </p>
           </div>
+
+          {/* Badge Total Repositori */}
+          <div className="shrink-0 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 font-jetbrains text-xs font-semibold text-zinc-700 dark:text-zinc-300 shadow-xs">
+            <FolderGit2 className="w-3.5 h-3.5 text-blue-500" />
+            <span>{works.length} Curated Repositories</span>
+          </div>
         </div>
 
-        {/* Filter Bar: Segmented Tabs Organisasi & Filter Bahasa */}
+        {/* Filter Bar: Tab Organisasi & Filter Bahasa */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 sm:mb-10 pb-4 border-b border-zinc-200/80 dark:border-zinc-800/80">
           {/* Akun Filter Tabs */}
           <div className="flex flex-wrap items-center gap-2">
@@ -136,10 +135,10 @@ export default function WorksSection() {
                 setAccountFilter('all')
                 setIsExpanded(false)
               }}
-              className={`font-jetbrains text-xs font-semibold px-4 py-2 rounded-lg transition-all duration-200 cursor-pointer ${
+              className={`font-jetbrains text-xs font-semibold px-4 py-2 rounded-full transition-all duration-200 cursor-pointer ${
                 accountFilter === 'all'
-                  ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-md'
-                  : 'bg-zinc-200/70 dark:bg-zinc-900/80 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white border border-transparent hover:border-zinc-300 dark:hover:border-zinc-700'
+                  ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-sm'
+                  : 'bg-zinc-200/70 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white'
               }`}
             >
               Semua ({works.length})
@@ -151,10 +150,10 @@ export default function WorksSection() {
                 setAccountFilter('untrustnova')
                 setIsExpanded(false)
               }}
-              className={`font-jetbrains text-xs font-semibold px-4 py-2 rounded-lg transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
+              className={`font-jetbrains text-xs font-semibold px-4 py-2 rounded-full transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
                 accountFilter === 'untrustnova'
-                  ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-md'
-                  : 'bg-zinc-200/70 dark:bg-zinc-900/80 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white border border-transparent hover:border-zinc-300 dark:hover:border-zinc-700'
+                  ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-sm'
+                  : 'bg-zinc-200/70 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white'
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-purple-500" />
@@ -168,10 +167,10 @@ export default function WorksSection() {
                 setAccountFilter('AndraZero121')
                 setIsExpanded(false)
               }}
-              className={`font-jetbrains text-xs font-semibold px-4 py-2 rounded-lg transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
+              className={`font-jetbrains text-xs font-semibold px-4 py-2 rounded-full transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
                 accountFilter === 'AndraZero121'
-                  ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-md'
-                  : 'bg-zinc-200/70 dark:bg-zinc-900/80 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white border border-transparent hover:border-zinc-300 dark:hover:border-zinc-700'
+                  ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-sm'
+                  : 'bg-zinc-200/70 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white'
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-blue-500" />
@@ -236,12 +235,12 @@ export default function WorksSection() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200/90 dark:border-zinc-800/90 bg-white/85 dark:bg-[#0c0c11]/85 p-5 sm:p-6 backdrop-blur-sm transition-all duration-300 hover:border-zinc-400 dark:hover:border-blue-500/50 hover:shadow-lg dark:hover:shadow-2xl dark:hover:shadow-blue-950/20"
+                  className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200/90 dark:border-zinc-800/90 bg-white/80 dark:bg-[#0c0c10]/80 p-5 sm:p-6 backdrop-blur-xs transition-all duration-300 hover:border-zinc-400 dark:hover:border-zinc-600 hover:shadow-lg dark:hover:shadow-2xl dark:hover:shadow-black/50"
                 >
                   {/* Watermark Tipografi Halus di Sudut Kartu */}
                   <div
                     aria-hidden="true"
-                    className="absolute top-2 right-4 text-6xl font-black text-zinc-200/30 dark:text-zinc-800/20 select-none pointer-events-none transition-transform duration-500 group-hover:scale-110 group-hover:text-blue-500/10 font-jetbrains"
+                    className="absolute top-2 right-4 text-6xl font-black text-zinc-200/30 dark:text-zinc-800/20 select-none pointer-events-none transition-transform duration-500 group-hover:scale-110 group-hover:text-zinc-300/40 dark:group-hover:text-zinc-700/30 font-jetbrains"
                   >
                     {isUntrustnova ? 'NV' : 'AZ'}
                   </div>
@@ -287,7 +286,7 @@ export default function WorksSection() {
                         <span className="break-all">{work.name}</span>
                         <ArrowUpRight className="w-4 h-4 shrink-0 opacity-70 group-hover/title:opacity-100 group-hover/title:translate-x-0.5 group-hover/title:-translate-y-0.5 transition-all" />
                       </a>
-                      <div className="font-zen text-[11px] text-zinc-400 dark:text-zinc-500 font-normal mt-0.5">
+                      <div className="font-sans text-[11px] text-zinc-400 dark:text-zinc-500 font-normal mt-0.5">
                         / {work.jpTitle}
                       </div>
                     </div>
@@ -299,7 +298,7 @@ export default function WorksSection() {
 
                     {/* Bahasa Pemrograman & Tags Topik */}
                     <div className="flex flex-wrap items-center gap-1.5 mb-5 relative z-10">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-jetbrains font-semibold bg-zinc-100 dark:bg-zinc-800/80 text-zinc-800 dark:text-zinc-200 border border-zinc-200/70 dark:border-zinc-700/60">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-jetbrains font-semibold bg-zinc-100 dark:bg-zinc-800/80 text-zinc-800 dark:text-zinc-200 border border-zinc-200/70 dark:border-zinc-700/60">
                         <span
                           className="w-2 h-2 rounded-full shrink-0"
                           style={{ backgroundColor: work.languageColor }}
@@ -343,7 +342,7 @@ export default function WorksSection() {
                       </a>
                     ) : (
                       <span className="text-[10px] font-jetbrains text-zinc-400 dark:text-zinc-600">
-                        Core / Library
+                        Library / Core
                       </span>
                     )}
                   </div>
