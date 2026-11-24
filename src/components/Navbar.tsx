@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, useAnimate } from 'motion/react'
 import { useLenis } from 'lenis/react'
 import {
@@ -47,100 +47,190 @@ const availableLanguages = [
   { code: 'ja', name: '日本語', flag: FlagJP },
 ]
 
-// Kolom Hujan Glif Jepang (Hiragana & Katakana) Ringan & Teroptimasi untuk Performa
-const KANA_RAIN_STREAMS = [
-  {
-    chars: ['雨', '水', '滴', 'ア', 'ン', 'ド', 'ラ', 'シ', 'ス', 'テ', 'ム', '雫'],
-    speed: 5.2,
-    delay: 0.8,
-    right: '5%',
-    size: 'text-xs',
-    baseOpacity: 0.8,
-  },
-  {
-    chars: ['デ', 'ザ', 'イ', 'ン', 'と', 'コ', 'ー', 'ド', 'の', '調', '和', '蒼'],
-    speed: 6.5,
-    delay: 2.5,
-    right: '16%',
-    size: 'text-[11px]',
-    baseOpacity: 0.6,
-  },
-  {
-    chars: ['み', 'ず', 'の', 'こ', 'と', 'ば', '清', '涼', '透', '明', '感'],
-    speed: 4.8,
-    delay: 0.2,
-    right: '28%',
-    size: 'text-xs',
-    baseOpacity: 0.85,
-  },
-  {
-    chars: ['ク', 'リ', 'エ', 'イ', 'テ', 'ィ', 'ブ', 'な', '道', '創', '造'],
-    speed: 7.2,
-    delay: 3.8,
-    right: '40%',
-    size: 'text-[10px]',
-    baseOpacity: 0.5,
-  },
-  {
-    chars: ['静', '寂', 'の', '中', 'に', 'あ', 'る', '力', '強', 'さ', '動'],
-    speed: 5.0,
-    delay: 1.5,
-    right: '52%',
-    size: 'text-xs',
-    baseOpacity: 0.75,
-  },
-]
+// CMatrix Japanese Character Set (Katakana, Hiragana, Kanji & Numeric Digits)
+const CMATRIX_CHARACTERS =
+  'ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜﾝあいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん零壱弐参肆伍陸漆捌玖拾雨水滴蒼龍風光暗桜星雫幽夢命魂虚無電脳道術結界0123456789'
+
+interface StreamColumn {
+  x: number
+  y: number
+  speed: number
+  length: number
+  chars: string[]
+  fontSize: number
+  nextMutation: number
+  isBackground: boolean
+}
 
 function FallingKanaRain() {
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    const container = containerRef.current
+    if (!canvas || !container) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    let animId: number
+    let width = 0
+    let height = 0
+    let columns: StreamColumn[] = []
+
+    const getRandomChar = () =>
+      CMATRIX_CHARACTERS[Math.floor(Math.random() * CMATRIX_CHARACTERS.length)]
+
+    function initColumns() {
+      if (!container || !canvas) return
+      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      const rect = container.getBoundingClientRect()
+      width = rect.width
+      height = rect.height
+
+      canvas.width = Math.floor(width * dpr)
+      canvas.height = Math.floor(height * dpr)
+      canvas.style.width = `${width}px`
+      canvas.style.height = `${height}px`
+
+      ctx?.scale(dpr, dpr)
+
+      const baseFontSize = width < 640 ? 13 : 15
+      const colSpacing = baseFontSize * 1.2
+      const numCols = Math.max(1, Math.floor(width / colSpacing))
+      const totalRows = Math.ceil(height / baseFontSize) + 10
+      columns = []
+
+      // Generate dense streams distributed across the entire screen
+      for (let i = 0; i < numCols; i++) {
+        const isBackground = i % 3 === 0
+        const fontSize = isBackground ? Math.max(10, baseFontSize - 2) : baseFontSize
+        const streamLength = Math.floor(Math.random() * 18) + (isBackground ? 10 : 14)
+        const chars: string[] = []
+        for (let j = 0; j < streamLength; j++) {
+          chars.push(getRandomChar())
+        }
+
+        columns.push({
+          x: i * colSpacing + colSpacing * 0.3,
+          // Uniformly distribute initial y across the screen so matrix rain is dense immediately
+          y: Math.random() * (totalRows + 20) - 10,
+          speed: isBackground ? 0.3 + Math.random() * 0.35 : 0.45 + Math.random() * 0.65,
+          length: streamLength,
+          chars,
+          fontSize,
+          nextMutation: Math.floor(Math.random() * 4) + 2,
+          isBackground,
+        })
+      }
+    }
+
+    initColumns()
+
+    const handleResize = () => {
+      initColumns()
+    }
+    window.addEventListener('resize', handleResize)
+
+    // Render loop
+    function draw() {
+      if (!ctx) return
+
+      ctx.clearRect(0, 0, width, height)
+
+      const baseFontSize = width < 640 ? 13 : 15
+      const totalRows = Math.ceil(height / baseFontSize) + 12
+
+      for (let i = 0; i < columns.length; i++) {
+        const col = columns[i]
+        col.y += col.speed
+
+        // Frequent character mutation for dynamic living cyber-terminal effect
+        col.nextMutation--
+        if (col.nextMutation <= 0) {
+          const randIdx = Math.floor(Math.random() * col.chars.length)
+          col.chars[randIdx] = getRandomChar()
+          col.nextMutation = Math.floor(Math.random() * 4) + 2
+        }
+
+        // Reset column smoothly once its tail leaves the bottom edge
+        if (col.y - col.length > totalRows) {
+          col.y = -Math.floor(Math.random() * 12)
+          col.speed = col.isBackground
+            ? 0.3 + Math.random() * 0.35
+            : 0.45 + Math.random() * 0.65
+          col.length = Math.floor(Math.random() * 18) + (col.isBackground ? 10 : 14)
+          col.chars = []
+          for (let j = 0; j < col.length; j++) {
+            col.chars.push(getRandomChar())
+          }
+        }
+
+        const headRow = Math.floor(col.y)
+
+        for (let k = 0; k < col.length; k++) {
+          const row = headRow - k
+          const yPos = row * col.fontSize
+
+          if (yPos >= -col.fontSize && yPos <= height + col.fontSize) {
+            const char = col.chars[k] || getRandomChar()
+
+            if (k === 0) {
+              // Head character: glowing bright white (or light cyan for background stream)
+              ctx.font = `bold ${col.fontSize}px monospace`
+              if (col.isBackground) {
+                ctx.fillStyle = '#bae6fd'
+                ctx.shadowColor = 'rgba(56, 189, 248, 0.4)'
+                ctx.shadowBlur = 4
+              } else {
+                ctx.fillStyle = '#ffffff'
+                ctx.shadowColor = 'rgba(56, 189, 248, 0.9)'
+                ctx.shadowBlur = 8
+              }
+              ctx.fillText(char, col.x, yPos)
+              ctx.shadowBlur = 0
+            } else if (k === 1) {
+              // Neck character: bright light cyan
+              ctx.font = `500 ${col.fontSize}px monospace`
+              ctx.fillStyle = col.isBackground
+                ? 'rgba(186, 230, 253, 0.7)'
+                : '#bae6fd'
+              ctx.fillText(char, col.x, yPos)
+            } else {
+              // Trailing characters: gradual fade in electric blue
+              const ratio = k / col.length
+              const maxAlpha = col.isBackground ? 0.35 : 0.82
+              const alpha = Math.max(0.04, (1 - ratio) * maxAlpha)
+              ctx.font = `400 ${col.fontSize}px monospace`
+              ctx.fillStyle = `rgba(56, 189, 248, ${alpha.toFixed(2)})`
+              ctx.fillText(char, col.x, yPos)
+            }
+          }
+        }
+      }
+
+      animId = requestAnimationFrame(draw)
+    }
+
+    animId = requestAnimationFrame(draw)
+
+    return () => {
+      cancelAnimationFrame(animId)
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
   return (
     <div
+      ref={containerRef}
       aria-hidden="true"
       className="absolute inset-0 pointer-events-none overflow-hidden select-none"
     >
-      {/* Top & Bottom Soft Fading Overlays (Jauh lebih hemat performa dibanding maskImage) */}
-      <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-[#08080a] to-transparent z-10 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#08080a] to-transparent z-10 pointer-events-none" />
-
-      {KANA_RAIN_STREAMS.map((col, idx) => {
-        const lastIdx = col.chars.length - 1
-
-        return (
-          <div
-            key={idx}
-            style={{
-              position: 'absolute',
-              right: col.right,
-              top: 0,
-              animation: `kanaRainFall ${col.speed}s linear -${col.delay}s infinite`,
-            }}
-            className={`flex flex-col items-center gap-1.5 sm:gap-2 font-mono font-medium tracking-widest ${col.size}`}
-          >
-            {col.chars.map((char, cIdx) => {
-              const isHead = cIdx === lastIdx
-              const progress = cIdx / lastIdx
-              const charOpacity = isHead
-                ? 1
-                : 0.05 + Math.pow(progress, 1.8) * 0.72 * col.baseOpacity
-
-              return (
-                <span
-                  key={cIdx}
-                  style={{
-                    opacity: charOpacity,
-                  }}
-                  className={`inline-block select-none transition-opacity ${
-                    isHead
-                      ? 'text-white font-bold drop-shadow-xs'
-                      : 'text-zinc-400'
-                  }`}
-                >
-                  {char}
-                </span>
-              )
-            })}
-          </div>
-        )
-      })}
+      <canvas ref={canvasRef} className="w-full h-full block" />
+      {/* Top & Bottom Soft Fading Overlays */}
+      <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#08080a] to-transparent z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-[#08080a] to-transparent z-10 pointer-events-none" />
     </div>
   )
 }

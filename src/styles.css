@@ -312,15 +312,6 @@ a {
   background: color-mix(in oklab, var(--header-bg) 84%, transparent 16%);
 }
 
-@keyframes kanaRainFall {
-  0% {
-    transform: translate3d(0, -100%, 0);
-  }
-  100% {
-    transform: translate3d(0, calc(100vh + 100%), 0);
-  }
-}
-
 /* GPU-accelerated Scenery Animations (Zero JS main thread cost) */
 @keyframes starTwinkle {
   0%, 100% {
